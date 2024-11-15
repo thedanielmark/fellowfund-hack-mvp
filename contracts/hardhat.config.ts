@@ -24,11 +24,13 @@ const config: HardhatUserConfig = {
   networks: {
     mantle: {
       url: 'https://rpc.mantle.xyz', //mainnet
+      chainId: 5000,
       accounts: [PRIVATE_KEY_1],
       // Use the default configuration
     },
     mantleSepolia: {
       url: 'https://rpc.sepolia.mantle.xyz', // Sepolia Testnet
+      chainId: 5003,
       accounts: [PRIVATE_KEY_1],
       gasPrice: 20000000, // specify the network's minimum basefee as the gas price
     },
