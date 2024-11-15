@@ -155,9 +155,9 @@ const DashboardLayout = ({ children }: LayoutProps) => {
                       src="/logo.png"
                       className="block h-8 w-8"
                     />
-                    <span className="text-xl font-black text-primary-500">
-                      Only
-                      <span className="font-black text-primary-600">Cars</span>
+                    <span className="text-3xl font-black text-primary-600">
+                      Fellow
+                      <span className="font-black text-white">Fund</span>
                     </span>
                   </div>
                   <div className="hidden sm:-my-px sm:ml-6 sm:flex sm:space-x-8">
