@@ -19,6 +19,7 @@ import { useAuth } from "@/providers/AuthProvider";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { RotatingLines } from "react-loader-spinner";
+import { ethers, JsonRpcSigner, parseEther } from "ethers";
 
 const navigation = [
   { name: "Navigate", href: "/dashboard" },
@@ -40,11 +41,79 @@ interface LayoutProps {
 
 const DashboardLayout = ({ children }: LayoutProps) => {
   const pathname = usePathname();
-  const { loggedIn, logout, user, address } = useAuth();
+  const { loggedIn, logout, user, address, getBalance, provider, getSigner } =
+    useAuth();
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [wallet, setWallet] = useState<any | null>(null);
   const [walletModalOpen, setWalletModalOpen] = useState<boolean>(false);
   const [balance, setBalance] = useState<number | any>(null);
   const [onlyCarsBalance, setOnlyCarsBalance] = useState<number | any>();
+
+  // Getting Web3Auth wallet balance
+  useEffect(() => {
+    const getTheBalance = async () => {
+      const balance = await getBalance();
+      console.log("Balance:", balance);
+      setBalance(balance);
+    };
+
+    if (loggedIn) {
+      getTheBalance();
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loggedIn]);
+
+  // Setting Wallet
+  useEffect(() => {
+    const getDetails = async () => {
+      if (loggedIn) {
+        const wallet = await getWallet();
+        setWallet(wallet);
+      }
+    };
+    getDetails();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [provider, loggedIn]);
+
+  // Get wallet
+  const getWallet = async (): Promise<JsonRpcSigner | null> => {
+    if (!provider) {
+      // uiConsole("provider not initialized yet");
+      return null;
+    }
+    const ethersProvider = new ethers.BrowserProvider(provider);
+
+    return ethersProvider.getSigner();
+  };
+
+  // Getting OnlyCars wallet balance
+  // useEffect(() => {
+  //   const getContractBalance = async () => {
+  //     const signer = await getSigner();
+  //     const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || "";
+
+  //     const contract = new ethers.Contract(
+  //       contractAddress,
+  //       contractABI,
+  //       signer
+  //     );
+  //     console.log(signer.address);
+  //     try {
+  //       // Call the balances function with the address parameter
+  //       const balance = await contract.balances(signer.address); // Note: view function, no .wait()
+  //       console.log(balance);
+  //       setOnlyCarsBalance(`${formatEther(balance)}`);
+  //     } catch (error) {
+  //       console.error("Error fetching balance:", error);
+  //     }
+  //   };
+
+  //   if (loggedIn) {
+  //     getContractBalance();
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [loggedIn]);
 
   // TODO: Remove this shit once you make an actual GET user data API call
   useEffect(() => {
@@ -196,7 +265,7 @@ const DashboardLayout = ({ children }: LayoutProps) => {
         </div>
       )}
 
-      {/* Modal with wallets info start */}
+      {/* Modal with charger info start */}
       <Dialog
         open={walletModalOpen}
         onClose={setWalletModalOpen}
@@ -288,7 +357,7 @@ const DashboardLayout = ({ children }: LayoutProps) => {
           </div>
         </div>
       </Dialog>
-      {/* Modal with wallets info end */}
+      {/* Modal with charger info end */}
     </>
   );
 };
