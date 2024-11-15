@@ -155,9 +155,9 @@ const DashboardLayout = ({ children }: LayoutProps) => {
                       src="/logo.png"
                       className="block h-8 w-8"
                     />
-                    <span className="text-xl font-black text-indigo-500">
+                    <span className="text-xl font-black text-primary-500">
                       Only
-                      <span className="font-black text-indigo-600">Cars</span>
+                      <span className="font-black text-primary-600">Cars</span>
                     </span>
                   </div>
                   <div className="hidden sm:-my-px sm:ml-6 sm:flex sm:space-x-8">
@@ -167,8 +167,8 @@ const DashboardLayout = ({ children }: LayoutProps) => {
                         href={item.href}
                         className={classNames(
                           item.href === pathname
-                            ? "border-indigo-500 text-white"
-                            : "border-transparent text-zinc-400 hover:border-indigo-300 hover:text-zinc-200",
+                            ? "border-primary-500 text-white"
+                            : "border-transparent text-zinc-400 hover:border-primary-300 hover:text-zinc-200",
                           "inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium"
                         )}
                       >
@@ -180,7 +180,7 @@ const DashboardLayout = ({ children }: LayoutProps) => {
                 <div className="hidden sm:ml-6 sm:flex sm:items-center">
                   <button
                     onClick={() => setWalletModalOpen(true)}
-                    className="relative rounded-full bg-zinc-900/70 p-2 text-zinc-400 hover:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                    className="relative rounded-full bg-zinc-900/70 p-2 text-zinc-400 hover:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
                   >
                     <span className="absolute -inset-1.5" />
                     <span className="sr-only">Wallet</span>
@@ -191,7 +191,7 @@ const DashboardLayout = ({ children }: LayoutProps) => {
                   <Menu as="div" className="relative ml-3">
                     {user && (
                       <div>
-                        <MenuButton className="relative flex rounded-full bg-zinc-900 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                        <MenuButton className="relative flex rounded-full bg-zinc-900 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2">
                           <span className="absolute -inset-1.5" />
                           <span className="sr-only">Open user menu</span>
                           <img
@@ -239,7 +239,7 @@ const DashboardLayout = ({ children }: LayoutProps) => {
                 </div>
                 <div className="-mr-2 flex items-center sm:hidden">
                   {/* Mobile menu button */}
-                  <DisclosureButton className="group relative inline-flex items-center justify-center rounded-md bg-white p-2 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                  <DisclosureButton className="group relative inline-flex items-center justify-center rounded-md bg-white p-2 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2">
                     <span className="absolute -inset-0.5" />
                     <span className="sr-only">Open main menu</span>
                     <Bars3Icon
@@ -348,7 +348,7 @@ const DashboardLayout = ({ children }: LayoutProps) => {
                 <button
                   type="button"
                   onClick={() => setWalletModalOpen(false)}
-                  className="mt-2 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold border border-zinc-200 text-zinc-900 shadow-sm hover:bg-indigo-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                  className="mt-2 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold border border-zinc-200 text-zinc-900 shadow-sm hover:bg-primary-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
                 >
                   Close
                 </button>

@@ -59,8 +59,8 @@ devDependencies:
     specifier: ^9.4.0
     version: 9.4.0(@babel/runtime@7.26.0)(bufferutil@4.0.8)(utf-8-validate@5.0.10)
   '@web3auth/ethereum-provider':
-    specifier: ^8.12.3
-    version: 8.12.4(@babel/runtime@7.26.0)(bufferutil@4.0.8)(utf-8-validate@5.0.10)
+    specifier: ^9.4.0
+    version: 9.4.0(@babel/runtime@7.26.0)(bufferutil@4.0.8)(utf-8-validate@5.0.10)
   '@web3auth/modal':
     specifier: ^9.4.0
     version: 9.4.0(@babel/runtime@7.26.0)(bufferutil@4.0.8)(react-dom@18.3.1)(react@18.3.1)(utf-8-validate@5.0.10)
@@ -1502,25 +1502,24 @@ packages:
       - utf-8-validate
     dev: true
 
-  /@web3auth/ethereum-provider@8.12.4(@babel/runtime@7.26.0)(bufferutil@4.0.8)(utf-8-validate@5.0.10):
-    resolution: {integrity: sha512-E9ChShysafJJm7JbouY4LarAsRsqCljSwHrjdPyHNR4mtKsXox5oI/fNBeb3gGJPL/rhzEQwE4+GkXQT5OafXQ==}
+  /@web3auth/ethereum-provider@9.4.0(@babel/runtime@7.26.0)(bufferutil@4.0.8)(utf-8-validate@5.0.10):
+    resolution: {integrity: sha512-sxEtACBtiTFvOoiFuvsRBo7Jd1vT2j4Z+SvdY6oCRtobCXud1f96FPPZbdUbu/K9CFr55+ymVTzJ803KUKn9+w==}
     engines: {node: '>=18.x', npm: '>=9.x'}
     peerDependencies:
       '@babel/runtime': 7.x
     dependencies:
       '@babel/runtime': 7.26.0
-      '@ethereumjs/common': 4.4.0
-      '@ethereumjs/tx': 5.4.0
       '@ethereumjs/util': 9.1.0
-      '@metamask/eth-sig-util': 7.0.2
-      '@toruslabs/base-controllers': 5.11.0(@babel/runtime@7.26.0)(bufferutil@4.0.8)(utf-8-validate@5.0.10)
-      '@toruslabs/http-helpers': 6.1.1(@babel/runtime@7.26.0)
-      '@toruslabs/openlogin-jrpc': 8.3.0(@babel/runtime@7.26.0)
-      '@web3auth/base': 8.12.4(@babel/runtime@7.26.0)(bufferutil@4.0.8)(utf-8-validate@5.0.10)
-      '@web3auth/base-provider': 8.12.4(@babel/runtime@7.26.0)(bufferutil@4.0.8)(utf-8-validate@5.0.10)
+      '@toruslabs/base-controllers': 6.2.4(@babel/runtime@7.26.0)(bufferutil@4.0.8)(utf-8-validate@5.0.10)
+      '@toruslabs/eccrypto': 5.0.4
+      '@toruslabs/http-helpers': 7.0.0(@babel/runtime@7.26.0)
+      '@web3auth/auth': 9.5.1(@babel/runtime@7.26.0)(bufferutil@4.0.8)(utf-8-validate@5.0.10)
+      '@web3auth/base': 9.4.0(@babel/runtime@7.26.0)(bufferutil@4.0.8)(utf-8-validate@5.0.10)
+      '@web3auth/base-provider': 9.4.0(@babel/runtime@7.26.0)(bufferutil@4.0.8)(utf-8-validate@5.0.10)
       assert: 2.1.0
       bignumber.js: 9.1.2
       bn.js: 5.2.1
+      ethers: 6.13.4(bufferutil@4.0.8)(utf-8-validate@5.0.10)
       jsonschema: 1.4.1
     transitivePeerDependencies:
       - '@sentry/types'

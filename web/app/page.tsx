@@ -63,15 +63,26 @@ export default function Home() {
               <div className="flex justify-start lg:w-0 lg:flex-1">
                 <Link href="/" className="flex items-center gap-x-3">
                   <span className="sr-only">Your Company</span>
-                  <img alt="" src="/logo.png" className="h-8 w-auto sm:h-10" />
-                  <span className="text-3xl font-black text-indigo-600">
+                  <div className="flex items-center gap-x-3">
+                    <img
+                      alt=""
+                      src="/logo.png"
+                      className="h-8 w-auto sm:h-10"
+                    />
+                    <img
+                      alt=""
+                      src="/nouns-logo.svg"
+                      className="h-8 w-auto sm:h-6"
+                    />
+                  </div>
+                  <span className="text-3xl font-black text-primary-600">
                     Fellow
                     <span className="font-black text-white">Fund</span>
                   </span>
                 </Link>
               </div>
               <div className="-my-2 -mr-2 md:hidden">
-                <PopoverButton className="relative inline-flex items-center justify-center rounded-md bg-white p-2 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
+                <PopoverButton className="relative inline-flex items-center justify-center rounded-md bg-white p-2 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-500">
                   <span className="absolute -inset-0.5" />
                   <span className="sr-only">Open menu</span>
                   <Bars3Icon aria-hidden="true" className="h-6 w-6" />
@@ -101,7 +112,7 @@ export default function Home() {
 
                 <a
                   href={loggedIn ? "/dashboard" : "/"}
-                  className="ml-8 inline-flex items-center justify-center whitespace-nowrap rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
+                  className="ml-8 inline-flex items-center justify-center whitespace-nowrap rounded-md border border-transparent bg-primary-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-primary-700"
                 >
                   Dashboard
                 </a>
@@ -118,12 +129,12 @@ export default function Home() {
                     <div>
                       <img
                         alt="Your Company"
-                        src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
+                        src="https://tailwindui.com/img/logos/mark.svg?color=primary&shade=600"
                         className="h-8 w-auto"
                       />
                     </div>
                     <div className="-mr-2">
-                      <PopoverButton className="relative inline-flex items-center justify-center rounded-md bg-white p-2 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
+                      <PopoverButton className="relative inline-flex items-center justify-center rounded-md bg-white p-2 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-500">
                         <span className="absolute -inset-0.5" />
                         <span className="sr-only">Close menu</span>
                         <XMarkIcon aria-hidden="true" className="h-6 w-6" />
@@ -138,7 +149,7 @@ export default function Home() {
                           href={item.href}
                           className="-m-3 flex items-center rounded-lg p-3 hover:bg-zinc-50"
                         >
-                          <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-md bg-indigo-600 text-white">
+                          <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-md bg-primary-600 text-white">
                             <item.icon aria-hidden="true" className="h-6 w-6" />
                           </div>
                           <div className="ml-4 text-base font-medium text-zinc-900">
@@ -192,18 +203,18 @@ export default function Home() {
                     >
                       <source src="/landing.mp4" type="video/mp4" />
                     </video>
-                    <div className="absolute inset-0 bg-indigo-700 mix-blend-multiply" />
+                    <div className="absolute inset-0 bg-primary-700 mix-blend-multiply" />
                   </div>
                   <div className="relative px-6 py-16 sm:py-24 lg:px-8 lg:py-32">
                     <h1 className="text-center text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
                       <span className="block text-white">
                         The Future of Prediction Markets is Here
                       </span>
-                      <span className="block text-indigo-200">
+                      <span className="block text-primary-200">
                         Analyze, Predict, Earn.
                       </span>
                     </h1>
-                    <p className="mx-auto mt-6 max-w-lg text-center text-xl text-indigo-200 sm:max-w-3xl">
+                    <p className="mx-auto mt-6 max-w-lg text-center text-xl text-primary-200 sm:max-w-3xl">
                       A decentralized prediction market platform where builders
                       pitch for fellowship grants, and users vote and predict
                       the most impactful projects. Empower innovation through
@@ -212,14 +223,14 @@ export default function Home() {
                     <div className="mx-auto mt-10 max-w-sm sm:flex sm:max-w-none sm:justify-center">
                       <div className="space-y-4 sm:mx-auto sm:inline-grid sm:grid-cols-2 sm:gap-5 sm:space-y-0">
                         <button
-                          className="flex items-center justify-center rounded-md border border-transparent bg-white px-4 py-3 text-base font-medium text-indigo-700 shadow-sm hover:bg-indigo-50 sm:px-8"
+                          className="flex items-center justify-center rounded-md border border-transparent bg-white px-4 py-3 text-base font-medium text-primary-700 shadow-sm hover:bg-primary-50 sm:px-8"
                           onClick={login}
                         >
                           Get started
                         </button>
                         <a
                           href="https://github.com/fabianferno/builder-fund/"
-                          className="flex items-center justify-center rounded-md border border-transparent bg-indigo-500 bg-opacity-60 px-4 py-3 text-base font-medium text-white shadow-sm hover:bg-opacity-70 sm:px-8"
+                          className="flex items-center justify-center rounded-md border border-transparent bg-primary-500 bg-opacity-60 px-4 py-3 text-base font-medium text-white shadow-sm hover:bg-opacity-70 sm:px-8"
                         >
                           Source Code
                         </a>

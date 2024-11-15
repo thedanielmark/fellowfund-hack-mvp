@@ -185,6 +185,29 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     uiConsole(privateKeyFromProvider);
   };
 
+  const readContract = async () => {
+    if (!provider) {
+      uiConsole("provider not initialized yet");
+      return;
+    }
+    const message = await RPC.readContract(provider);
+    uiConsole(message);
+  };
+
+  const writeContract = async (data: any) => {
+    if (!provider) {
+      uiConsole("provider not initialized yet");
+      return;
+    }
+    const receipt = await RPC.writeContract(provider, data);
+    uiConsole(receipt);
+    if (receipt) {
+      setTimeout(async () => {
+        await readContract();
+      }, 10000);
+    }
+  };
+
   function uiConsole(...args: any[]): void {
     console.log(...args);
   }
@@ -206,6 +229,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         signMessage,
         sendTransaction,
         getPrivateKey,
+        readContract,
+        writeContract,
       }}
     >
       {children}

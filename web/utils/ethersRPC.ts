@@ -1,6 +1,7 @@
 /* eslint-disable import/no-anonymous-default-export */
 import type { IProvider } from "@web3auth/base";
 import { ethers } from "ethers";
+import { contractABI } from "@/utils/contractABI";
 
 const getChainId = async (provider: IProvider): Promise<any> => {
   try {
@@ -116,6 +117,46 @@ const getPrivateKey = async (provider: IProvider): Promise<any> => {
   }
 };
 
+const readContract = async (provider: IProvider): Promise<any> => {
+  try {
+    const signer = await getSigner(provider);
+
+    const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || "";
+    const contract = new ethers.Contract(
+      contractAddress,
+      JSON.parse(JSON.stringify(contractABI)),
+      signer
+    );
+
+    // Read message from smart contract
+    const message = await contract.message();
+    return message;
+  } catch (error) {
+    return error as string;
+  }
+};
+
+const writeContract = async (provider: IProvider, args: any): Promise<any> => {
+  try {
+    const signer = await getSigner(provider);
+
+    const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || "";
+    const contract = new ethers.Contract(
+      contractAddress,
+      JSON.parse(JSON.stringify(contractABI)),
+      signer
+    );
+    // Generate random number between 1000 and 9000
+
+    const tx = await contract.mintVehicle(args);
+    // Wait for transaction to finish
+    const receipt = await tx.wait();
+    return receipt;
+  } catch (error) {
+    return error as string;
+  }
+};
+
 export default {
   getChainId,
   getAccounts,
@@ -124,4 +165,6 @@ export default {
   sendTransaction,
   signMessage,
   getPrivateKey,
+  readContract,
+  writeContract,
 };
