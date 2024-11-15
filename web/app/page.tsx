@@ -234,7 +234,7 @@ export default function Home() {
             <div className="bg-zinc-900/70">
               <div className="mx-auto max-w-7xl px-6 py-16 lg:px-8">
                 <p className="text-center text-base font-semibold text-zinc-500">
-                  The OnlyCars network works with every major EV manufacturer
+                  The FellowFund network works with every major EV manufacturer
                   around the world
                 </p>
                 <div className="mt-6 grid grid-cols-2 gap-8 md:grid-cols-6 lg:grid-cols-5">
