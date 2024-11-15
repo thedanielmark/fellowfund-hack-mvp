@@ -2,9 +2,10 @@
 pragma solidity ^0.8.27;
 
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
+import {Fellowship} from "./Types.sol";
 
 interface IFellowFund {
-    function createFellowship() external;
+    function createFellowship(Fellowship calldata _fellowship) external;
     function applyToFellowship(string memory someData) external;
     function openFellowshipMarket() external;
     // function to interact with pools -> should happen directly via pools (Uniswap)
@@ -20,7 +21,7 @@ contract FellowFund is IFellowFund, Ownable {
 
     constructor() Ownable(msg.sender) {}
 
-    function createFellowship() external {
+    function createFellowship(Fellowship calldata _fellowship) external {
         // Todo: Create a new fellowship
         // - Define liquidity - make sure funds are there - could be fixed
         // - Define how much percentage should be used for initial liquidity for applicants - could be fixed
