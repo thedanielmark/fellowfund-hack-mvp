@@ -3,10 +3,6 @@ pragma solidity ^0.8.27;
 
 struct Fellowship {
     /**
-     * @notice The unique identifier of the fellowship
-     */
-    uint256 uuid;
-    /**
      * @notice The name of the fellowship
      */
     string name;
@@ -19,27 +15,24 @@ struct Fellowship {
      */
     uint256 liquidity;
     /**
-     * @notice How much percentage of the liquidity should be used for initial liquidity for applicants' token pools.
+     * @notice The wheighted metrics that need to be achieved to pass the fellowship successfully.
+     * @dev The metrics should be github commits and poaps.
      */
-    uint256 initialLiquidityForApplicants;
-    Achievement[] achievements;
-    // Todo: Specify metadata for the fellowship - what should be achieved with which weights?
-    string metadata;
+    WeightedMetric[2] requiredMetrics;
 }
 
-struct Achievement {
-    uint8 weight;
-    string description;
+struct WeightedMetric {
+    uint256 weight;
+    uint256 count;
 }
-// Todo: this should reference which achievements should be checked against after epoch end to determine the outcome of the fellow's performance.
 
 struct Application {
-    /**
-     * @notice The unique identifier of the application
-     */
-    uint256 uuid;
     /**
      * @notice The address of the applicant
      */
     address applicant;
+    /**
+     * @notice The github username of the applicant
+     */
+    string githubUsername;
 }
