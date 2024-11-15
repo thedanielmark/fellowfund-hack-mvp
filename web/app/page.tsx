@@ -10,11 +10,17 @@ import {
   QuestionMarkCircleIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
+import { useAuth } from "@/providers/AuthProvider";
+
+import Footer from "@/components/Footer";
 import Link from "next/link";
 
 const navigation = [
-  { name: "Markets", href: "/" },
-  { name: "Fellowships", href: "/wallet" },
+  { name: "Locate", href: "/" },
+  { name: "Wallet", href: "/wallet" },
+  { name: "My Devices", href: "/my-devices" },
+  { name: "Navigate", href: "/navigate" },
+  { name: "Trips", href: "/trips" },
 ];
 
 const solutions = [
@@ -46,6 +52,8 @@ const solutions = [
 ];
 
 export default function Home() {
+  const { login, loggedIn, user } = useAuth();
+
   return (
     <>
       <div>
@@ -70,7 +78,34 @@ export default function Home() {
                 </PopoverButton>
               </div>
 
-              <div className="hidden items-center justify-end md:flex md:flex-1 lg:w-0"></div>
+              <div className="hidden items-center justify-end md:flex md:flex-1 lg:w-0">
+                {loggedIn && (
+                  <div className="flex items-center">
+                    <div>
+                      <img
+                        alt=""
+                        src={user.profileImage}
+                        className="inline-block h-9 w-9 rounded-full"
+                      />
+                    </div>
+                    <div className="ml-3">
+                      <p className="text-sm font-medium text-gray-200 group-hover:text-white">
+                        {user.name}
+                      </p>
+                      <p className="text-xs font-medium text-gray-500 group-hover:text-gray-700">
+                        {user.email}
+                      </p>
+                    </div>
+                  </div>
+                )}
+
+                <a
+                  href={loggedIn ? "/dashboard" : "/"}
+                  className="ml-8 inline-flex items-center justify-center whitespace-nowrap rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
+                >
+                  Dashboard
+                </a>
+              </div>
             </div>
 
             <PopoverPanel
@@ -129,6 +164,9 @@ export default function Home() {
                   <div className="mt-6">
                     <p className="mt-6 text-center text-base font-medium text-zinc-500">
                       Existing customer?
+                      <button onClick={login} className="text-zinc-900">
+                        Open Dashboard
+                      </button>
                     </p>
                   </div>
                 </div>
@@ -173,6 +211,12 @@ export default function Home() {
                     </p>
                     <div className="mx-auto mt-10 max-w-sm sm:flex sm:max-w-none sm:justify-center">
                       <div className="space-y-4 sm:mx-auto sm:inline-grid sm:grid-cols-2 sm:gap-5 sm:space-y-0">
+                        <button
+                          className="flex items-center justify-center rounded-md border border-transparent bg-white px-4 py-3 text-base font-medium text-indigo-700 shadow-sm hover:bg-indigo-50 sm:px-8"
+                          onClick={login}
+                        >
+                          Get started
+                        </button>
                         <a
                           href="https://github.com/fabianferno/builder-fund/"
                           className="flex items-center justify-center rounded-md border border-transparent bg-indigo-500 bg-opacity-60 px-4 py-3 text-base font-medium text-white shadow-sm hover:bg-opacity-70 sm:px-8"
@@ -221,6 +265,7 @@ export default function Home() {
               </div>
             </div>
           </div>
+          <Footer />
         </main>
       </div>
     </>
