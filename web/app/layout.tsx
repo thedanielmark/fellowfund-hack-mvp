@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-page-custom-font */
 import type { Metadata } from "next";
 import "./globals.css";
+import { AuthProvider } from "@/providers/AuthProvider";
 
 export const metadata: Metadata = {
   title: "FellowFund",
@@ -23,7 +24,7 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-screen bg-black text-white">
-        <>{children}</>
+        <AuthProvider>{children}</AuthProvider>
       </body>
     </html>
   );
