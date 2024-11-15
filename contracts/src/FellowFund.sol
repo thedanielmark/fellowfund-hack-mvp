@@ -13,11 +13,12 @@ interface IFellowFund {
 }
 
 interface IVerifier {
+    // Todo: Define exact parameters
     function verifyProof(bytes memory) external;
 }
 
 contract FellowFund is IFellowFund, Ownable {
-    address vLayerVerifierContract; // Todo: use interface
+    IVerifier vLayerVerifierContract;
 
     constructor() Ownable(msg.sender) {}
 
