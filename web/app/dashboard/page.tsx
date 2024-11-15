@@ -59,21 +59,6 @@ function DashboardHomePage() {
             className="flex flex-col p-5 overflow-hidden rounded-lg shadow-lg bg-zinc-900"
           >
             <div className="flex items-center">
-              <div>
-                <img
-                  alt=""
-                  src={market.fundLogo}
-                  className="inline-block size-5 rounded-full"
-                />
-              </div>
-              <div className="ml-2">
-                <p className="text-sm font-medium text-gray-200 group-hover:text-white">
-                  {market.fundName}
-                </p>
-                <p className="text-xs font-medium text-gray-500 group-hover:text-gray-700"></p>
-              </div>
-            </div>
-            <div className="mt-5 flex items-center">
               <div className="shrink-0">
                 <a href={"/market"}>
                   <span className="sr-only">{market.name}</span>
@@ -92,16 +77,39 @@ function DashboardHomePage() {
                 </p>
               </div>
             </div>
-            <div className="mt-5 flex items-center justify-around gap-x-3">
-              <div className="flex items-end gap-x-2">
-                <span className="text-green-600 font-bold text-5xl">17%</span>
-                <span className="text-zinc-400 font-medium text-sm">Yes</span>
+
+            <div className="mt-5 flex items-center space-x-2">
+              <div className="text-xs font-medium text-gray-900 dark:text-zinc-100">
+                Consensus
               </div>
-              <div className="flex items-end gap-x-2">
-                <span className="text-red-600 font-bold text-5xl">83%</span>
-                <span className="text-zinc-400 font-medium text-sm">No</span>
-              </div>
+              {Number(market.yes) + Number(market.no) === 0 ? (
+                <div className="w-full flex bg-gray-200 dark:bg-zinc-800 rounded-full h-1.5"></div>
+              ) : (
+                <div className="w-full flex bg-gray-200 dark:bg-zinc-900 rounded-full h-1.5">
+                  <div
+                    className="bg-green-500 h-2.5 rounded-full"
+                    style={{
+                      width: `${
+                        (Number(market.yes) /
+                          (Number(market.yes) + Number(market.no))) *
+                        100
+                      }%`,
+                    }}
+                  />
+                  <div
+                    className="bg-red-500 h-2.5 rounded-full"
+                    style={{
+                      width: `${
+                        (Number(market.no) /
+                          (Number(market.yes) + Number(market.no))) *
+                        100
+                      }%`,
+                    }}
+                  />
+                </div>
+              )}
             </div>
+
             <div className="mt-8">
               <a
                 href="/market/id"
@@ -109,6 +117,22 @@ function DashboardHomePage() {
               >
                 View Market
               </a>
+            </div>
+
+            <div className="mt-5 flex items-center">
+              <div>
+                <img
+                  alt=""
+                  src={market.fundLogo}
+                  className="inline-block size-5 rounded-full"
+                />
+              </div>
+              <div className="ml-2">
+                <p className="text-sm font-medium text-gray-200 group-hover:text-white">
+                  {market.fundName}
+                </p>
+                <p className="text-xs font-medium text-gray-500 group-hover:text-gray-700"></p>
+              </div>
             </div>
           </div>
         ))}
