@@ -10,6 +10,7 @@ interface IProofVerifier {
 
 interface IProofVerificationRegistry is IProofVerifier {
     event ProofVerified(string username, address account);
+    event Registered(string username, address account);
 
     function resolve(string memory username) external view returns (address account);
 }
@@ -19,6 +20,7 @@ contract GithubVerificationRegistry is IProofVerificationRegistry, Ownable {
     mapping(string githubUsername => address account) public githubUsernameToAccount;
 
     constructor(IProofVerifier _proofVerifier) Ownable(msg.sender) {
+        require(address(_proofVerifier) != address(0), "ProofVerifier cannot be zero address");
         proofVerifier = _proofVerifier;
     }
 
@@ -33,5 +35,7 @@ contract GithubVerificationRegistry is IProofVerificationRegistry, Ownable {
     function verify(Proof calldata _proof, string memory _username, address _account) external {
         proofVerifier.verify(_proof, _username, _account);
         emit ProofVerified(_username, _account);
+        githubUsernameToAccount[_username] = _account;
+        emit Registered(_username, _account);
     }
 }
