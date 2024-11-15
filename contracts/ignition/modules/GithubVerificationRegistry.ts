@@ -5,9 +5,9 @@ import { buildModule } from "@nomicfoundation/hardhat-ignition/modules";
 const githubVerificationRegistryModule = buildModule("GithubVerificationRegistry", (m) => {
     // If parameters are required for deployment, they can be provided in a JSON file:
     // npx hardhat ignition deploy ignition/modules/FellowFund.ts --parameters ignition/parameters.json
-    const name = m.getParameter("name", "githubVerificationRegistry");
+    const verifierContract = m.getParameter("verifier", "0x5fbdb2315678afecb367f032d93f642f64180aa3");
 
-    const githubVerificationRegistry = m.contract("GithubVerificationRegistry", [name], {});
+    const githubVerificationRegistry = m.contract("GithubVerificationRegistry", [verifierContract], {});
     return { githubVerificationRegistry };
 });
 
