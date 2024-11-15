@@ -9,7 +9,7 @@ import { contractABI } from "@/utils/contractABI";
 import { RotatingLines } from "react-loader-spinner";
 import { Description, Field, Label, Switch } from "@headlessui/react";
 
-function RegisterVehiclePage() {
+function CreateFellowshipPage() {
   const { address, getSigner } = useAuth();
   const [inputs, setInputs] = useState<any>({
     deviceDefinitionId: "",
@@ -147,7 +147,7 @@ function RegisterVehiclePage() {
                       required={true}
                       value={inputs.name}
                       onChange={handleInputChange}
-                      placeholder="Danny's Fellowship Programme"
+                      placeholder="Danny's Fellowship Program"
                       className="block w-full border-0 py-1.5 px-0 bg-transparent text-white placeholder:text-zinc-400 focus:ring-0 sm:text-sm sm:leading-6"
                     />
                   </div>
@@ -161,7 +161,7 @@ function RegisterVehiclePage() {
                       htmlFor="make"
                       className="block text-xs font-medium text-zinc-200"
                     >
-                      Programme Budget
+                      Program Budget
                     </label>
 
                     <div className="relative rounded-md shadow-sm">
@@ -189,13 +189,15 @@ function RegisterVehiclePage() {
                 </div>
                 {/* Amount end */}
 
+                <div className="col-span-6 w-full pt-0.5 bg-zinc-800" />
+
                 {/* Impact metrics start */}
                 <h1 className="col-span-6 sm:col-span-6 text-2xl">
                   Impact Metrics
                 </h1>
 
                 {/* GitHub commits start */}
-                <div className="col-span-3 sm:col-span-6">
+                <div className="col-span-6 sm:col-span-6">
                   <Field className="flex items-center justify-between">
                     <span className="flex grow flex-col">
                       <Label
@@ -223,8 +225,39 @@ function RegisterVehiclePage() {
                   </Field>
                 </div>
                 {/* GitHub commits end */}
+
+                {/* GitHub organization start */}
+                <div className="col-span-3 sm:col-span-3">
+                  <div className="rounded-md px-3 pb-1.5 pt-2.5 shadow-sm ring-1 ring-inset ring-zinc-800 focus-within:ring-2 focus-within:ring-primary-600">
+                    <label
+                      htmlFor="make"
+                      className="block text-xs font-medium text-zinc-200"
+                    >
+                      GitHub Organization Handle
+                    </label>
+
+                    <div className="relative rounded-md shadow-sm">
+                      <div className="flex rounded-md shadow-sm ring-0 ring-inset sm:max-w-md">
+                        <span className="flex select-none items-center text-gray-500 sm:text-sm">
+                          https://github.com/
+                        </span>
+                        <input
+                          id="company-website"
+                          name="company-website"
+                          type="text"
+                          placeholder="BoneyM"
+                          className="block w-full rounded-md border-0 py-1.5 pl-3 pr-12 bg-transparent text-white placeholder:text-zinc-400 focus:ring-0 sm:text-sm/6"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {/* GitHub organization end */}
+
+                <div className="col-span-6 w-full pt-0.5 bg-zinc-800" />
+
                 {/* Events attended start */}
-                <div className="col-span-3 sm:col-span-6">
+                <div className="col-span-6 sm:col-span-6">
                   <Field className="flex items-center justify-between">
                     <span className="flex grow flex-col">
                       <Label
@@ -252,6 +285,29 @@ function RegisterVehiclePage() {
                   </Field>
                 </div>
                 {/* Events attended end */}
+
+                {/* Events count start */}
+                <div className="col-span-3">
+                  <div className="rounded-md px-3 pb-1.5 pt-2.5 shadow-sm ring-1 ring-inset ring-zinc-800 focus-within:ring-2 focus-within:ring-primary-600">
+                    <label
+                      htmlFor="make"
+                      className="block text-xs font-medium text-zinc-200"
+                    >
+                      Number of Events
+                    </label>
+                    <input
+                      id="name"
+                      name="name"
+                      type="text"
+                      required={true}
+                      value={inputs.name}
+                      onChange={handleInputChange}
+                      placeholder="3"
+                      className="block w-full border-0 py-1.5 px-0 bg-transparent text-white placeholder:text-zinc-400 focus:ring-0 sm:text-sm sm:leading-6"
+                    />
+                  </div>
+                </div>
+                {/* Events count end */}
                 {/* Impact metrics end */}
               </div>
             </div>
@@ -324,4 +380,4 @@ function RegisterVehiclePage() {
   );
 }
 
-export default RegisterVehiclePage;
+export default CreateFellowshipPage;
