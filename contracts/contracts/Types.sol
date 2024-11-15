@@ -11,9 +11,9 @@ struct Fellowship {
      */
     string description;
     /**
-     * @notice How much liquidity the fellowship should have.
+     * @notice The amount of funds in Eth that is spent on the fellowship.
      */
-    uint256 liquidity;
+    uint256 funds;
     /**
      * @notice The wheighted metrics that need to be achieved to pass the fellowship successfully.
      * @dev The metrics should be github commits and poaps.
