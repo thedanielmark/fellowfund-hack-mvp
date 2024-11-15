@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-page-custom-font */
 import type { Metadata } from "next";
 import "./globals.css";
+import "@/styles/index.scss";
 import { AuthProvider } from "@/providers/AuthProvider";
 
 export const metadata: Metadata = {

@@ -1,6 +1,6 @@
-import type { Config } from "tailwindcss";
+const defaultTheme = require("tailwindcss/defaultTheme");
 
-const config: Config = {
+const config = {
   content: [
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -11,6 +11,10 @@ const config: Config = {
     "./utils/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
+    fontFamily: {
+      display: ["var(--font-display)", ...defaultTheme.fontFamily.sans],
+      body: ["var(--font-body)", ...defaultTheme.fontFamily.sans],
+    },
     extend: {
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
