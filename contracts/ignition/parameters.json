@@ -1,5 +1,8 @@
 {
     "FellowFund": {
         "name": "FellowFund"
+    },
+    "GithubVerificationRegistry": {
+        "name": "GithubVerificationRegistry"
     }
 }
