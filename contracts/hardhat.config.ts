@@ -16,6 +16,9 @@ const config: HardhatUserConfig = {
       },
     },
   },
+  typechain: {
+    outDir: "typechain-types"
+  },
   defaultNetwork: 'mantleSepolia', // chosen by default when network isn't specified while running Hardhat
   networks: {
     mantle: {
