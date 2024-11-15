@@ -67,9 +67,9 @@ export default function Footer() {
 
         <div className="mt-12 max-w-2xl text-xl sm:text-2xl mx-auto text-center font-medium text-gray-400">
           Building FellowFund has been an incredibly fun effort across many
-          people at OnlyCars and our frens at other companies. We&apos;re always
-          looking to make OnlyCars better, so please let us know how we can
-          improve.
+          people at FellowFund and our frens at other companies. We&apos;re
+          always looking to make FellowFund better, so please let us know how we
+          can improve.
         </div>
 
         <nav
