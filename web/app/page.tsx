@@ -65,8 +65,8 @@ export default function Home() {
                   <span className="sr-only">Your Company</span>
                   <img alt="" src="/logo.png" className="h-8 w-auto sm:h-10" />
                   <span className="text-3xl font-black text-indigo-600">
-                    Fore
-                    <span className="font-black text-white">caster</span>
+                    Fellow
+                    <span className="font-black text-white">Fund</span>
                   </span>
                 </Link>
               </div>
@@ -234,8 +234,7 @@ export default function Home() {
             <div className="bg-zinc-900/70">
               <div className="mx-auto max-w-7xl px-6 py-16 lg:px-8">
                 <p className="text-center text-base font-semibold text-zinc-500">
-                  The FellowFund network works with every major EV manufacturer
-                  around the world
+                  FellowFund is built on some of the best web3 technologies
                 </p>
                 <div className="mt-6 grid grid-cols-2 gap-8 md:grid-cols-6 lg:grid-cols-5">
                   <div className="col-span-1 flex items-center justify-center md:col-span-2 lg:col-span-1">
