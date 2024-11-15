@@ -2,8 +2,8 @@
 pragma solidity ^0.8.0;
 
 import "lib/forge-std/src/Test.sol";
-import {FellowFund} from "../src/FellowFund.sol";
-import {Fellowship, WeightedMetric} from "../src/Types.sol";
+import {FellowFund} from "../contracts/FellowFund.sol";
+import {Fellowship, WeightedMetric} from "../contracts/Types.sol";
 
 contract FellowFundTest is Test {
     FellowFund fellowFund;

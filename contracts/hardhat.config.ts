@@ -1,14 +1,10 @@
 import { HardhatUserConfig, vars } from "hardhat/config";
+import '@typechain/hardhat';
 import "@nomicfoundation/hardhat-toolbox";
-import "@nomiclabs/hardhat-solhint";
-import '@typechain/hardhat'
-import '@openzeppelin/hardhat-upgrades'
-import '@nomicfoundation/hardhat-chai-matchers'
-import 'hardhat-storage-layout'
 
 const PRIVATE_KEY_1 = vars.has("PRIVATE_KEY_1") ? vars.get("PRIVATE_KEY_1") : (() => { throw new Error("PRIVATE_KEY_1 is not set in environment variables"); })();
 
-/** @type import('hardhat/config').HardhatUserConfig */
+
 const config: HardhatUserConfig = {
   solidity: {
     version: "0.8.27",
@@ -43,22 +39,6 @@ const config: HardhatUserConfig = {
       accounts: [PRIVATE_KEY_1],
     },
   },
-  // etherscan: {
-  //   apiKey: {
-  //     sepolia: process.env.ETHERSCAN_API_KEY,
-  //     openCampusCodex: process.env.OPENCAMPUS_CODEX_API_KEY,
-  //   },
-  //   customChains: [
-  //     {
-  //       network: "openCampusCodex",
-  //       chainId: 656476,
-  //       urls: {
-  //         apiURL: "https://opencampus-codex.blockscout.com/api",
-  //         browserURL: "https://opencampus-codex.blockscout.com",
-  //       },
-  //     },
-  //   ],
-  // },
 };
 
 export default config;
