@@ -41,7 +41,7 @@ function ApplyToFellowhipPage({
     // Write to contract
     const signer = await getSigner();
 
-    const contractAddress = "0x2323Cd8097708f4C8D4BA37aE72644Af712bAD76";
+    const contractAddress = "0x25d598CBB74fa73290e74697616DE2740d280745";
     const contract = new ethers.Contract(
       contractAddress,
       JSON.parse(JSON.stringify(contractABI)),

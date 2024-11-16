@@ -197,11 +197,6 @@ export const contractABI = [
             name: "status",
             type: "uint8",
           },
-          {
-            internalType: "uint256",
-            name: "maxApplicants",
-            type: "uint256",
-          },
         ],
         indexed: false,
         internalType: "struct Fellowship",
@@ -339,46 +334,29 @@ export const contractABI = [
   {
     inputs: [
       {
-        components: [
-          {
-            internalType: "string",
-            name: "metadata",
-            type: "string",
-          },
-          {
-            internalType: "uint256",
-            name: "funds",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "applicationDeadline",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "marketDeadline",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "epochEndTime",
-            type: "uint256",
-          },
-          {
-            internalType: "enum FellowshipStatus",
-            name: "status",
-            type: "uint8",
-          },
-          {
-            internalType: "uint256",
-            name: "maxApplicants",
-            type: "uint256",
-          },
-        ],
-        internalType: "struct Fellowship",
-        name: "_fellowship",
-        type: "tuple",
+        internalType: "string",
+        name: "_metadata",
+        type: "string",
+      },
+      {
+        internalType: "uint256",
+        name: "_funds",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "_applicationDeadline",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "_marketDeadline",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "_epochDeadline",
+        type: "uint256",
       },
     ],
     name: "createFellowship",
@@ -451,11 +429,6 @@ export const contractABI = [
         internalType: "enum FellowshipStatus",
         name: "status",
         type: "uint8",
-      },
-      {
-        internalType: "uint256",
-        name: "maxApplicants",
-        type: "uint256",
       },
     ],
     stateMutability: "view",

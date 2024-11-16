@@ -63,7 +63,6 @@ function CreateFellowshipPage() {
       new Date(inputs.applicationDeadline).getTime() / 1000,
       new Date(inputs.marketDeadline).getTime() / 1000,
       new Date(inputs.epochEndtime).getTime() / 1000,
-      1,
       { value: parseEther(inputs.amount) }
     );
     console.log(tx);
