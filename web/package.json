@@ -14,6 +14,7 @@
     "@pushprotocol/restapi": "^1.7.29",
     "@pushprotocol/socket": "^0.5.3",
     "@tailwindcss/line-clamp": "^0.4.4",
+    "@vlayer/sdk": "^0.1.0-nightly-20241115-70dfc11",
     "@worldcoin/idkit": "^1.3.0",
     "@xmtp/consent-proof-signature": "^0.1.3",
     "axios": "^1.4.0",
