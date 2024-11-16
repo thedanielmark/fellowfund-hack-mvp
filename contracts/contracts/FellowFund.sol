@@ -28,57 +28,30 @@ contract FellowFund is IFellowFund, Ownable {
     }
 
     modifier onlyOperator() {
-        require(
-            msg.sender == operator,
-            "Only the operator can call this function"
-        );
+        require(msg.sender == operator, "Only the operator can call this function");
         _;
     }
 
-    function createFellowship(
-        Fellowship calldata _fellowship
-    ) external payable {
+    function createFellowship(Fellowship calldata _fellowship) external payable {
         require(msg.value == _fellowship.funds, "Incorrect funds sent");
-        require(
-            _fellowship.applicationDeadline > block.timestamp,
-            "Invalid application deadline"
-        );
-        require(
-            _fellowship.marketDeadline > _fellowship.applicationDeadline,
-            "Invalid market deadline"
-        );
-        require(
-            _fellowship.epochEndTime > _fellowship.marketDeadline,
-            "Invalid epoch end time"
-        );
+        require(_fellowship.applicationDeadline > block.timestamp, "Invalid application deadline");
+        require(_fellowship.marketDeadline > _fellowship.applicationDeadline, "Invalid market deadline");
+        require(_fellowship.epochEndTime > _fellowship.marketDeadline, "Invalid epoch end time");
 
         require(_fellowship.maxApplicants > 0, "Invalid max applicants");
 
         uint256 fellowshipId = fellowshipCount++;
         fellowships[fellowshipId] = _fellowship;
-        fellowships[fellowshipId].status = FellowshipStatus
-            .AcceptingApplications;
+        fellowships[fellowshipId].status = FellowshipStatus.AcceptingApplications;
 
         emit FellowshipCreated(fellowshipId, fellowships[fellowshipId]);
     }
 
-    function applyToFellowship(
-        uint256 fellowshipId,
-        string calldata metadata
-    ) external {
+    function applyToFellowship(uint256 fellowshipId, string calldata metadata) external {
         Fellowship storage fellowship = fellowships[fellowshipId];
-        require(
-            fellowship.status == FellowshipStatus.AcceptingApplications,
-            "Not accepting applications"
-        );
-        require(
-            block.timestamp < fellowship.applicationDeadline,
-            "Application period ended"
-        );
-        require(
-            applications[fellowshipId].length < fellowship.maxApplicants,
-            "Maximum applicants reached"
-        );
+        require(fellowship.status == FellowshipStatus.AcceptingApplications, "Not accepting applications");
+        require(block.timestamp < fellowship.applicationDeadline, "Application period ended");
+        require(applications[fellowshipId].length < fellowship.maxApplicants, "Maximum applicants reached");
 
         // Todo: Add vlayer verification logic here - use vlayerProof as parameter
 
@@ -99,25 +72,15 @@ contract FellowFund is IFellowFund, Ownable {
 
     function openFellowshipMarkets(uint256 fellowshipId) external onlyOperator {
         Fellowship storage fellowship = fellowships[fellowshipId];
-        require(
-            block.timestamp >= fellowship.applicationDeadline,
-            "Application period not ended"
-        );
-        require(
-            fellowship.status == FellowshipStatus.AcceptingApplications,
-            "Invalid status"
-        );
+        require(block.timestamp >= fellowship.applicationDeadline, "Application period not ended");
+        require(fellowship.status == FellowshipStatus.AcceptingApplications, "Invalid status");
 
         Application[] storage apps = applications[fellowshipId];
         require(apps.length > 0, "No applications to create markets for");
 
         // Create market for each applicant
         for (uint256 i = 0; i < apps.length; i++) {
-            Market market = new Market(
-                address(this),
-                fellowshipId,
-                apps[i].applicant
-            );
+            Market market = new Market(address(this), fellowshipId, apps[i].applicant);
             markets[fellowshipId][i] = IMarket(address(market));
 
             // Emit event for each market creation
@@ -129,73 +92,58 @@ contract FellowFund is IFellowFund, Ownable {
 
     function evaluateMarket(uint256 fellowshipId) external onlyOperator {
         Fellowship storage fellowship = fellowships[fellowshipId];
-        require(
-            block.timestamp >= fellowship.marketDeadline,
-            "Market still open"
-        );
-        require(
-            fellowship.status == FellowshipStatus.MarketOpen,
-            "Invalid status"
-        );
+        require(block.timestamp >= fellowship.marketDeadline, "Market still open");
+        require(fellowship.status == FellowshipStatus.MarketOpen, "Invalid status");
 
         Application[] storage apps = applications[fellowshipId];
-        uint256 acceptedCount = 0;
+        uint256 acceptedApplicantsCount = 0;
 
         uint256 nrApps = apps.length;
         // Evaluate each application based on market stakes
         for (uint256 i = 0; i < nrApps; i++) {
             Application storage app = apps[i];
             IMarket market = markets[fellowshipId][i];
-            uint256 yesStakes = market.getBet(Side.Yes);
-            uint256 noStakes = market.getBet(Side.No);
-            uint256 totalStakes = noStakes + noStakes;
+            uint256 yesBets = market.getBet(Side.Yes);
+            uint256 noBets = market.getBet(Side.No);
+            uint256 totalBets = yesBets + noBets;
 
-            if (totalStakes > 0) {
-                if (yesStakes > noStakes) {
+            if (totalBets > 0) {
+                if (yesBets > noBets) {
                     app.accepted = true;
-                    acceptedCount++;
+                    acceptedApplicantsCount++;
                 }
             }
         }
-        uint256 grantPerAccepted = fellowship.funds / acceptedCount;
+        uint256 grantPerAccepted = 0;
+        if (acceptedApplicantsCount > 0) {
+            grantPerAccepted = fellowship.funds / acceptedApplicantsCount;
+        }
 
         // Calculate grant amount for accepted applications
-        if (acceptedCount > 0) {
-            for (uint256 i = 0; i < apps.length; i++) {
+        if (acceptedApplicantsCount > 0) {
+            for (uint256 i = 0; i < nrApps; i++) {
                 if (apps[i].accepted) {
                     apps[i].grantAmount = grantPerAccepted;
-                    payable(apps[i].applicant).transfer(grantPerAccepted);
+                    (bool success,) = payable(apps[i].applicant).call{value: grantPerAccepted}("");
+                    require(success, "Transfer failed"); // Fine for the hackathon, but will need different approach in the future, since a single failing transfer (e.g., if the recipient is a contract) could block the whole payout in the evaluation.
                 }
             }
         }
-
         fellowship.status = FellowshipStatus.EpochStarted;
-        emit EpochStarted(
-            fellowshipId,
-            grantPerAccepted,
-            acceptedCount,
-            apps.length
-        );
+        emit EpochStarted(fellowshipId, grantPerAccepted, acceptedApplicantsCount, apps.length);
     }
 
-    function setApplicantImpact(
-        uint256 fellowshipId,
-        uint256 applicationId,
-        bool achieved,
-        bytes calldata proof
-    ) external onlyVerifier {
-        require(
-            fellowships[fellowshipId].status == FellowshipStatus.EpochStarted,
-            "Invalid status"
-        );
+    function setApplicantImpact(uint256 fellowshipId, uint256 applicationId, bool achieved, bytes calldata proof)
+        external
+        onlyVerifier
+    {
+        require(fellowships[fellowshipId].status == FellowshipStatus.EpochStarted, "Invalid status");
 
         // Verify TEE proof
-        (bool success, ) = phalaVerifier.call(proof);
+        (bool success,) = phalaVerifier.call(proof);
         require(success, "Invalid achievement proof");
 
-        Application storage application = applications[fellowshipId][
-            applicationId
-        ];
+        Application storage application = applications[fellowshipId][applicationId];
         application.achieved = achieved;
         application.verified = true;
 
@@ -205,10 +153,7 @@ contract FellowFund is IFellowFund, Ownable {
     function resolveFellowship(uint256 fellowshipId) external onlyOperator {
         Fellowship storage fellowship = fellowships[fellowshipId];
         require(block.timestamp >= fellowship.epochEndTime, "Epoch not ended");
-        require(
-            fellowship.status == FellowshipStatus.EpochStarted,
-            "Invalid status"
-        );
+        require(fellowship.status == FellowshipStatus.EpochStarted, "Invalid status");
 
         Application[] storage apps = applications[fellowshipId];
         for (uint256 i = 0; i < apps.length; i++) {
