@@ -21,6 +21,7 @@ struct Fellowship {
     uint256 marketDeadline;
     uint256 epochEndTime;
     FellowshipStatus status;
+    uint256 maxApplicants;
 }
 
 struct Application {
@@ -28,6 +29,8 @@ struct Application {
     string metadata;
     bool achieved;
     bool verified;
+    uint256 yesStakes;
+    uint256 noStakes;
     bool accepted;
     uint256 grantAmount;
 }
