@@ -1,0 +1,16 @@
+{
+    "name": "Celo Builder Ecosystem",
+    "description": "Driving global blockchain adoption with Celo’s mobile-first Ethereum Layer-2 network for real-world payments.",
+    "githubOrg": "celonetwork",
+    "logoURI": "https://cryptologos.cc/logos/thumbs/celo.png?v=034",
+    "kpiTargets": {
+        "totalCommits": {
+            "targetValue": 50,
+            "weight": 0.7
+        },
+        "poapEvents": {
+            "targetValue": 10,
+            "weight": 0.3
+        }
+    }
+}

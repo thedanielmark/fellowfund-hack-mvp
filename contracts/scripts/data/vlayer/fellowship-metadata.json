@@ -1,0 +1,16 @@
+{
+    "name": "vLayer Verifiable Data Initiative",
+    "description": "Bridging Web2 and Web3 with state-of-the-art ZKPs and trustless claims for real-world data integration into smart contracts.",
+    "githubOrg": "vlayer",
+    "logoURI": "https://vlayer.io/images/logo-vlayer-dark.svg",
+    "kpiTargets": {
+        "totalCommits": {
+            "targetValue": 22,
+            "weight": 0.6
+        },
+        "poapEvents": {
+            "targetValue": 5,
+            "weight": 0.4
+        }
+    }
+}

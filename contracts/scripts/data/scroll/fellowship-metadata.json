@@ -1,0 +1,16 @@
+{
+    "name": "Scroll ZK Rollup Initiative",
+    "description": "Scaling Ethereum seamlessly with zkEVM-powered ZK rollups, enabling smooth user and developer experiences.",
+    "githubOrg": "scrollrollup",
+    "logoURI": "https://scroll.io/assets/images/scroll-logo-dark.svg",
+    "kpiTargets": {
+        "totalCommits": {
+            "targetValue": 18,
+            "weight": 0.6
+        },
+        "poapEvents": {
+            "targetValue": 4,
+            "weight": 0.4
+        }
+    }
+}

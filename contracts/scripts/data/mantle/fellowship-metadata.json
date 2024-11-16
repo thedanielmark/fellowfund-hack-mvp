@@ -1,0 +1,16 @@
+{
+    "name": "Mantle Ecosystem Growth Program",
+    "description": "Advancing Web3 with Mantle’s modular architecture and $mETH liquid staking innovations for DeFi and beyond.",
+    "githubOrg": "mantlenetwork",
+    "logoURI": "https://cryptologos.cc/logos/thumbs/mantle.png?v=034",
+    "kpiTargets": {
+        "totalCommits": {
+            "targetValue": 30,
+            "weight": 0.8
+        },
+        "poapEvents": {
+            "targetValue": 5,
+            "weight": 0.2
+        }
+    }
+}
