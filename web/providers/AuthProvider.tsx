@@ -12,13 +12,13 @@ const clientId = process.env.NEXT_PUBLIC_WEB3AUTH_CLIENT_ID || "";
 
 const chainConfig = {
   chainNamespace: CHAIN_NAMESPACES.EIP155,
-  chainId: "0x138b",
-  rpcTarget: "https://rpc.ankr.com/mantle_sepolia",
-  displayName: "Mantle Sepolia Testnet",
-  blockExplorerUrl: "explorer.sepolia.mantle.xyz/",
-  ticker: "ETH",
+  chainId: "0x13882",
+  rpcTarget: "https://polygon-amoy.drpc.org",
+  displayName: "Polygon Amoy",
+  blockExplorerUrl: "explorer.amoy.polygonscan.com/",
+  ticker: "POL",
   tickerName: "Ethereum",
-  logo: "https://cryptologos.cc/logos/mantle-mnt-logo.png",
+  logo: "https://cryptologos.cc/logos/polygon-matic-logo.png",
 };
 
 const privateKeyProvider = new EthereumPrivateKeyProvider({

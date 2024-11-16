@@ -8,6 +8,7 @@ import { ethers, toUtf8Bytes } from "ethers";
 import { contractABI } from "@/utils/contractABI";
 import { RotatingLines } from "react-loader-spinner";
 import { Description, Field, Label, Switch } from "@headlessui/react";
+import { parseEther } from "ethers";
 
 function CreateFellowshipPage() {
   const { address, getSigner } = useAuth();
@@ -59,9 +60,10 @@ function CreateFellowshipPage() {
       inputs.amount,
       new Date(inputs.applicationDeadline).getTime() / 1000,
       new Date(inputs.marketDeadline).getTime() / 1000,
-      inputs.epochEndtime,
-      inputs.status,
+      new Date(inputs.epochEndtime).getTime() / 1000,
+      1,
       inputs.maxApplicants,
+      parseEther(inputs.amount),
     ]);
     console.log(tx);
     // Wait for transaction to finish
