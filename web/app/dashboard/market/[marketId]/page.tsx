@@ -23,19 +23,19 @@ function MarketPage({ params }: { params: { marketId: string } }) {
   }
 
   return (
-    <div className="py-12">
-      <div className="grid grid-cols-12 gap-x-5">
+    <div className="py-6 sm:py-12 px-4 sm:px-0">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
         {/* Left column start */}
-        <div className="col-span-9">
+        <div className="lg:col-span-9">
           <div className="flex items-center">
             <div>
               <img
                 alt=""
                 src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                className="inline-block size-12 rounded-full"
+                className="inline-block size-10 sm:size-12 rounded-full"
               />
             </div>
-            <h1 className="ml-3 text-3xl font-medium text-black">
+            <h1 className="ml-3 text-xl sm:text-3xl font-medium text-black">
               Guil&apos;s Performance Market
             </h1>
           </div>
@@ -61,21 +61,21 @@ function MarketPage({ params }: { params: { marketId: string } }) {
           </div>
           {/* Graph end */}
 
-          <div className="mt-12">
-            <h1 className="mt-5 text-3xl font-medium text-black">
+          <div className="mt-8 sm:mt-12">
+            <h1 className="text-2xl sm:text-3xl font-medium text-black">
               Applicant Details
             </h1>
-            <div className="mt-5">
+            <div className="mt-4 sm:mt-5">
               <div>
                 <div>
-                  <p className="text-base font-medium ring-zinc-900">Name</p>
-                  <h1 className="text-xl text-zinc-800">Fabian Ferno</h1>
+                  <p className="text-sm sm:text-base font-medium ring-zinc-900">Name</p>
+                  <h1 className="text-lg sm:text-xl text-zinc-800">Fabian Ferno</h1>
                 </div>
-                <div className="mt-5">
-                  <p className="text-base font-medium ring-zinc-900">
+                <div className="mt-4 sm:mt-5">
+                  <p className="text-sm sm:text-base font-medium ring-zinc-900">
                     About the Applicant
                   </p>
-                  <h1 className="text-xl text-zinc-800">
+                  <h1 className="text-base sm:text-xl text-zinc-800">
                     Fabian is a software engineer with 5 years of experience. He
                     is a blockchain enthusiast and has been working on
                     blockchain projects for the past 3 years. He is currently
@@ -87,13 +87,13 @@ function MarketPage({ params }: { params: { marketId: string } }) {
                     world.
                   </h1>
                 </div>
-                <div>
+                <div className="mt-4 sm:mt-5">
                   <p className="text-sm font-medium ring-zinc-900">
                     Market Status
                   </p>
                   <p className="mt-1 text-sm text-zinc-800">Open</p>
                 </div>
-                <div>
+                <div className="mt-4 sm:mt-5">
                   <p className="text-sm font-medium ring-zinc-900">
                     Market End
                   </p>
@@ -105,14 +105,14 @@ function MarketPage({ params }: { params: { marketId: string } }) {
         </div>
         {/* Left column end */}
         {/* Right column start */}
-        <div className="col-span-3">
-          <div className="sticky top-10 mt-4 rounded-lg border border-zinc-200 bg-zinc-100 shadow-sm">
-            <div className="p-5 flex items-center">
+        <div className="lg:col-span-3">
+          <div className="lg:sticky lg:top-10 mt-4 rounded-lg border border-zinc-200 bg-zinc-100 shadow-sm">
+            <div className="p-4 sm:p-5 flex items-center">
               <div className="shrink-0">
                 <img
                   alt=""
                   src="https://i.pravatar.cc/150?img=5"
-                  className="size-10 rounded-full"
+                  className="size-8 sm:size-10 rounded-full"
                 />
               </div>
               <div className="ml-3">
@@ -139,7 +139,7 @@ function MarketPage({ params }: { params: { marketId: string } }) {
                 </select>
               </div>
               <div className="hidden sm:block">
-                <div className="px-5 border-b border-zinc-200">
+                <div className="px-4 sm:px-5 border-b border-zinc-200">
                   <nav aria-label="Tabs" className="-mb-px flex space-x-8">
                     {tabs.map((tab) => (
                       <button
@@ -161,7 +161,7 @@ function MarketPage({ params }: { params: { marketId: string } }) {
             </div>
 
             {/* Tabs content start  */}
-            <div className="p-5">
+            <div className="p-4 sm:p-5">
               {currentTab === "Yes" && (
                 <div>
                   <div className="rounded-md px-3 pb-1.5 pt-2.5 shadow-sm ring-1 ring-inset ring-zinc-200 focus-within:ring-2 focus-within:ring-primary-600">
