@@ -1,0 +1,79 @@
+type ApplicationEvaluated @entity(immutable: true) {
+  id: Bytes!
+  fellowshipId: BigInt! # uint256
+  applicationId: BigInt! # uint256
+  achieved: Boolean! # bool
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type ApplicationSubmitted @entity(immutable: true) {
+  id: Bytes!
+  fellowshipId: BigInt! # uint256
+  applicationId: BigInt! # uint256
+  applicant: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type EpochResolved @entity(immutable: true) {
+  id: Bytes!
+  fellowshipId: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type EpochStarted @entity(immutable: true) {
+  id: Bytes!
+  fellowshipId: BigInt! # uint256
+  grantPerAccepted: BigInt! # uint256
+  acceptedCount: BigInt! # uint256
+  totalApplications: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type FellowshipCreated @entity(immutable: true) {
+  id: Bytes!
+  fellowshipId: BigInt! # uint256
+  fellowship_metadata: String! # string
+  fellowship_funds: BigInt! # uint256
+  fellowship_applicationDeadline: BigInt! # uint256
+  fellowship_marketDeadline: BigInt! # uint256
+  fellowship_epochEndTime: BigInt! # uint256
+  fellowship_status: Int! # uint8
+  fellowship_maxApplicants: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type FellowshipResolved @entity(immutable: true) {
+  id: Bytes!
+  fellowshipId: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type MarketOpened @entity(immutable: true) {
+  id: Bytes!
+  fellowshipId: BigInt! # uint256
+  marketAddress: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type OwnershipTransferred @entity(immutable: true) {
+  id: Bytes!
+  previousOwner: Bytes! # address
+  newOwner: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
