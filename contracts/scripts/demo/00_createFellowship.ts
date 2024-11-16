@@ -59,7 +59,7 @@ export async function createFellowship(deployer: Wallet, fellowshipDataDir: stri
 }
 
 function getMetadataJSON(fellowshipDataDir: string): any {
-    const metadataPath = path.join(__dirname, "./data", fellowshipDataDir, "fellowship-metadata.json");
+    const metadataPath = path.join(__dirname, "../data", "/fellowship", fellowshipDataDir, "fellowship-metadata.json");
     const fellowshipMetadata = JSON.parse(fs.readFileSync(metadataPath, 'utf-8'));
     return fellowshipMetadata;
 }
@@ -69,7 +69,7 @@ function getCompactJSON(json: any): string {
 }
 
 function getFunds(fellowshipDataDir: string): bigint {
-    const filePath = path.join(__dirname, "./data", fellowshipDataDir, "fellowship.json");
+    const filePath = path.join(__dirname, "../data", "/fellowship", fellowshipDataDir, "fellowship.json");
     const fellowship = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
     return fellowship.funds;
 }
