@@ -4,6 +4,7 @@ import { FellowFund } from "../../typechain-types/contracts/FellowFund";
 import { fellowFundContractAddress } from "../utils/constants";
 import { fundIfLocalNetwork } from "../utils/network";
 import { FellowshipStruct } from "../../typechain-types/contracts/FellowFund";
+import { getCompactJSON } from "../utils/json";
 import { getPersonalWallet } from "../utils/wallet";
 import fs, { stat } from "fs";
 import path from "path";
@@ -62,10 +63,6 @@ function getMetadataJSON(fellowshipDataDir: string): any {
     const metadataPath = path.join(__dirname, "../data", "/fellowship", fellowshipDataDir, "fellowship-metadata.json");
     const fellowshipMetadata = JSON.parse(fs.readFileSync(metadataPath, 'utf-8'));
     return fellowshipMetadata;
-}
-
-function getCompactJSON(json: any): string {
-    return JSON.stringify(json);
 }
 
 function getFunds(fellowshipDataDir: string): bigint {
