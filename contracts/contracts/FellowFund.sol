@@ -96,38 +96,40 @@ contract FellowFund is IFellowFund, Ownable {
         require(fellowship.status == FellowshipStatus.MarketOpen, "Invalid status");
 
         Application[] storage apps = applications[fellowshipId];
-        uint256 acceptedCount = 0;
+        uint256 acceptedApplicantsCount = 0;
 
         uint256 nrApps = apps.length;
         // Evaluate each application based on market stakes
         for (uint256 i = 0; i < nrApps; i++) {
             Application storage app = apps[i];
             IMarket market = markets[fellowshipId][i];
-            uint256 yesStakes = market.getBet(Side.Yes);
-            uint256 noStakes = market.getBet(Side.No);
-            uint256 totalStakes = noStakes + noStakes;
+            uint256 yesBets = market.getBet(Side.Yes);
+            uint256 noBets = market.getBet(Side.No);
+            uint256 totalBets = yesBets + noBets;
 
-            if (totalStakes > 0) {
-                if (yesStakes > noStakes) {
+            if (totalBets > 0) {
+                if (yesBets > noBets) {
                     app.accepted = true;
-                    acceptedCount++;
+                    acceptedApplicantsCount++;
                 }
             }
         }
-        uint256 grantPerAccepted = fellowship.funds / acceptedCount;
+        uint256 grantPerAccepted = 0;
+        if (acceptedApplicantsCount > 0) {
+            grantPerAccepted = fellowship.funds / acceptedApplicantsCount;
+        }
 
         // Calculate grant amount for accepted applications
-        if (acceptedCount > 0) {
-            for (uint256 i = 0; i < apps.length; i++) {
+        if (acceptedApplicantsCount > 0) {
+            for (uint256 i = 0; i < nrApps; i++) {
                 if (apps[i].accepted) {
                     apps[i].grantAmount = grantPerAccepted;
                     payable(apps[i].applicant).transfer(grantPerAccepted);
                 }
             }
         }
-
         fellowship.status = FellowshipStatus.EpochStarted;
-        emit EpochStarted(fellowshipId, grantPerAccepted, acceptedCount, apps.length);
+        emit EpochStarted(fellowshipId, grantPerAccepted, acceptedApplicantsCount, apps.length);
     }
 
     function setApplicantImpact(uint256 fellowshipId, uint256 applicationId, bool achieved, bytes calldata proof)
