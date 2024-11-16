@@ -1,3 +1,12 @@
+type ApplicantAccepted @entity(immutable: true) {
+  id: Bytes!
+  fellowshipId: BigInt! # uint256
+  applicationId: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
 type ApplicationEvaluated @entity(immutable: true) {
   id: Bytes!
   fellowshipId: BigInt! # uint256
@@ -13,6 +22,7 @@ type ApplicationSubmitted @entity(immutable: true) {
   fellowshipId: BigInt! # uint256
   applicationId: BigInt! # uint256
   applicant: Bytes! # address
+  metadata: String! # string
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
@@ -64,6 +74,7 @@ type MarketOpened @entity(immutable: true) {
   id: Bytes!
   fellowshipId: BigInt! # uint256
   marketAddress: Bytes! # address
+  applicationId: BigInt! # uint256
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!

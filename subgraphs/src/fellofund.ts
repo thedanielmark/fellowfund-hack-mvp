@@ -1,4 +1,5 @@
 import {
+  ApplicantAccepted as ApplicantAcceptedEvent,
   ApplicationEvaluated as ApplicationEvaluatedEvent,
   ApplicationSubmitted as ApplicationSubmittedEvent,
   EpochResolved as EpochResolvedEvent,
@@ -7,8 +8,9 @@ import {
   FellowshipResolved as FellowshipResolvedEvent,
   MarketOpened as MarketOpenedEvent,
   OwnershipTransferred as OwnershipTransferredEvent
-} from "../generated/FelloFund/FelloFund"
+} from "../generated/fellofund/fellofund"
 import {
+  ApplicantAccepted,
   ApplicationEvaluated,
   ApplicationSubmitted,
   EpochResolved,
@@ -18,6 +20,20 @@ import {
   MarketOpened,
   OwnershipTransferred
 } from "../generated/schema"
+
+export function handleApplicantAccepted(event: ApplicantAcceptedEvent): void {
+  let entity = new ApplicantAccepted(
+    event.transaction.hash.concatI32(event.logIndex.toI32())
+  )
+  entity.fellowshipId = event.params.fellowshipId
+  entity.applicationId = event.params.applicationId
+
+  entity.blockNumber = event.block.number
+  entity.blockTimestamp = event.block.timestamp
+  entity.transactionHash = event.transaction.hash
+
+  entity.save()
+}
 
 export function handleApplicationEvaluated(
   event: ApplicationEvaluatedEvent
@@ -45,6 +61,7 @@ export function handleApplicationSubmitted(
   entity.fellowshipId = event.params.fellowshipId
   entity.applicationId = event.params.applicationId
   entity.applicant = event.params.applicant
+  entity.metadata = event.params.metadata
 
   entity.blockNumber = event.block.number
   entity.blockTimestamp = event.block.timestamp
@@ -122,6 +139,7 @@ export function handleMarketOpened(event: MarketOpenedEvent): void {
   )
   entity.fellowshipId = event.params.fellowshipId
   entity.marketAddress = event.params.marketAddress
+  entity.applicationId = event.params.applicationId
 
   entity.blockNumber = event.block.number
   entity.blockTimestamp = event.block.timestamp

@@ -39,6 +39,25 @@
         "internalType": "uint256",
         "name": "applicationId",
         "type": "uint256"
+      }
+    ],
+    "name": "ApplicantAccepted",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "fellowshipId",
+        "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "applicationId",
+        "type": "uint256"
       },
       {
         "indexed": false,
@@ -70,6 +89,12 @@
         "internalType": "address",
         "name": "applicant",
         "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "metadata",
+        "type": "string"
       }
     ],
     "name": "ApplicationSubmitted",
@@ -194,6 +219,12 @@
         "internalType": "address",
         "name": "marketAddress",
         "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "applicationId",
+        "type": "uint256"
       }
     ],
     "name": "MarketOpened",
@@ -229,8 +260,6 @@
       { "internalType": "string", "name": "metadata", "type": "string" },
       { "internalType": "bool", "name": "achieved", "type": "bool" },
       { "internalType": "bool", "name": "verified", "type": "bool" },
-      { "internalType": "uint256", "name": "yesStakes", "type": "uint256" },
-      { "internalType": "uint256", "name": "noStakes", "type": "uint256" },
       { "internalType": "bool", "name": "accepted", "type": "bool" },
       { "internalType": "uint256", "name": "grantAmount", "type": "uint256" }
     ],
@@ -339,7 +368,7 @@
     ],
     "name": "markets",
     "outputs": [
-      { "internalType": "contract Market", "name": "", "type": "address" }
+      { "internalType": "contract IMarket", "name": "", "type": "address" }
     ],
     "stateMutability": "view",
     "type": "function"

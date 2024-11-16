@@ -1,6 +1,7 @@
 import { newMockEvent } from "matchstick-as"
 import { ethereum, BigInt, Address } from "@graphprotocol/graph-ts"
 import {
+  ApplicantAccepted,
   ApplicationEvaluated,
   ApplicationSubmitted,
   EpochResolved,
@@ -9,7 +10,31 @@ import {
   FellowshipResolved,
   MarketOpened,
   OwnershipTransferred
-} from "../generated/FelloFund/FelloFund"
+} from "../generated/fellofund/fellofund"
+
+export function createApplicantAcceptedEvent(
+  fellowshipId: BigInt,
+  applicationId: BigInt
+): ApplicantAccepted {
+  let applicantAcceptedEvent = changetype<ApplicantAccepted>(newMockEvent())
+
+  applicantAcceptedEvent.parameters = new Array()
+
+  applicantAcceptedEvent.parameters.push(
+    new ethereum.EventParam(
+      "fellowshipId",
+      ethereum.Value.fromUnsignedBigInt(fellowshipId)
+    )
+  )
+  applicantAcceptedEvent.parameters.push(
+    new ethereum.EventParam(
+      "applicationId",
+      ethereum.Value.fromUnsignedBigInt(applicationId)
+    )
+  )
+
+  return applicantAcceptedEvent
+}
 
 export function createApplicationEvaluatedEvent(
   fellowshipId: BigInt,
@@ -44,7 +69,8 @@ export function createApplicationEvaluatedEvent(
 export function createApplicationSubmittedEvent(
   fellowshipId: BigInt,
   applicationId: BigInt,
-  applicant: Address
+  applicant: Address,
+  metadata: string
 ): ApplicationSubmitted {
   let applicationSubmittedEvent = changetype<ApplicationSubmitted>(
     newMockEvent()
@@ -66,6 +92,9 @@ export function createApplicationSubmittedEvent(
   )
   applicationSubmittedEvent.parameters.push(
     new ethereum.EventParam("applicant", ethereum.Value.fromAddress(applicant))
+  )
+  applicationSubmittedEvent.parameters.push(
+    new ethereum.EventParam("metadata", ethereum.Value.fromString(metadata))
   )
 
   return applicationSubmittedEvent
@@ -164,7 +193,8 @@ export function createFellowshipResolvedEvent(
 
 export function createMarketOpenedEvent(
   fellowshipId: BigInt,
-  marketAddress: Address
+  marketAddress: Address,
+  applicationId: BigInt
 ): MarketOpened {
   let marketOpenedEvent = changetype<MarketOpened>(newMockEvent())
 
@@ -180,6 +210,12 @@ export function createMarketOpenedEvent(
     new ethereum.EventParam(
       "marketAddress",
       ethereum.Value.fromAddress(marketAddress)
+    )
+  )
+  marketOpenedEvent.parameters.push(
+    new ethereum.EventParam(
+      "applicationId",
+      ethereum.Value.fromUnsignedBigInt(applicationId)
     )
   )
 
