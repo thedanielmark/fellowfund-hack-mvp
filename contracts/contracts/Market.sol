@@ -66,26 +66,32 @@ contract Market is IMarket {
         isMarketResolved = true;
 
         uint256 totalWinningBets = bets[_winner];
+        // Todo: Decide what to do with the funds if no one wins, i.e., totalWinningBets == 0.
         if (totalWinningBets > 0) {
-            uint256 totalPot = bets[Side.Yes] + bets[Side.No];
-
-            for (uint256 i = 0; i < bettors.length; i++) {
+            uint256 totalPot = address(this).balance;
+            uint256 nrBettors = bettors.length;
+            for (uint256 i = 0; i < nrBettors; i++) {
                 address bettor = bettors[i];
-                uint256 winningBet = betsPerBettor[bettor][_winner];
+                uint256 winningBets = betsPerBettor[bettor][_winner];
 
-                if (winningBet > 0) {
-                    uint256 winnings = (winningBet * totalPot) / totalWinningBets;
+                if (winningBets > 0) {
+                    uint256 winnings = (winningBets * totalPot) / totalWinningBets;
+                    // Reset winner's bets before transfer
                     betsPerBettor[bettor][Side.Yes] = 0;
                     betsPerBettor[bettor][Side.No] = 0;
 
                     (bool success,) = payable(bettor).call{value: winnings}("");
+                    // Todo: This should not revert. If one bettor uses a contract as bettor that rejects payment resolve is blocked for everyone!
                     if (!success) revert TransferFailed();
 
                     emit WinningsDistributed(bettor, winnings);
+                } else {
+                    // Reset looser's bets
+                    betsPerBettor[bettor][Side.Yes] = 0;
+                    betsPerBettor[bettor][Side.No] = 0;
                 }
             }
         }
-
         emit MarketResolved(_winner);
     }
 }
