@@ -2,8 +2,9 @@
 pragma solidity ^0.8.24;
 
 import "./Types.sol";
+import {IMarket} from "./interfaces/IMarket.sol";
 
-contract Market {
+contract Market is IMarket {
     address public immutable operator;
 
     // State variables
