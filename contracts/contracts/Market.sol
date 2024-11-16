@@ -32,7 +32,10 @@ contract Market {
     }
 
     modifier onlyOperator() {
-        require(msg.sender == operator, "Only the operator can call this function");
+        require(
+            msg.sender == operator,
+            "Only the operator can call this function"
+        );
         _;
     }
 
@@ -67,11 +70,14 @@ contract Market {
                 uint256 winningBet = betsPerBettor[bettor][_winner];
 
                 if (winningBet > 0) {
-                    uint256 winnings = (winningBet * totalPot) / totalWinningBets;
+                    uint256 winnings = (winningBet * totalPot) /
+                        totalWinningBets;
                     betsPerBettor[bettor][Side.Yes] = 0;
                     betsPerBettor[bettor][Side.No] = 0;
 
-                    (bool success,) = payable(bettor).call{value: winnings}("");
+                    (bool success, ) = payable(bettor).call{value: winnings}(
+                        ""
+                    );
                     if (!success) revert TransferFailed();
 
                     emit WinningsDistributed(bettor, winnings);
