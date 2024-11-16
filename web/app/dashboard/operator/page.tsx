@@ -34,8 +34,13 @@ declare global {
   }
 }
 
-
-function FellowshipCard({ fellowshipId, signer }: { fellowshipId: number, signer: ethers.JsonRpcSigner }) {
+function FellowshipCard({
+  fellowshipId,
+  signer,
+}: {
+  fellowshipId: number;
+  signer: ethers.JsonRpcSigner;
+}) {
   const [loading, setLoading] = useState<boolean>(false);
   const [data, setData] = useState<any>(null);
   const [applications, setApplications] = useState<any>(null);
@@ -53,7 +58,7 @@ function FellowshipCard({ fellowshipId, signer }: { fellowshipId: number, signer
     } catch (error) {
       console.error("Error fetching applications:", error);
     }
-  }
+  };
 
   const getFellowshipFromContract = async (fellowshipId: number) => {
     setLoading(true);
@@ -73,32 +78,51 @@ function FellowshipCard({ fellowshipId, signer }: { fellowshipId: number, signer
     } finally {
       setLoading(false);
     }
-  }
-
+  };
 
   useEffect(() => {
     getFellowshipFromContract(fellowshipId);
   }, [fellowshipId, signer]);
 
   if (loading) {
-    return <div className="flex justify-center">
-      <RotatingLines visible={true} width="24" strokeColor="#000000" strokeWidth="5" animationDuration="0.75" ariaLabel="loading" />
-    </div>;
+    return (
+      <div className="flex justify-center">
+        <RotatingLines
+          visible={true}
+          width="24"
+          strokeColor="#000000"
+          strokeWidth="5"
+          animationDuration="0.75"
+          ariaLabel="loading"
+        />
+      </div>
+    );
   }
 
   if (!data) return null;
 
   return (
     <div className="text-xs space-y-1">
-      <div><span className="font-semibold">Funds:</span> {ethers.formatEther(data.funds || '0')} ETH</div>
-      <div><span className="font-semibold">Grant per accepted:</span> {ethers.formatEther(data.grantPerAccepted || '0')} ETH</div>
-      <div><span className="font-semibold">Accepted:</span> {Number(data.acceptedApplicants)}</div>
-      <div><span className="font-semibold">Epoch started:</span> {data.epochStarted ? 'Yes' : 'No'}</div>
+      <div>
+        <span className="font-semibold">Funds:</span>{" "}
+        {ethers.formatEther(data.funds || "0")} ETH
+      </div>
+      <div>
+        <span className="font-semibold">Grant per accepted:</span>{" "}
+        {ethers.formatEther(data.grantPerAccepted || "0")} ETH
+      </div>
+      <div>
+        <span className="font-semibold">Accepted:</span>{" "}
+        {Number(data.acceptedApplicants)}
+      </div>
+      <div>
+        <span className="font-semibold">Epoch started:</span>{" "}
+        {data.epochStarted ? "Yes" : "No"}
+      </div>
       {/* <div><span className="font-semibold">Applications:</span> {applications.length}</div> */}
     </div>
   );
 }
-
 
 function OperatorPage() {
   const [fellowships, setFellowships] = useState<Fellowship[]>([]);
@@ -118,7 +142,6 @@ function OperatorPage() {
     setSigner(signer);
     return signer;
   };
-
 
   // Modify the useEffect to use window.ethereum
   useEffect(() => {
@@ -280,19 +303,28 @@ function OperatorPage() {
                           {JSON.parse(fellowship.metadata).name}
                         </td>
                         <td className="whitespace-nowrap px-3 py-4 text-sm">
-                          <span className={`inline-flex rounded-full px-2 text-xs font-semibold leading-5 ${fellowship.status === 0 ? 'bg-gray-100 text-gray-800' :
-                            fellowship.status === 1 ? 'bg-yellow-100 text-yellow-800' :
-                              fellowship.status === 2 ? 'bg-blue-100 text-blue-800' :
-                                fellowship.status === 3 ? 'bg-green-100 text-green-800' :
-                                  'bg-purple-100 text-purple-800'
-                            }`}>
-                            {[
-                              "Created",
-                              "AcceptingApplications",
-                              "MarketOpen",
-                              "EpochStarted",
-                              "Resolved",
-                            ][fellowship.status]}
+                          <span
+                            className={`inline-flex rounded-full px-2 text-xs font-semibold leading-5 ${
+                              fellowship.status === 0
+                                ? "bg-gray-100 text-gray-800"
+                                : fellowship.status === 1
+                                ? "bg-yellow-100 text-yellow-800"
+                                : fellowship.status === 2
+                                ? "bg-blue-100 text-blue-800"
+                                : fellowship.status === 3
+                                ? "bg-green-100 text-green-800"
+                                : "bg-purple-100 text-purple-800"
+                            }`}
+                          >
+                            {
+                              [
+                                "Created",
+                                "AcceptingApplications",
+                                "MarketOpen",
+                                "EpochStarted",
+                                "Resolved",
+                              ][fellowship.status]
+                            }
                           </span>
                         </td>
                         <td className="whitespace-nowrap px-3 py-4 text-sm">
@@ -325,7 +357,12 @@ function OperatorPage() {
                           </div>
                         </td>
                         <td className="whitespace-nowrap px-3 py-4 text-sm">
-                          {signer && <FellowshipCard fellowshipId={Number(fellowship.fellowshipId)} signer={signer} />}
+                          {signer && (
+                            <FellowshipCard
+                              fellowshipId={Number(fellowship.fellowshipId)}
+                              signer={signer}
+                            />
+                          )}
                         </td>
                       </tr>
                     ))}
@@ -354,25 +391,31 @@ function OperatorPage() {
       {/* Success/Error Message */}
       {message && (
         <div
-          className={`rounded-md p-4 ${showSuccess ? "bg-primary-900" : "bg-red-900"
-            }`}
+          className={`rounded-md p-4 ${
+            showSuccess ? "bg-primary-900" : "bg-red-900"
+          }`}
         >
           <div className="flex">
             <div className="flex-shrink-0">
               <InformationCircleIcon
-                className={`h-5 w-5 ${showSuccess ? "text-primary-400" : "text-red-400"
-                  }`}
+                className={`h-5 w-5 ${
+                  showSuccess ? "text-primary-400" : "text-red-400"
+                }`}
                 aria-hidden="true"
               />
             </div>
             <div className="ml-3 flex-1 md:flex md:justify-between">
-              <p className={`text-sm ${showSuccess ? 'text-green-700' : 'text-red-700'}`}>
+              <p
+                className={`text-sm ${
+                  showSuccess ? "text-green-700" : "text-red-700"
+                }`}
+              >
                 {message}
               </p>
               {showSuccess && transactionHash && (
                 <p className="mt-3 text-sm md:ml-6 md:mt-0">
                   <a
-                    href={`https://zkevm.blockscout.com/tx/${transactionHash}`}
+                    href={`https://optimism-sepolia.blockscout.com/tx/${transactionHash}`}
                     className="whitespace-nowrap font-medium text-primary-500 hover:text-primary-200"
                     target="_blank"
                     rel="noopener noreferrer"

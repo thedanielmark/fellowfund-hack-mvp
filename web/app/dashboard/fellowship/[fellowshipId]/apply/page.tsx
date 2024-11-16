@@ -321,7 +321,7 @@ function ApplyToFellowhipPage({
                 </p>
                 <p className="mt-3 flex items-center gap-x-3 text-sm md:ml-6 md:mt-0">
                   <a
-                    href={`https://scan.sign.global/attestation/${attestationID}`}
+                    href={`https://optimism-sepolia.blockscout.com/tx/${attestationID}`}
                     className="whitespace-nowrap font-medium text-primary-500 hover:text-primary-200"
                     target="_blank"
                   >
@@ -329,7 +329,7 @@ function ApplyToFellowhipPage({
                     <span aria-hidden="true"> &rarr;</span>
                   </a>
                   <a
-                    href={`https://zkevm.blockscout.com/tx/${transactionHash}`}
+                    href={`https://optimism-sepolia.blockscout.com/tx/${transactionHash}`}
                     className="whitespace-nowrap font-medium text-primary-500 hover:text-primary-200"
                     target="_blank"
                   >
