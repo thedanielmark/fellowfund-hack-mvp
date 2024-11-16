@@ -21,9 +21,7 @@ contract FellowFund is IFellowFund {
         emit FellowshipCreated(fellowshipId, fellowships[fellowshipId]);
     }
 
-    function applyToFellowship(uint256 _fellowshipId, bytes calldata _vlayerProof, string calldata _metadata)
-        external
-    {}
+    function applyToFellowship(uint256 fellowshipId, string calldata metadata) external {}
 
     function openFellowshipMarkets(uint256 fellowshipId) external {
         // Todo: For each applicant, do the following:
