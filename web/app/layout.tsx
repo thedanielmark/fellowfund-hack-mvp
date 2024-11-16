@@ -24,7 +24,7 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className="min-h-screen bg-black text-white">
+      <body className="min-h-screen bg-white text-black">
         <AuthProvider>{children}</AuthProvider>
       </body>
     </html>

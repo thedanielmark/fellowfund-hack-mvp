@@ -61,7 +61,7 @@ export default function Home() {
     <>
       <div>
         <header>
-          <Popover className="relative bg-black">
+          <Popover className="relative bg-white">
             <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-6 md:justify-start md:space-x-10 lg:px-8">
               <div className="flex justify-start lg:w-0 lg:flex-1">
                 <Link href="/" className="flex items-center gap-x-3">
@@ -69,7 +69,7 @@ export default function Home() {
                   <div className="flex items-center gap-x-3">
                     <img
                       alt=""
-                      src="/logo.png"
+                      src="/logo-color.png"
                       className="h-8 w-auto sm:h-10"
                     />
                     <img
@@ -78,14 +78,14 @@ export default function Home() {
                       className="h-8 w-auto sm:h-6"
                     />
                   </div>
-                  <span className="text-3xl font-black text-primary-600">
+                  <h1 className="text-3xl font-black text-primary-60 flex">
                     Fellow
-                    <span className="font-black text-white">Fund</span>
-                  </span>
+                    <h1 className="text-primary-600">Fund</h1>
+                  </h1>
                 </Link>
               </div>
               <div className="-my-2 -mr-2 md:hidden">
-                <PopoverButton className="relative inline-flex items-center justify-center rounded-md bg-white p-2 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-500">
+                <PopoverButton className="relative inline-flex items-center justify-center rounded-md bg-white p-2 text-zinc-600 hover:bg-zinc-100 hover:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-500">
                   <span className="absolute -inset-0.5" />
                   <span className="sr-only">Open menu</span>
                   <Bars3Icon aria-hidden="true" className="h-6 w-6" />
@@ -103,10 +103,10 @@ export default function Home() {
                       />
                     </div>
                     <div className="ml-3">
-                      <p className="text-sm font-medium text-gray-200 group-hover:text-white">
+                      <p className="text-sm font-medium text-zinc-900 group-hover:text-black">
                         {user.name}
                       </p>
-                      <p className="text-xs font-medium text-gray-500 group-hover:text-gray-700">
+                      <p className="text-xs font-medium text-zinc-600 group-hover:text-zinc-700">
                         {user.email}
                       </p>
                     </div>
@@ -137,7 +137,7 @@ export default function Home() {
                       />
                     </div>
                     <div className="-mr-2">
-                      <PopoverButton className="relative inline-flex items-center justify-center rounded-md bg-white p-2 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-500">
+                      <PopoverButton className="relative inline-flex items-center justify-center rounded-md bg-white p-2 text-zinc-600 hover:bg-zinc-100 hover:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-500">
                         <span className="absolute -inset-0.5" />
                         <span className="sr-only">Close menu</span>
                         <XMarkIcon aria-hidden="true" className="h-6 w-6" />
@@ -152,10 +152,10 @@ export default function Home() {
                           href={item.href}
                           className="-m-3 flex items-center rounded-lg p-3 hover:bg-zinc-50"
                         >
-                          <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-md bg-primary-600 text-white">
+                          <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-md bg-primary-600 text-black">
                             <item.icon aria-hidden="true" className="h-6 w-6" />
                           </div>
-                          <div className="ml-4 text-base font-medium text-zinc-900">
+                          <div className="ml-4 text-base font-medium text-zinc-100">
                             {item.name}
                           </div>
                         </a>
@@ -169,7 +169,7 @@ export default function Home() {
                       <a
                         key={item.name}
                         href={item.href}
-                        className="text-base font-medium text-zinc-200 hover:text-white"
+                        className="text-base font-medium text-zinc-800 hover:text-black"
                       >
                         {item.name}
                       </a>
@@ -178,7 +178,7 @@ export default function Home() {
                   <div className="mt-6">
                     <p className="mt-6 text-center text-base font-medium text-zinc-500">
                       Existing customer?
-                      <button onClick={login} className="text-zinc-900">
+                      <button onClick={login} className="text-zinc-100">
                         Open Dashboard
                       </button>
                     </p>
@@ -193,7 +193,7 @@ export default function Home() {
           <div>
             {/* Hero card */}
             <div className="relative">
-              <div className="absolute inset-x-0 bottom-0 h-1/2 bg-zinc-900/70" />
+              <div className="absolute inset-x-0 bottom-0 h-1/2 bg-zinc-100/70" />
               <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
                 <div className="relative shadow-xl sm:overflow-hidden sm:rounded-2xl">
                   <div className="absolute inset-0">
@@ -227,7 +227,7 @@ export default function Home() {
                       <div className="space-y-4 sm:mx-auto sm:inline-grid sm:grid-cols-2 sm:gap-5 sm:space-y-0">
                         {worldIdVerified ? (
                           <button
-                            className="flex items-center justify-center rounded-md border border-transparent bg-white px-4 py-3 text-base font-medium text-primary-700 shadow-sm hover:bg-primary-50 sm:px-8"
+                            className="flex items-center justify-center rounded-md border border-transparent bg-white px-4 py-3 text-base font-medium text-primary-900 shadow-sm hover:bg-primary-50 sm:px-8"
                             onClick={login}
                           >
                             Get started
@@ -238,7 +238,7 @@ export default function Home() {
 
                         <a
                           href="https://github.com/fabianferno/builder-fund/"
-                          className="flex items-center justify-center rounded-md border border-transparent bg-primary-500 bg-opacity-60 px-4 py-3 text-base font-medium text-white shadow-sm hover:bg-opacity-70 sm:px-8"
+                          className="flex items-center justify-center rounded-md border border-transparent bg-primary-500 bg-opacity-60 px-4 py-3 text-base font-medium text-primary-100 shadow-sm hover:bg-opacity-70 sm:px-8"
                         >
                           Source Code
                         </a>
@@ -250,7 +250,7 @@ export default function Home() {
             </div>
 
             {/* Logo cloud */}
-            <div className="bg-zinc-900/70">
+            <div className="bg-zinc-100/70">
               <div className="mx-auto max-w-7xl px-6 py-16 lg:px-8">
                 <p className="text-center text-base font-semibold text-zinc-500">
                   FellowFund is built on some of the best web3 technologies

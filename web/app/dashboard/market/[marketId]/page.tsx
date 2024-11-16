@@ -5,12 +5,13 @@ import { useState } from "react";
 
 function MarketPage({ params }: { params: { marketId: string } }) {
   const tabs = [
-    { name: "Buy", href: "#", current: false },
-    { name: "Sell", href: "#", current: false },
+    { name: "Yes", current: true },
+    { name: "No", current: false },
   ];
-  const [currentTab, setCurrentTab] = useState("Buy");
 
-  const [buyValue, setBuyValue] = useState("10");
+  const [currentTab, setCurrentTab] = useState("Yes");
+  const [yesValue, setYesValue] = useState("10");
+  const [noValue, setNoValue] = useState("10");
 
   function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(" ");
@@ -34,7 +35,7 @@ function MarketPage({ params }: { params: { marketId: string } }) {
                 className="inline-block size-12 rounded-full"
               />
             </div>
-            <h1 className="ml-3 text-3xl font-medium text-white">
+            <h1 className="ml-3 text-3xl font-medium text-black">
               Guil&apos;s Performance Market
             </h1>
           </div>
@@ -59,143 +60,170 @@ function MarketPage({ params }: { params: { marketId: string } }) {
             />
           </div>
           {/* Graph end */}
+
+          <div className="mt-12">
+            <h1 className="mt-5 text-3xl font-medium text-black">
+              Applicant Details
+            </h1>
+            <div className="mt-5">
+              <div>
+                <div>
+                  <p className="text-base font-medium ring-zinc-900">Name</p>
+                  <h1 className="text-xl text-zinc-800">Fabian Ferno</h1>
+                </div>
+                <div className="mt-5">
+                  <p className="text-base font-medium ring-zinc-900">
+                    About the Applicant
+                  </p>
+                  <h1 className="text-xl text-zinc-800">
+                    Fabian is a software engineer with 5 years of experience. He
+                    is a blockchain enthusiast and has been working on
+                    blockchain projects for the past 3 years. He is currently
+                    working on a decentralized finance project. He is passionate
+                    about blockchain technology and is looking to contribute to
+                    the blockchain ecosystem. He is a strong believer in the
+                    future of blockchain technology and is excited about the
+                    potential of blockchain technology to revolutionize the
+                    world.
+                  </h1>
+                </div>
+                <div>
+                  <p className="text-sm font-medium ring-zinc-900">
+                    Market Status
+                  </p>
+                  <p className="mt-1 text-sm text-zinc-800">Open</p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium ring-zinc-900">
+                    Market End
+                  </p>
+                  <p className="mt-1 text-sm text-zinc-800">In 2 days</p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
         {/* Left column end */}
         {/* Right column start */}
-        <div className="col-span-3 mt-4 rounded-lg border border-zinc-800 bg-zinc-900 shadow-sm">
-          <div className="p-5 flex items-center">
-            <div className="shrink-0">
-              <img
-                alt=""
-                src="https://i.pravatar.cc/150?img=5"
-                className="size-10 rounded-full"
-              />
-            </div>
-            <div className="ml-3">
-              <p className="text-sm font-medium text-zinc-100">
-                Will Alice be able to increase her performance by 25%?
-              </p>
-            </div>
-          </div>
-
-          <div>
-            <div className="sm:hidden">
-              <label htmlFor="tabs" className="sr-only">
-                Select a tab
-              </label>
-              {/* Use an "onChange" listener to redirect the user to the selected tab URL. */}
-              <select
-                id="tabs"
-                name="tabs"
-                className="block w-full rounded-md border-zinc-300 py-2 pl-3 pr-10 text-base focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm"
-              >
-                {tabs.map((tab) => (
-                  <option key={tab.name}>{tab.name}</option>
-                ))}
-              </select>
-            </div>
-            <div className="hidden sm:block">
-              <div className="px-5 border-b border-zinc-800">
-                <nav aria-label="Tabs" className="-mb-px flex space-x-8">
-                  {tabs.map((tab) => (
-                    <button
-                      key={tab.name}
-                      onClick={() => changeTab(tab.name)}
-                      className={classNames(
-                        tab.name === currentTab
-                          ? "border-primary-500 text-white"
-                          : "border-transparent text-zinc-400 hover:border-zinc-400 hover:text-zinc-200",
-                        "whitespace-nowrap border-b-2 px-1 py-4 text-sm font-medium"
-                      )}
-                    >
-                      {tab.name}
-                    </button>
-                  ))}
-                </nav>
+        <div className="col-span-3">
+          <div className="sticky top-10 mt-4 rounded-lg border border-zinc-200 bg-zinc-100 shadow-sm">
+            <div className="p-5 flex items-center">
+              <div className="shrink-0">
+                <img
+                  alt=""
+                  src="https://i.pravatar.cc/150?img=5"
+                  className="size-10 rounded-full"
+                />
+              </div>
+              <div className="ml-3">
+                <p className="text-sm font-medium ring-zinc-900">
+                  Will Alice be able to increase her performance by 25%?
+                </p>
               </div>
             </div>
-          </div>
 
-          {/* Tabs content start  */}
-          <div className="p-5">
-            {currentTab === "Buy" && (
-              <div>
-                <div className="flex items-center gap-x-3">
-                  <button
-                    type="submit"
-                    className="w-full rounded-md border border-transparent bg-green-600 px-4 py-3 text-sm font-bold text-white shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-zinc-50"
-                  >
-                    Yes (0.91)
-                  </button>
-                  <button
-                    type="submit"
-                    className="w-full rounded-md border border-transparent bg-red-600 px-4 py-3 text-sm font-bold text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:ring-offset-zinc-50"
-                  >
-                    No (0.09)
-                  </button>
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="company-website"
-                    className="block text-sm/6 font-medium text-zinc-900"
-                  >
-                    Buy Value
-                  </label>
-                  <div className="mt-2 flex rounded-md shadow-sm">
-                    <button
-                      className="inline-flex items-center rounded-l-md border border-r-0 border-zinc-500 px-4 text-zinc-500 sm:text-sm font-bold focus:ring-2 focus:ring-inset focus:ring-primary-600"
-                      onClick={() => {
-                        const value = parseInt(buyValue) - 1;
-                        setBuyValue(value.toString());
-                      }}
-                    >
-                      -
-                    </button>
-                    <input
-                      id="company-website"
-                      name="company-website"
-                      type="text"
-                      placeholder="10"
-                      value={buyValue}
-                      onChange={(e) => setBuyValue(e.target.value)}
-                      className="block w-full min-w-0 flex-1 rounded-none border-0 py-1.5 bg-transparent text-white ring-1 ring-inset ring-zinc-500 placeholder:text-zinc-400 focus:ring-2 focus:ring-inset focus:ring-primary-600 sm:text-sm/6"
-                    />
-                    <button
-                      className="inline-flex items-center rounded-r-md border border-l-0 border-zinc-500 px-4 text-zinc-500 sm:text-sm font-bold focus:ring-2 focus:ring-inset focus:ring-primary-600"
-                      onClick={() => {
-                        const value = parseInt(buyValue) + 1;
-                        setBuyValue(value.toString());
-                      }}
-                    >
-                      +
-                    </button>
-                  </div>
-                </div>
-
-                <button
-                  type="submit"
-                  className="mt-5 w-full rounded-md border border-transparent bg-primary-600 px-4 py-3 text-sm font-bold text-white shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus:ring-offset-zinc-50"
+            <div>
+              <div className="sm:hidden">
+                <label htmlFor="tabs" className="sr-only">
+                  Select a tab
+                </label>
+                {/* Use an "onChange" listener to redirect the user to the selected tab URL. */}
+                <select
+                  id="tabs"
+                  name="tabs"
+                  className="block w-full rounded-md border-zinc-300 py-2 pl-3 pr-10 text-base focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm"
                 >
-                  Buy
-                </button>
-
-                <div className="mt-12 grid grid-cols-2 text-sm">
-                  <div className="text-zinc-400 font-seimbold">Avg Price</div>
-                  <div className="text-white font-semibold text-right">
-                    0.91
-                  </div>
-                  <div className="text-zinc-400 font-seimbold">Shares</div>
-                  <div className="text-white font-semibold text-right">10</div>
-                  <div className="text-zinc-400 font-seimbold">
-                    Potential Return
-                  </div>
-                  <div className="text-white font-semibold text-right">9.1</div>
+                  {tabs.map((tab) => (
+                    <option key={tab.name}>{tab.name}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="hidden sm:block">
+                <div className="px-5 border-b border-zinc-200">
+                  <nav aria-label="Tabs" className="-mb-px flex space-x-8">
+                    {tabs.map((tab) => (
+                      <button
+                        key={tab.name}
+                        onClick={() => changeTab(tab.name)}
+                        className={classNames(
+                          tab.name === currentTab
+                            ? "border-primary-500 text-black"
+                            : "border-transparent text-zinc-600 hover:border-zinc-400 hover:text-zinc-800",
+                          "whitespace-nowrap border-b-2 px-1 py-4 text-sm font-medium"
+                        )}
+                      >
+                        {tab.name}
+                      </button>
+                    ))}
+                  </nav>
                 </div>
               </div>
-            )}
+            </div>
+
+            {/* Tabs content start  */}
+            <div className="p-5">
+              {currentTab === "Yes" && (
+                <div>
+                  <div className="rounded-md px-3 pb-1.5 pt-2.5 shadow-sm ring-1 ring-inset ring-zinc-200 focus-within:ring-2 focus-within:ring-primary-600">
+                    <label
+                      htmlFor="yesValue"
+                      className="block text-xs font-medium text-zinc-800"
+                    >
+                      Amount to buy in ETH
+                    </label>
+                    <input
+                      id="yesValue"
+                      name="yesValue"
+                      type="text"
+                      required={true}
+                      value={yesValue}
+                      onChange={(e) => setYesValue(e.target.value)}
+                      placeholder="3"
+                      className="block w-full border-0 py-1.5 px-0 bg-transparent text-black placeholder:text-zinc-600 focus:ring-0 sm:text-sm sm:leading-6"
+                    />
+                  </div>
+
+                  <button
+                    type="submit"
+                    className="mt-5 w-full rounded-md border border-transparent bg-primary-600 px-4 py-3 text-sm font-bold text-white shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus:ring-offset-zinc-50"
+                  >
+                    Buy ETH
+                  </button>
+                </div>
+              )}
+
+              {currentTab === "No" && (
+                <div>
+                  <div className="rounded-md px-3 pb-1.5 pt-2.5 shadow-sm ring-1 ring-inset ring-zinc-200 focus-within:ring-2 focus-within:ring-primary-600">
+                    <label
+                      htmlFor="noValue"
+                      className="block text-xs font-medium text-zinc-800"
+                    >
+                      Amount to buy in ETH
+                    </label>
+                    <input
+                      id="noValue"
+                      name="noValue"
+                      type="text"
+                      required={true}
+                      value={noValue}
+                      onChange={(e) => setNoValue(e.target.value)}
+                      placeholder="3"
+                      className="block w-full border-0 py-1.5 px-0 bg-transparent text-black placeholder:text-zinc-600 focus:ring-0 sm:text-sm sm:leading-6"
+                    />
+                  </div>
+
+                  <button
+                    type="submit"
+                    className="mt-5 w-full rounded-md border border-transparent bg-primary-600 px-4 py-3 text-sm font-bold text-black shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus:ring-offset-zinc-50"
+                  >
+                    Buy ETH
+                  </button>
+                </div>
+              )}
+            </div>
+            {/* Tabs content end */}
           </div>
-          {/* Tabs content end */}
         </div>
         {/* Right column end */}
       </div>

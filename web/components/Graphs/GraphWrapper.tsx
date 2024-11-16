@@ -19,9 +19,9 @@ interface Props {
 export default function GraphWrapper({ title, children, height = 400 }: Props) {
   return (
     <>
-      <div className="bg-zinc-900/70 border border-zinc-800 rounded-lg overflow-hidden md:p-5 p-1 shadow">
+      <div className="bg-zinc-100/70 border border-zinc-200 rounded-lg overflow-hidden md:p-5 p-1 shadow">
         <section className="md:flex md:justify-between items-center px-5 md:px-0 lg:mx-4 pt-4 md:p-0">
-          <h1 className="text-2xl font-bold text-white">{title}</h1>
+          <h1 className="text-2xl font-bold text-black">{title}</h1>
         </section>
         <div
           className="relative lg:p-5"

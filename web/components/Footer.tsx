@@ -52,9 +52,9 @@ const navigation = {
 
 export default function Footer() {
   return (
-    <footer id="contact" className="bg-black text-white">
+    <footer id="contact" className="bg-white text-black">
       <div className="mx-auto max-w-7xl overflow-hidden px-6 py-20 sm:py-24 lg:px-8">
-        <p className="text-4xl lg:text-6xl leading-[3rem] text-center text-white font-bold">
+        <h1 className="text-4xl lg:text-6xl leading-[3rem] text-center text-black font-bold">
           Made with ❤️ by your friends at
           <Image
             src="/logo-color.png"
@@ -63,7 +63,7 @@ export default function Footer() {
             width={512}
             alt="FellowFund"
           />
-        </p>
+        </h1>
 
         <div className="mt-12 max-w-2xl text-xl sm:text-2xl mx-auto text-center font-medium text-gray-400">
           Building FellowFund has been an incredibly fun effort across many
@@ -80,7 +80,7 @@ export default function Footer() {
             <div key={item.name}>
               <Link
                 href={item.href}
-                className="text-xl leading-6 text-zinc-600 hover:text-zinc-200 transition-all ease-in-out duration-200"
+                className="text-xl leading-6 text-zinc-600 hover:text-zinc-800 transition-all ease-in-out duration-200"
               >
                 {item.name}
               </Link>
@@ -92,7 +92,7 @@ export default function Footer() {
             <Link
               key={item.name}
               href={item.href}
-              className="text-zinc-400 hover:text-zinc-200 transition-all ease-in-out duration-200"
+              className="text-zinc-600 hover:text-zinc-800 transition-all ease-in-out duration-200"
               target="_blank"
               passHref={true}
             >

@@ -64,7 +64,7 @@ export default function WorldCoinConnect({
         >
           {({ open }) => (
             <div
-              className="font-bold text-lg pt-1 text-zinc-600 cursor-pointer"
+              className="font-bold text-lg pt-1 text-primary-100 cursor-pointer"
               onClick={open}
             >
               Get started
@@ -73,7 +73,7 @@ export default function WorldCoinConnect({
         </IDKitWidget>
       ) : (
         <div className="text-right mt-1 mr-1">
-          <span className="text-xs bg-blue-500 text-white px-2 py-1 rounded-full">
+          <span className="text-xs bg-blue-500 text-black px-2 py-1 rounded-full">
             Worldcoin ✅{" "}
           </span>
         </div>

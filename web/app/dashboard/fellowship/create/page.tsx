@@ -109,12 +109,12 @@ function CreateFellowshipPage() {
       <div className="my-10 space-y-6 sm:px-6 lg:col-span-9 lg:px-0">
         <form onSubmit={handleSubmit}>
           <div className="shadow sm:overflow-hidden sm:rounded-md">
-            <div className="space-y-6 bg-zinc-900/70 border border-zinc-800 px-4 py-6 sm:p-6 overflow-hidden">
+            <div className="space-y-6 bg-zinc-100/70 border border-zinc-200 px-4 py-6 sm:p-6 overflow-hidden">
               <div>
-                <h1 className="text-2xl font-semibold leading-6 text-white">
+                <h1 className="text-2xl font-semibold leading-6 text-black">
                   Create a New Fellowship Program
                 </h1>
-                <p className="mt-1 text-sm text-zinc-400">
+                <p className="mt-1 text-sm text-zinc-600">
                   This information will be displayed publicly so be careful what
                   you share.
                 </p>
@@ -123,10 +123,10 @@ function CreateFellowshipPage() {
               <div className="grid grid-cols-6 gap-6">
                 {/* Name start */}
                 <div className="col-span-3 sm:col-span-3">
-                  <div className="rounded-md px-3 pb-1.5 pt-2.5 shadow-sm ring-1 ring-inset ring-zinc-800 focus-within:ring-2 focus-within:ring-primary-600">
+                  <div className="rounded-md px-3 pb-1.5 pt-2.5 shadow-sm ring-1 ring-inset ring-zinc-200 focus-within:ring-2 focus-within:ring-primary-600">
                     <label
                       htmlFor="name"
-                      className="block text-xs font-medium text-zinc-200"
+                      className="block text-xs font-medium text-zinc-800"
                     >
                       A Friendly Name For Your Fellowship Program
                     </label>
@@ -138,7 +138,7 @@ function CreateFellowshipPage() {
                       value={inputs.name}
                       onChange={handleInputChange}
                       placeholder="Danny's Fellowship Program"
-                      className="block w-full border-0 py-1.5 px-0 bg-transparent text-white placeholder:text-zinc-400 focus:ring-0 sm:text-sm sm:leading-6"
+                      className="block w-full border-0 py-1.5 px-0 bg-transparent text-black placeholder:text-zinc-600 focus:ring-0 sm:text-sm sm:leading-6"
                     />
                   </div>
                 </div>
@@ -146,10 +146,10 @@ function CreateFellowshipPage() {
 
                 {/* Amount start */}
                 <div className="col-span-3 sm:col-span-3">
-                  <div className="rounded-md px-3 pb-1.5 pt-2.5 shadow-sm ring-1 ring-inset ring-zinc-800 focus-within:ring-2 focus-within:ring-primary-600">
+                  <div className="rounded-md px-3 pb-1.5 pt-2.5 shadow-sm ring-1 ring-inset ring-zinc-200 focus-within:ring-2 focus-within:ring-primary-600">
                     <label
                       htmlFor="amount"
-                      className="block text-xs font-medium text-zinc-200"
+                      className="block text-xs font-medium text-zinc-800"
                     >
                       Program Budget
                     </label>
@@ -166,7 +166,7 @@ function CreateFellowshipPage() {
                         onChange={handleInputChange}
                         placeholder="0.00"
                         aria-describedby="price-currency"
-                        className="block w-full rounded-md border-0 py-1.5 pl-3 pr-12 bg-transparent text-white placeholder:text-zinc-400 focus:ring-0 sm:text-sm/6"
+                        className="block w-full rounded-md border-0 py-1.5 pl-3 pr-12 bg-transparent text-black placeholder:text-zinc-600 focus:ring-0 sm:text-sm/6"
                       />
                       <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
                         <span
@@ -195,11 +195,11 @@ function CreateFellowshipPage() {
                       <Label
                         as="span"
                         passive
-                        className="text-sm/6 font-medium text-white"
+                        className="text-sm/6 font-medium text-black"
                       >
                         GitHub Commits
                       </Label>
-                      <Description as="span" className="text-sm text-zinc-400">
+                      <Description as="span" className="text-sm text-zinc-600">
                         Total number of GitHub commits made by the applicant to
                         their project.
                       </Description>
@@ -220,10 +220,10 @@ function CreateFellowshipPage() {
 
                 {/* GitHub organization start */}
                 <div className="col-span-3 sm:col-span-3">
-                  <div className="rounded-md px-3 pb-1.5 pt-2.5 shadow-sm ring-1 ring-inset ring-zinc-800 focus-within:ring-2 focus-within:ring-primary-600">
+                  <div className="rounded-md px-3 pb-1.5 pt-2.5 shadow-sm ring-1 ring-inset ring-zinc-200 focus-within:ring-2 focus-within:ring-primary-600">
                     <label
                       htmlFor="gitHubOrganizationHandle"
-                      className="block text-xs font-medium text-zinc-200"
+                      className="block text-xs font-medium text-zinc-800"
                     >
                       GitHub Organization Handle
                     </label>
@@ -240,7 +240,7 @@ function CreateFellowshipPage() {
                           value={inputs.githubOrganization}
                           onChange={handleInputChange}
                           placeholder="BoneyM"
-                          className="block w-full rounded-md border-0 py-1.5 pl-3 pr-12 bg-transparent text-white placeholder:text-zinc-400 focus:ring-0 sm:text-sm/6"
+                          className="block w-full rounded-md border-0 py-1.5 pl-3 pr-12 bg-transparent text-black placeholder:text-zinc-600 focus:ring-0 sm:text-sm/6"
                         />
                       </div>
                     </div>
@@ -252,7 +252,7 @@ function CreateFellowshipPage() {
                 <div className="col-span-6 sm:col-span-6">
                   <label
                     htmlFor="gitHubOrganizationWeight"
-                    className="block text-xs font-medium text-zinc-200"
+                    className="block text-xs font-medium text-zinc-800"
                   >
                     Weight for this metric (0-1)
                   </label>
@@ -269,7 +269,7 @@ function CreateFellowshipPage() {
                       }
                       className="appearance-none bg-zinc-800 slider rounded-full"
                     />
-                    <div className="text-sm text-zinc-200 font-bold">
+                    <div className="text-sm text-zinc-800 font-bold">
                       {inputs.githubOrganizationWeight / 100}
                     </div>
                   </div>
@@ -285,11 +285,11 @@ function CreateFellowshipPage() {
                       <Label
                         as="span"
                         passive
-                        className="text-sm/6 font-medium text-white"
+                        className="text-sm/6 font-medium text-black"
                       >
                         Events Attended
                       </Label>
-                      <Description as="span" className="text-sm text-zinc-400">
+                      <Description as="span" className="text-sm text-zinc-600">
                         Total number of events attended by the applicant in
                         support of their project.
                       </Description>
@@ -310,10 +310,10 @@ function CreateFellowshipPage() {
 
                 {/* Events count start */}
                 <div className="col-span-3">
-                  <div className="rounded-md px-3 pb-1.5 pt-2.5 shadow-sm ring-1 ring-inset ring-zinc-800 focus-within:ring-2 focus-within:ring-primary-600">
+                  <div className="rounded-md px-3 pb-1.5 pt-2.5 shadow-sm ring-1 ring-inset ring-zinc-200 focus-within:ring-2 focus-within:ring-primary-600">
                     <label
                       htmlFor="eventsCount"
-                      className="block text-xs font-medium text-zinc-200"
+                      className="block text-xs font-medium text-zinc-800"
                     >
                       Number of Events
                     </label>
@@ -325,7 +325,7 @@ function CreateFellowshipPage() {
                       value={inputs.eventsCount}
                       onChange={handleInputChange}
                       placeholder="3"
-                      className="block w-full border-0 py-1.5 px-0 bg-transparent text-white placeholder:text-zinc-400 focus:ring-0 sm:text-sm sm:leading-6"
+                      className="block w-full border-0 py-1.5 px-0 bg-transparent text-black placeholder:text-zinc-600 focus:ring-0 sm:text-sm sm:leading-6"
                     />
                   </div>
                 </div>
@@ -335,7 +335,7 @@ function CreateFellowshipPage() {
                 <div className="col-span-6 sm:col-span-6">
                   <label
                     htmlFor="make"
-                    className="block text-xs font-medium text-zinc-200"
+                    className="block text-xs font-medium text-zinc-800"
                   >
                     Weight for this metric (0-1)
                   </label>
@@ -352,7 +352,7 @@ function CreateFellowshipPage() {
                       }
                       className="appearance-none bg-zinc-800 slider rounded-full"
                     />
-                    <div className="text-sm text-zinc-200 font-bold">
+                    <div className="text-sm text-zinc-800 font-bold">
                       {inputs.eventsWeight / 100}
                     </div>
                   </div>
@@ -369,10 +369,10 @@ function CreateFellowshipPage() {
 
                 {/* Applcation deadline start */}
                 <div className="col-span-3">
-                  <div className="rounded-md px-3 pb-1.5 pt-2.5 shadow-sm ring-1 ring-inset ring-zinc-800 focus-within:ring-2 focus-within:ring-primary-600">
+                  <div className="rounded-md px-3 pb-1.5 pt-2.5 shadow-sm ring-1 ring-inset ring-zinc-200 focus-within:ring-2 focus-within:ring-primary-600">
                     <label
                       htmlFor="applicationDeadline"
-                      className="block text-xs font-medium text-zinc-200"
+                      className="block text-xs font-medium text-zinc-800"
                     >
                       Application Deadline
                     </label>
@@ -384,7 +384,7 @@ function CreateFellowshipPage() {
                       value={inputs.applicationDeadline}
                       onChange={handleInputChange}
                       placeholder="2021-12-31"
-                      className="block w-full border-0 py-1.5 px-0 bg-transparent text-white placeholder:text-zinc-400 focus:ring-0 sm:text-sm sm:leading-6"
+                      className="block w-full border-0 py-1.5 px-0 bg-transparent text-black placeholder:text-zinc-600 focus:ring-0 sm:text-sm sm:leading-6"
                     />
                   </div>
                 </div>
@@ -392,10 +392,10 @@ function CreateFellowshipPage() {
 
                 {/* Market deadline start */}
                 <div className="col-span-3">
-                  <div className="rounded-md px-3 pb-1.5 pt-2.5 shadow-sm ring-1 ring-inset ring-zinc-800 focus-within:ring-2 focus-within:ring-primary-600">
+                  <div className="rounded-md px-3 pb-1.5 pt-2.5 shadow-sm ring-1 ring-inset ring-zinc-200 focus-within:ring-2 focus-within:ring-primary-600">
                     <label
                       htmlFor="marketDeadline"
-                      className="block text-xs font-medium text-zinc-200"
+                      className="block text-xs font-medium text-zinc-800"
                     >
                       Market Deadline
                     </label>
@@ -407,7 +407,7 @@ function CreateFellowshipPage() {
                       value={inputs.marketDeadline}
                       onChange={handleInputChange}
                       placeholder="2021-12-31"
-                      className="block w-full border-0 py-1.5 px-0 bg-transparent text-white placeholder:text-zinc-400 focus:ring-0 sm:text-sm sm:leading-6"
+                      className="block w-full border-0 py-1.5 px-0 bg-transparent text-black placeholder:text-zinc-600 focus:ring-0 sm:text-sm sm:leading-6"
                     />
                   </div>
                 </div>
@@ -415,10 +415,10 @@ function CreateFellowshipPage() {
 
                 {/* Epoch endtime start */}
                 <div className="col-span-3">
-                  <div className="rounded-md px-3 pb-1.5 pt-2.5 shadow-sm ring-1 ring-inset ring-zinc-800 focus-within:ring-2 focus-within:ring-primary-600">
+                  <div className="rounded-md px-3 pb-1.5 pt-2.5 shadow-sm ring-1 ring-inset ring-zinc-200 focus-within:ring-2 focus-within:ring-primary-600">
                     <label
                       htmlFor="epochEndtime"
-                      className="block text-xs font-medium text-zinc-200"
+                      className="block text-xs font-medium text-zinc-800"
                     >
                       Epoch End Time
                     </label>
@@ -430,7 +430,7 @@ function CreateFellowshipPage() {
                       value={inputs.epochEndtime}
                       onChange={handleInputChange}
                       placeholder="2021-12-31"
-                      className="block w-full border-0 py-1.5 px-0 bg-transparent text-white placeholder:text-zinc-400 focus:ring-0 sm:text-sm sm:leading-6"
+                      className="block w-full border-0 py-1.5 px-0 bg-transparent text-black placeholder:text-zinc-600 focus:ring-0 sm:text-sm sm:leading-6"
                     />
                   </div>
                 </div>
@@ -438,10 +438,10 @@ function CreateFellowshipPage() {
 
                 {/* Max applicants start */}
                 <div className="col-span-3 sm:col-span-3">
-                  <div className="rounded-md px-3 pb-1.5 pt-2.5 shadow-sm ring-1 ring-inset ring-zinc-800 focus-within:ring-2 focus-within:ring-primary-600">
+                  <div className="rounded-md px-3 pb-1.5 pt-2.5 shadow-sm ring-1 ring-inset ring-zinc-200 focus-within:ring-2 focus-within:ring-primary-600">
                     <label
                       htmlFor="maxApplicants"
-                      className="block text-xs font-medium text-zinc-200"
+                      className="block text-xs font-medium text-zinc-800"
                     >
                       Maximum Number of Applicants
                     </label>
@@ -453,7 +453,7 @@ function CreateFellowshipPage() {
                       value={inputs.maxApplicants}
                       onChange={handleInputChange}
                       placeholder="10"
-                      className="block w-full border-0 py-1.5 px-0 bg-transparent text-white placeholder:text-zinc-400 focus:ring-0 sm:text-sm sm:leading-6"
+                      className="block w-full border-0 py-1.5 px-0 bg-transparent text-black placeholder:text-zinc-600 focus:ring-0 sm:text-sm sm:leading-6"
                     />
                   </div>
                 </div>
@@ -461,10 +461,10 @@ function CreateFellowshipPage() {
                 {/* Fellowship info end */}
               </div>
             </div>
-            <div className="flex justify-end bg-zinc-800/70 px-4 py-3 text-right sm:px-6 border border-zinc-800">
+            <div className="flex justify-end bg-zinc-800/70 px-4 py-3 text-right sm:px-6 border border-zinc-200">
               <button
                 type="submit"
-                className={`flex items-center justify-center gap-x-3 rounded-md bg-primary-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600 ${
+                className={`flex items-center justify-center gap-x-3 rounded-md bg-primary-600 px-3 py-2 text-sm font-semibold text-black shadow-sm hover:bg-primary-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600 ${
                   isLoading
                     ? "cursor-not-allowed opacity-50"
                     : "cursor-pointer opacity-100"
@@ -500,7 +500,7 @@ function CreateFellowshipPage() {
                 />
               </div>
               <div className="ml-3 flex-1 md:flex md:justify-between">
-                <p className="text-sm text-white">
+                <p className="text-sm text-black">
                   Your program was successfully created.
                 </p>
                 <p className="mt-3 flex items-center gap-x-3 text-sm md:ml-6 md:mt-0">

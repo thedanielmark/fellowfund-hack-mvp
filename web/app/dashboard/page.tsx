@@ -56,7 +56,7 @@ function DashboardHomePage() {
         {markets.map((market, index) => (
           <div
             key={index}
-            className="flex flex-col p-5 overflow-hidden rounded-lg shadow-lg bg-zinc-900"
+            className="flex flex-col p-5 overflow-hidden rounded-lg shadow-lg bg-zinc-100"
           >
             <div className="flex items-center">
               <div className="shrink-0">
@@ -79,13 +79,11 @@ function DashboardHomePage() {
             </div>
 
             <div className="mt-5 flex items-center space-x-2">
-              <div className="text-xs font-medium text-gray-900 dark:text-zinc-100">
-                Consensus
-              </div>
+              <div className="text-xs font-medium text-gray-900">Consensus</div>
               {Number(market.yes) + Number(market.no) === 0 ? (
                 <div className="w-full flex bg-gray-200 dark:bg-zinc-800 rounded-full h-1.5"></div>
               ) : (
-                <div className="w-full flex bg-gray-200 dark:bg-zinc-900 rounded-full h-1.5">
+                <div className="w-full flex bg-gray-200 dark:bg-zinc-100 rounded-full h-1.5">
                   <div
                     className="bg-green-500 h-2.5 rounded-full"
                     style={{
@@ -113,7 +111,7 @@ function DashboardHomePage() {
             <div className="mt-8">
               <a
                 href="/market/id"
-                className="block w-full text-center rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                className="block w-full text-center rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-black shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
                 View Market
               </a>
@@ -128,7 +126,7 @@ function DashboardHomePage() {
                 />
               </div>
               <div className="ml-2">
-                <p className="text-sm font-medium text-gray-200 group-hover:text-white">
+                <p className="text-sm font-medium text-gray-200 group-hover:text-black">
                   {market.fundName}
                 </p>
                 <p className="text-xs font-medium text-gray-500 group-hover:text-gray-700"></p>
