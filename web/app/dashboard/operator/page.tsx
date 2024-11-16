@@ -64,6 +64,9 @@ function OperatorPage() {
               epochEndTime
               epochStarted
               fellowshipId
+              applicants {
+                id
+              }
               funds
               grantPerAccepted
               id
@@ -178,10 +181,13 @@ function OperatorPage() {
                   <thead>
                     <tr>
                       <th className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-black sm:pl-0">
-                        ID
+                        Name
                       </th>
                       <th className="px-3 py-3.5 text-left text-sm font-semibold text-black">
                         Status
+                      </th>
+                      <th className="px-3 py-3.5 text-left text-sm font-semibold text-black">
+                        No. of Applicants
                       </th>
                       <th className="px-3 py-3.5 text-left text-sm font-semibold text-black">
                         Actions
@@ -192,7 +198,7 @@ function OperatorPage() {
                     {fellowships.map((fellowship) => (
                       <tr key={fellowship.id}>
                         <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-black sm:pl-0">
-                          {fellowship.fellowshipId}
+                          {JSON.parse(fellowship.metadata).name}
                         </td>
                         <td className="whitespace-nowrap px-3 py-4 text-sm text-zinc-300">
                           {
@@ -204,6 +210,9 @@ function OperatorPage() {
                               "Resolved",
                             ][fellowship.status]
                           }
+                        </td>
+                        <td className="whitespace-nowrap px-3 py-4 text-sm">
+                          {fellowship?.totalApplications || 0}
                         </td>
                         <td className="whitespace-nowrap px-3 py-4 text-sm">
                           <div className="flex gap-2">

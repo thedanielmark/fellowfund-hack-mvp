@@ -230,7 +230,7 @@ export default function Home() {
                             className="flex items-center justify-center rounded-md border border-transparent bg-white px-4 py-3 text-base font-medium text-primary-900 shadow-sm hover:bg-primary-50 sm:px-8"
                             onClick={login}
                           >
-                            Get started
+                            Login
                           </button>
                         ) : (
                           <WorldCoinConnect onAction={setWorldcoinVerified} />
