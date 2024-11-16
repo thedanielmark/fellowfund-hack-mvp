@@ -5,6 +5,7 @@ This project is based on [hardhat](https://hardhat.org/) and using [Ignition](ht
 ## Deployed Contracts and Networks
 
 > 🚨 A **complete list** of the deployed contracts, its versions and networks, can be found here:
+> 
 > [testnetDeployments.json](./ignition/deployments/testnetDeployments.json)
 
 ## Getting Started
