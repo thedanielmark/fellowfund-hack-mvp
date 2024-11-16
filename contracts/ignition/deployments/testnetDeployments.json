@@ -1,6 +1,12 @@
 {
     "FellowFund": {
-        "amoy": "0x3B0C03e82c60AF5D16f3419d969d80D3Ed4E0de2",
-        "flowTestnet": "0x0810B2d3C23d7207C6B15fb6B3303e99561cb80f"
+        "amoy": "0x25d598CBB74fa73290e74697616DE2740d280745",
+        "flowTestnet": "0x2323Cd8097708f4C8D4BA37aE72644Af712bAD76",
+        "mantleSepolia": "",
+        "rootstockTestnet": "0x0810B2d3C23d7207C6B15fb6B3303e99561cb80f",
+        "archive": {
+            "amoy": "0x3B0C03e82c60AF5D16f3419d969d80D3Ed4E0de2",
+            "flowTestnet": "0x0810B2d3C23d7207C6B15fb6B3303e99561cb80f"
+        }
     }
 }
