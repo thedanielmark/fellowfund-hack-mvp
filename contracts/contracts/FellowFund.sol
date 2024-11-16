@@ -32,16 +32,30 @@ contract FellowFund is IFellowFund, Ownable {
         _;
     }
 
-    function createFellowship(Fellowship calldata _fellowship) external payable {
-        require(msg.value == _fellowship.funds, "Incorrect funds sent");
-        require(_fellowship.applicationDeadline > block.timestamp, "Invalid application deadline");
-        require(_fellowship.marketDeadline > _fellowship.applicationDeadline, "Invalid market deadline");
-        require(_fellowship.epochEndTime > _fellowship.marketDeadline, "Invalid epoch end time");
+    function createFellowship(
+        string calldata _metadata,
+        uint256 _funds,
+        uint256 _applicationDeadline,
+        uint256 _marketDeadline,
+        uint256 _epochDeadline
+    ) external payable {
+        require(msg.value == _funds, "Incorrect funds sent");
+        require(_applicationDeadline > block.timestamp, "Invalid application deadline");
+        require(_marketDeadline > _applicationDeadline, "Invalid market deadline");
+        require(_epochDeadline > _marketDeadline, "Invalid epoch end time");
 
-        require(_fellowship.maxApplicants > 0, "Invalid max applicants");
+        uint256 fellowshipId = fellowshipCount;
+        fellowshipCount++;
 
-        uint256 fellowshipId = fellowshipCount++;
-        fellowships[fellowshipId] = _fellowship;
+        Fellowship storage fellowship = fellowships[fellowshipId];
+        fellowship.metadata = _metadata;
+        fellowship.funds = _funds;
+        fellowship.applicationDeadline = _applicationDeadline;
+        fellowship.marketDeadline = _marketDeadline;
+        fellowship.epochEndTime = _epochDeadline;
+        fellowship.status = FellowshipStatus.Created;
+
+        fellowships[fellowshipId] = fellowship;
         fellowships[fellowshipId].status = FellowshipStatus.AcceptingApplications;
 
         emit FellowshipCreated(fellowshipId, fellowships[fellowshipId]);
@@ -51,7 +65,6 @@ contract FellowFund is IFellowFund, Ownable {
         Fellowship storage fellowship = fellowships[fellowshipId];
         require(fellowship.status == FellowshipStatus.AcceptingApplications, "Not accepting applications");
         require(block.timestamp < fellowship.applicationDeadline, "Application period ended");
-        require(applications[fellowshipId].length < fellowship.maxApplicants, "Maximum applicants reached");
 
         // Todo: Add vlayer verification logic here - use vlayerProof as parameter
 
