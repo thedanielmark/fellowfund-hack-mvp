@@ -124,7 +124,8 @@ contract FellowFund is IFellowFund, Ownable {
             for (uint256 i = 0; i < nrApps; i++) {
                 if (apps[i].accepted) {
                     apps[i].grantAmount = grantPerAccepted;
-                    payable(apps[i].applicant).transfer(grantPerAccepted);
+                    (bool success,) = payable(apps[i].applicant).call{value: grantPerAccepted}("");
+                    require(success, "Transfer failed"); // Fine for the hackathon, but will need different approach in the future, since a single failing transfer (e.g., if the recipient is a contract) could block the whole payout in the evaluation.
                 }
             }
         }
