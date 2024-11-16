@@ -21,6 +21,11 @@ const config: HardhatUserConfig = {
   },
   defaultNetwork: 'mantleSepolia', // chosen by default when network isn't specified while running Hardhat
   networks: {
+    polygonAmoy: {
+      url: "https://polygon-amoy.drpc.org",
+      chainId: 80002,
+      accounts: [PRIVATE_KEY_1],
+    },
     mantle: {
       url: 'https://rpc.mantle.xyz', //mainnet
       chainId: 5000,
