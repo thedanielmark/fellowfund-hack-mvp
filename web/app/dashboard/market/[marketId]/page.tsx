@@ -68,14 +68,14 @@ function MarketPage({ params }: { params: { marketId: string } }) {
             <div className="mt-5">
               <div>
                 <div>
-                  <p className="text-base font-medium ring-zinc-900">Name</p>
-                  <h1 className="text-xl text-zinc-800">Fabian Ferno</h1>
+                  <h1 className="text-sm font-medium ring-zinc-900">Name</h1>
+                  <p className="text-base text-zinc-800">Fabian Ferno</p>
                 </div>
                 <div className="mt-5">
-                  <p className="text-base font-medium ring-zinc-900">
+                  <h1 className="text-sm font-medium ring-zinc-900">
                     About the Applicant
-                  </p>
-                  <h1 className="text-xl text-zinc-800">
+                  </h1>
+                  <p className="text-base text-zinc-800">
                     Fabian is a software engineer with 5 years of experience. He
                     is a blockchain enthusiast and has been working on
                     blockchain projects for the past 3 years. He is currently
@@ -85,19 +85,7 @@ function MarketPage({ params }: { params: { marketId: string } }) {
                     future of blockchain technology and is excited about the
                     potential of blockchain technology to revolutionize the
                     world.
-                  </h1>
-                </div>
-                <div>
-                  <p className="text-sm font-medium ring-zinc-900">
-                    Market Status
                   </p>
-                  <p className="mt-1 text-sm text-zinc-800">Open</p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium ring-zinc-900">
-                    Market End
-                  </p>
-                  <p className="mt-1 text-sm text-zinc-800">In 2 days</p>
                 </div>
               </div>
             </div>
@@ -169,7 +157,7 @@ function MarketPage({ params }: { params: { marketId: string } }) {
                       htmlFor="yesValue"
                       className="block text-xs font-medium text-zinc-800"
                     >
-                      Amount to buy in ETH
+                      Amount to vote with in ETH
                     </label>
                     <input
                       id="yesValue"
@@ -187,7 +175,7 @@ function MarketPage({ params }: { params: { marketId: string } }) {
                     type="submit"
                     className="mt-5 w-full rounded-md border border-transparent bg-primary-600 px-4 py-3 text-sm font-bold text-white shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus:ring-offset-zinc-50"
                   >
-                    Buy ETH
+                    Vote Yes
                   </button>
                 </div>
               )}
@@ -199,7 +187,7 @@ function MarketPage({ params }: { params: { marketId: string } }) {
                       htmlFor="noValue"
                       className="block text-xs font-medium text-zinc-800"
                     >
-                      Amount to buy in ETH
+                      Amount to vote with in ETH
                     </label>
                     <input
                       id="noValue"
@@ -217,7 +205,7 @@ function MarketPage({ params }: { params: { marketId: string } }) {
                     type="submit"
                     className="mt-5 w-full rounded-md border border-transparent bg-primary-600 px-4 py-3 text-sm font-bold text-white shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus:ring-offset-zinc-50"
                   >
-                    Buy ETH
+                    Vote No
                   </button>
                 </div>
               )}

@@ -32,10 +32,7 @@ import { RotatingLines } from "react-loader-spinner";
 import { ethers, JsonRpcSigner, parseEther } from "ethers";
 import { networks } from "@/utils/chains";
 
-const navigation = [
-  { name: "Navigate", href: "/dashboard" },
-  { name: "Wallet", href: "/dashboard/wallet" },
-];
+const navigation = [{ name: "Fellowships", href: "/dashboard/fellowships" }];
 
 const userNavigation = [
   { name: "Your Profile", href: "/profile" },
@@ -162,15 +159,25 @@ const DashboardLayout = ({ children }: LayoutProps) => {
               <div className="flex h-16 justify-between">
                 <div className="flex">
                   <div className="flex flex-shrink-0 items-center gap-x-2">
-                    <img
-                      alt="FellowFund"
-                      src="/logo.png"
-                      className="block h-8 w-8"
-                    />
-                    <span className="text-3xl font-black text-primary-600">
-                      Fellow
-                      <span className="font-black text-black">Fund</span>
-                    </span>
+                    <Link href="/" className="flex items-center gap-x-3">
+                      <span className="sr-only">Your Company</span>
+                      <div className="flex items-center gap-x-3">
+                        <img
+                          alt=""
+                          src="/logo-color.png"
+                          className="h-8 w-auto sm:h-10"
+                        />
+                        <img
+                          alt=""
+                          src="/nouns-logo.svg"
+                          className="h-8 w-auto sm:h-6"
+                        />
+                      </div>
+                      <h1 className="text-3xl font-black text-primary-60 flex">
+                        Fellow
+                        <h1 className="text-primary-600">Fund</h1>
+                      </h1>
+                    </Link>
                   </div>
                   <div className="hidden sm:-my-px sm:ml-6 sm:flex sm:space-x-8">
                     {navigation.map((item) => (
