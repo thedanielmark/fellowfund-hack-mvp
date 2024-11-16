@@ -334,6 +334,29 @@ export const contractABI = [
   {
     inputs: [
       {
+        internalType: "uint256",
+        name: "fellowshipId",
+        type: "uint256",
+      },
+      {
+        internalType: "string",
+        name: "metadata",
+        type: "string",
+      },
+      {
+        internalType: "address",
+        name: "applicantAddress",
+        type: "address",
+      },
+    ],
+    name: "applyToFellowshipWithCustomAddress",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
         internalType: "string",
         name: "_metadata",
         type: "string",
