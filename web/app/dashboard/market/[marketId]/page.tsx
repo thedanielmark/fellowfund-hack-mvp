@@ -215,7 +215,7 @@ function MarketPage({ params }: { params: { marketId: string } }) {
 
                   <button
                     type="submit"
-                    className="mt-5 w-full rounded-md border border-transparent bg-primary-600 px-4 py-3 text-sm font-bold text-black shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus:ring-offset-zinc-50"
+                    className="mt-5 w-full rounded-md border border-transparent bg-primary-600 px-4 py-3 text-sm font-bold text-white shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus:ring-offset-zinc-50"
                   >
                     Buy ETH
                   </button>

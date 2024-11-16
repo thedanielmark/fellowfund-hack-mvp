@@ -58,7 +58,7 @@ const DashboardLayout = ({ children }: LayoutProps) => {
   const [wallet, setWallet] = useState<any | null>(null);
   const [walletModalOpen, setWalletModalOpen] = useState<boolean>(false);
   const [balance, setBalance] = useState<number | any>(null);
-  const [onlyCarsBalance, setOnlyCarsBalance] = useState<number | any>();
+  const [FellowFundBalance, setFellowFundBalance] = useState<number | any>();
   const [selectedNetwork, setSelectedNetwork] = useState(networks[1]);
 
   // Getting Web3Auth wallet balance
@@ -99,7 +99,7 @@ const DashboardLayout = ({ children }: LayoutProps) => {
     return ethersProvider.getSigner();
   };
 
-  // Getting OnlyCars wallet balance
+  // Getting FellowFund wallet balance
   // useEffect(() => {
   //   const getContractBalance = async () => {
   //     const signer = await getSigner();
@@ -115,7 +115,7 @@ const DashboardLayout = ({ children }: LayoutProps) => {
   //       // Call the balances function with the address parameter
   //       const balance = await contract.balances(signer.address); // Note: view function, no .wait()
   //       console.log(balance);
-  //       setOnlyCarsBalance(`${formatEther(balance)}`);
+  //       setFellowFundBalance(`${formatEther(balance)}`);
   //     } catch (error) {
   //       console.error("Error fetching balance:", error);
   //     }
@@ -163,7 +163,7 @@ const DashboardLayout = ({ children }: LayoutProps) => {
                 <div className="flex">
                   <div className="flex flex-shrink-0 items-center gap-x-2">
                     <img
-                      alt="OnlyCars"
+                      alt="FellowFund"
                       src="/logo.png"
                       className="block h-8 w-8"
                     />
@@ -387,7 +387,7 @@ const DashboardLayout = ({ children }: LayoutProps) => {
 
                   <div className="mt-3 bg-zinc-100/70 border border-zinc-200 p-4 rounded-lg shadow-sm">
                     <h3 className="text-sm font-semibold text-black">
-                      OnlyCars Wallet Balance <br />
+                      FellowFund Wallet Balance <br />
                       <span className="text-zinc-600 font-light text-xs">
                         ({process.env.NEXT_PUBLIC_CONTRACT_ADDRESS})
                       </span>
@@ -401,7 +401,7 @@ const DashboardLayout = ({ children }: LayoutProps) => {
                         />
                       </div>
                       <div className="text-sm">
-                        {onlyCarsBalance && onlyCarsBalance} ETH
+                        {FellowFundBalance && FellowFundBalance} ETH
                       </div>
                     </div>
                   </div>

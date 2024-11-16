@@ -14,6 +14,8 @@ function CreateFellowshipPage() {
   const { address, getSigner } = useAuth();
   const [inputs, setInputs] = useState<any>({
     name: "",
+    description: "",
+    logoURL: "",
     amount: 0,
     githubCommits: false,
     githubOrganizationHandle: "",
@@ -48,7 +50,7 @@ function CreateFellowshipPage() {
     // Write to contract
     const signer = await getSigner();
 
-    const contractAddress = "0x2323Cd8097708f4C8D4BA37aE72644Af712bAD76";
+    const contractAddress = "0x25d598CBB74fa73290e74697616DE2740d280745";
     const contract = new ethers.Contract(
       contractAddress,
       JSON.parse(JSON.stringify(contractABI)),
@@ -56,15 +58,12 @@ function CreateFellowshipPage() {
     );
 
     const tx = await contract.createFellowship(
-      [
-        JSON.stringify(inputs),
-        parseEther(inputs.amount),
-        new Date(inputs.applicationDeadline).getTime() / 1000,
-        new Date(inputs.marketDeadline).getTime() / 1000,
-        new Date(inputs.epochEndtime).getTime() / 1000,
-        1,
-        inputs.maxApplicants,
-      ],
+      JSON.stringify(inputs),
+      parseEther(inputs.amount),
+      new Date(inputs.applicationDeadline).getTime() / 1000,
+      new Date(inputs.marketDeadline).getTime() / 1000,
+      new Date(inputs.epochEndtime).getTime() / 1000,
+      1,
       { value: parseEther(inputs.amount) }
     );
     console.log(tx);
@@ -109,7 +108,7 @@ function CreateFellowshipPage() {
       <div className="my-10 space-y-6 sm:px-6 lg:col-span-9 lg:px-0">
         <form onSubmit={handleSubmit}>
           <div className="shadow sm:overflow-hidden sm:rounded-md">
-            <div className="space-y-6 bg-zinc-100/70 border border-zinc-200 px-4 py-6 sm:p-6 overflow-hidden">
+            <div className="space-y-6 bg-zinc-100/70 border border-zinc-200 px-4 py-6 sm:p-6 overflow-hidden rounded-md">
               <div>
                 <h1 className="text-2xl font-semibold leading-6 text-black">
                   Create a New Fellowship Program
@@ -123,7 +122,7 @@ function CreateFellowshipPage() {
               <div className="grid grid-cols-6 gap-6">
                 {/* Name start */}
                 <div className="col-span-3 sm:col-span-3">
-                  <div className="rounded-md px-3 pb-1.5 pt-2.5 shadow-sm ring-1 ring-inset ring-zinc-200 focus-within:ring-2 focus-within:ring-primary-600">
+                  <div className="rounded-md px-3 pb-1.5 pt-2.5 ring-1 ring-inset ring-zinc-200 focus-within:ring-2 focus-within:ring-primary-600">
                     <label
                       htmlFor="name"
                       className="block text-xs font-medium text-zinc-800"
@@ -146,7 +145,7 @@ function CreateFellowshipPage() {
 
                 {/* Amount start */}
                 <div className="col-span-3 sm:col-span-3">
-                  <div className="rounded-md px-3 pb-1.5 pt-2.5 shadow-sm ring-1 ring-inset ring-zinc-200 focus-within:ring-2 focus-within:ring-primary-600">
+                  <div className="rounded-md px-3 pb-1.5 pt-2.5 ring-1 ring-inset ring-zinc-200 focus-within:ring-2 focus-within:ring-primary-600">
                     <label
                       htmlFor="amount"
                       className="block text-xs font-medium text-zinc-800"
@@ -154,7 +153,7 @@ function CreateFellowshipPage() {
                       Program Budget
                     </label>
 
-                    <div className="relative rounded-md shadow-sm">
+                    <div className="relative rounded-md">
                       <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center">
                         <span className="text-gray-500 sm:text-sm">$</span>
                       </div>
@@ -180,6 +179,51 @@ function CreateFellowshipPage() {
                   </div>
                 </div>
                 {/* Amount end */}
+
+                {/* Description start */}
+                <div className="col-span-6 sm:col-span-6">
+                  <div className="rounded-md px-3 pb-1.5 pt-2.5 ring-1 ring-inset ring-zinc-200 focus-within:ring-2 focus-within:ring-primary-600">
+                    <label
+                      htmlFor="description"
+                      className="block text-xs font-medium text-zinc-800"
+                    >
+                      A Friendly Name For Your Fellowship Program
+                    </label>
+                    <textarea
+                      id="description"
+                      name="description"
+                      rows={3}
+                      required={true}
+                      value={inputs.description}
+                      onChange={handleInputChange}
+                      placeholder="This is a fellowship program for developers who are"
+                      className="block w-full border-0 py-1.5 px-0 bg-transparent text-black placeholder:text-zinc-600 focus:ring-0 sm:text-sm sm:leading-6"
+                    />
+                  </div>
+                </div>
+                {/* Description end */}
+
+                {/* Logo URL start */}
+                <div className="col-span-6 sm:col-span-6">
+                  <div className="rounded-md px-3 pb-1.5 pt-2.5 ring-1 ring-inset ring-zinc-200 focus-within:ring-2 focus-within:ring-primary-600">
+                    <label
+                      htmlFor="logoURL"
+                      className="block text-xs font-medium text-zinc-800"
+                    >
+                      URL to your fellowship&apos;s logo
+                    </label>
+                    <input
+                      id="logoURL"
+                      name="logoURL"
+                      required={true}
+                      value={inputs.logoURL}
+                      onChange={handleInputChange}
+                      placeholder="https://example.com/logo.png"
+                      className="block w-full border-0 py-1.5 px-0 bg-transparent text-black placeholder:text-zinc-600 focus:ring-0 sm:text-sm sm:leading-6"
+                    />
+                  </div>
+                </div>
+                {/* Logo URL end */}
 
                 <div className="col-span-6 w-full pt-0.5 bg-zinc-800" />
 
@@ -220,7 +264,7 @@ function CreateFellowshipPage() {
 
                 {/* GitHub organization start */}
                 <div className="col-span-3 sm:col-span-3">
-                  <div className="rounded-md px-3 pb-1.5 pt-2.5 shadow-sm ring-1 ring-inset ring-zinc-200 focus-within:ring-2 focus-within:ring-primary-600">
+                  <div className="rounded-md px-3 pb-1.5 pt-2.5 ring-1 ring-inset ring-zinc-200 focus-within:ring-2 focus-within:ring-primary-600">
                     <label
                       htmlFor="gitHubOrganizationHandle"
                       className="block text-xs font-medium text-zinc-800"
@@ -228,8 +272,8 @@ function CreateFellowshipPage() {
                       GitHub Organization Handle
                     </label>
 
-                    <div className="relative rounded-md shadow-sm">
-                      <div className="flex rounded-md shadow-sm ring-0 ring-inset sm:max-w-md">
+                    <div className="relative rounded-md">
+                      <div className="flex rounded-md ring-0 ring-inset sm:max-w-md">
                         <span className="flex select-none items-center text-gray-500 sm:text-sm">
                           https://github.com/
                         </span>
@@ -257,7 +301,7 @@ function CreateFellowshipPage() {
                     Weight for this metric (0-1)
                   </label>
 
-                  <div className="mt-3 relative flex items-center gap-x-2 rounded-md shadow-sm">
+                  <div className="mt-3 relative flex items-center gap-x-2 rounded-md">
                     <input
                       type="range"
                       value={inputs.githubOrganizationWeight}
@@ -310,7 +354,7 @@ function CreateFellowshipPage() {
 
                 {/* Events count start */}
                 <div className="col-span-3">
-                  <div className="rounded-md px-3 pb-1.5 pt-2.5 shadow-sm ring-1 ring-inset ring-zinc-200 focus-within:ring-2 focus-within:ring-primary-600">
+                  <div className="rounded-md px-3 pb-1.5 pt-2.5 ring-1 ring-inset ring-zinc-200 focus-within:ring-2 focus-within:ring-primary-600">
                     <label
                       htmlFor="eventsCount"
                       className="block text-xs font-medium text-zinc-800"
@@ -340,7 +384,7 @@ function CreateFellowshipPage() {
                     Weight for this metric (0-1)
                   </label>
 
-                  <div className="mt-3 relative flex items-center gap-x-2 rounded-md shadow-sm">
+                  <div className="mt-3 relative flex items-center gap-x-2 rounded-md">
                     <input
                       type="range"
                       value={inputs.eventsWeight}
@@ -369,7 +413,7 @@ function CreateFellowshipPage() {
 
                 {/* Applcation deadline start */}
                 <div className="col-span-3">
-                  <div className="rounded-md px-3 pb-1.5 pt-2.5 shadow-sm ring-1 ring-inset ring-zinc-200 focus-within:ring-2 focus-within:ring-primary-600">
+                  <div className="rounded-md px-3 pb-1.5 pt-2.5 ring-1 ring-inset ring-zinc-200 focus-within:ring-2 focus-within:ring-primary-600">
                     <label
                       htmlFor="applicationDeadline"
                       className="block text-xs font-medium text-zinc-800"
@@ -392,7 +436,7 @@ function CreateFellowshipPage() {
 
                 {/* Market deadline start */}
                 <div className="col-span-3">
-                  <div className="rounded-md px-3 pb-1.5 pt-2.5 shadow-sm ring-1 ring-inset ring-zinc-200 focus-within:ring-2 focus-within:ring-primary-600">
+                  <div className="rounded-md px-3 pb-1.5 pt-2.5 ring-1 ring-inset ring-zinc-200 focus-within:ring-2 focus-within:ring-primary-600">
                     <label
                       htmlFor="marketDeadline"
                       className="block text-xs font-medium text-zinc-800"
@@ -415,7 +459,7 @@ function CreateFellowshipPage() {
 
                 {/* Epoch endtime start */}
                 <div className="col-span-3">
-                  <div className="rounded-md px-3 pb-1.5 pt-2.5 shadow-sm ring-1 ring-inset ring-zinc-200 focus-within:ring-2 focus-within:ring-primary-600">
+                  <div className="rounded-md px-3 pb-1.5 pt-2.5 ring-1 ring-inset ring-zinc-200 focus-within:ring-2 focus-within:ring-primary-600">
                     <label
                       htmlFor="epochEndtime"
                       className="block text-xs font-medium text-zinc-800"
@@ -438,7 +482,7 @@ function CreateFellowshipPage() {
 
                 {/* Max applicants start */}
                 <div className="col-span-3 sm:col-span-3">
-                  <div className="rounded-md px-3 pb-1.5 pt-2.5 shadow-sm ring-1 ring-inset ring-zinc-200 focus-within:ring-2 focus-within:ring-primary-600">
+                  <div className="rounded-md px-3 pb-1.5 pt-2.5 ring-1 ring-inset ring-zinc-200 focus-within:ring-2 focus-within:ring-primary-600">
                     <label
                       htmlFor="maxApplicants"
                       className="block text-xs font-medium text-zinc-800"

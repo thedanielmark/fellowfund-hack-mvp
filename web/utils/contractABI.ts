@@ -52,6 +52,25 @@ export const contractABI = [
         name: "applicationId",
         type: "uint256",
       },
+    ],
+    name: "ApplicantAccepted",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "uint256",
+        name: "fellowshipId",
+        type: "uint256",
+      },
+      {
+        indexed: true,
+        internalType: "uint256",
+        name: "applicationId",
+        type: "uint256",
+      },
       {
         indexed: false,
         internalType: "bool",
@@ -82,6 +101,12 @@ export const contractABI = [
         internalType: "address",
         name: "applicant",
         type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "string",
+        name: "metadata",
+        type: "string",
       },
     ],
     name: "ApplicationSubmitted",
@@ -215,6 +240,12 @@ export const contractABI = [
         name: "marketAddress",
         type: "address",
       },
+      {
+        indexed: true,
+        internalType: "uint256",
+        name: "applicationId",
+        type: "uint256",
+      },
     ],
     name: "MarketOpened",
     type: "event",
@@ -272,16 +303,6 @@ export const contractABI = [
         internalType: "bool",
         name: "verified",
         type: "bool",
-      },
-      {
-        internalType: "uint256",
-        name: "yesStakes",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "noStakes",
-        type: "uint256",
       },
       {
         internalType: "bool",
@@ -456,7 +477,7 @@ export const contractABI = [
     name: "markets",
     outputs: [
       {
-        internalType: "contract Market",
+        internalType: "contract IMarket",
         name: "",
         type: "address",
       },
