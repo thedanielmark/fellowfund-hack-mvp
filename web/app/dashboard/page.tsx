@@ -1,103 +1,12 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
-import getMarkets from "@/utils/queries/getMarkets";
+import getFellowships from "@/utils/queries/getFellowships";
 import { GraphQLClient } from "graphql-request";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
 function DashboardHomePage() {
-  // const markets = [
-  //   {
-  //     name: "Will Alice be able to increase her performance by 25%?",
-  //     pfp_url: "https://i.pravatar.cc/150?img=5",
-  //     chance: 25,
-  //     volume: 1000,
-  //     fundName: "Ethereum",
-  //     fundLogo: "https://cryptologos.cc/logos/ethereum-eth-logo.png",
-  //     yes: 600,
-  //     no: 400,
-  //   },
-  //   {
-  //     name: "Will Bob be able to increase his performance by 17%?",
-  //     pfp_url: "https://i.pravatar.cc/150?img=10",
-  //     chance: 15,
-  //     volume: 500,
-  //     fundName: "Polygon",
-  //     fundLogo: "https://cryptologos.cc/logos/polygon-matic-logo.png",
-  //     yes: 300,
-  //     no: 200,
-  //   },
-  //   {
-  //     name: "Will Charlie be able to increase his performance by 21%?",
-  //     pfp_url: "https://i.pravatar.cc/150?img=15",
-  //     chance: 10,
-  //     volume: 200,
-  //     fundName: "Binance Smart Chain",
-  //     fundLogo: "https://cryptologos.cc/logos/binance-coin-bnb-logo.png",
-  //     yes: 150,
-  //     no: 50,
-  //   },
-  //   {
-  //     name: "Will Diana be able to increase her performance by 5%?",
-  //     pfp_url: "https://i.pravatar.cc/150?img=20",
-  //     chance: 50,
-  //     volume: 3000,
-  //     fundName: "Avalanche",
-  //     fundLogo: "https://cryptologos.cc/logos/avalanche-avax-logo.png",
-  //     yes: 2000,
-  //     no: 1000,
-  //   },
-  // ];
-
-  const sampleData = [
-    {
-      id: "0",
-      epochEndTime: "1732233600",
-      applicationDeadline: "1732060800",
-      maxApplicants: "10",
-      metadata:
-        '{"name":"My first program","amount":"0.0005","githubCommits":true,"githubOrganizationHandle":"","githubOrganizationWeight":"63","eventsAttended":false,"eventsCount":"3","eventsWeight":"76","applicationDeadline":"2024-11-20","marketDeadline":"2024-11-21","epochEndtime":"2024-11-22","status":"Created","maxApplicants":"10","gitHubOrganizationHandle":"fellowfund"}',
-      funds: "500000000000000",
-    },
-    {
-      id: "1",
-      epochEndTime: "1731774075",
-      applicationDeadline: "1731773835",
-      maxApplicants: "100",
-      metadata:
-        '{"name":"NounsDAO Fellow Special Edition","description":"This fellowship intends to fund active contributors, bringing results and stickness to the ecosystem.","githubOrg":"fellowfund","kpiTargets":{"totalCommits":{"targetValue":6,"weight":0.8},"poapEvents":{"targetValue":2,"weight":0.2}}}',
-      funds: "0",
-    },
-    {
-      id: "2",
-      epochEndTime: "1732233600",
-      applicationDeadline: "1732060800",
-      maxApplicants: "10",
-      metadata:
-        '{"name":"My first program","amount":"0.0005","githubCommits":true,"githubOrganizationHandle":"","githubOrganizationWeight":"63","eventsAttended":false,"eventsCount":"3","eventsWeight":"76","applicationDeadline":"2024-11-20","marketDeadline":"2024-11-21","epochEndtime":"2024-11-22","status":"Created","maxApplicants":"10","gitHubOrganizationHandle":"fellowfund"}',
-      funds: "500000000000000",
-    },
-    {
-      id: "3",
-      epochEndTime: "1732233600",
-      applicationDeadline: "1732060800",
-      maxApplicants: "10",
-      metadata:
-        '{"name":"My first program","amount":"0.0005","githubCommits":true,"githubOrganizationHandle":"","githubOrganizationWeight":"47","eventsAttended":false,"eventsCount":"3","eventsWeight":"69","applicationDeadline":"2024-11-20","marketDeadline":"2024-11-21","epochEndtime":"2024-11-22","status":"Created","maxApplicants":"10","gitHubOrganizationHandle":"fellowfund"}',
-      funds: "500000000000000",
-    },
-    {
-      id: "4",
-      epochEndTime: "1731774870",
-      applicationDeadline: "1731774630",
-      maxApplicants: "10",
-      metadata:
-        '{"name":"NounsDAO Fellow Special Edition","description":"This fellowship intends to fund active contributors, bringing results and stickness to the ecosystem.","githubOrg":"fellowfund","kpiTargets":{"totalCommits":{"targetValue":6,"weight":0.8},"poapEvents":{"targetValue":2,"weight":0.2}}}',
-      funds: "1000",
-    },
-  ];
-
   const [fellowships, setFellowships] = useState([]);
 
   useEffect(() => {
@@ -106,7 +15,7 @@ function DashboardHomePage() {
         const client = new GraphQLClient(
           process.env.NEXT_PUBLIC_GRAPH_URL || ""
         );
-        const query = getMarkets();
+        const query = getFellowships();
         const result: any = await client.request(query);
 
         // Log the entire result to inspect its structure

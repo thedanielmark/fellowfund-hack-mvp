@@ -3,10 +3,13 @@
 import TwoPointGraph from "@/components/Graphs/TwoPointGraph";
 import { useAuth } from "@/providers/AuthProvider";
 import { contractABI } from "@/utils/contractABI";
+import { marketContractABI } from "@/utils/marketContractABI";
+import getMarket from "@/utils/queries/getMarket";
 import { ethers, parseEther } from "ethers";
-import { useState } from "react";
+import { GraphQLClient } from "graphql-request";
+import { useEffect, useState } from "react";
 
-function MarketPage({ params }: { params: { marketId: string } }) {
+function MarketPage({ params }: { params: { marketId: any } }) {
   const { address, getSigner } = useAuth();
 
   const tabs = [
@@ -27,6 +30,36 @@ function MarketPage({ params }: { params: { marketId: string } }) {
     setCurrentTab(tabName);
   }
 
+  const [applicantData, setApplicantData] = useState<any>();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const client = new GraphQLClient(
+          process.env.NEXT_PUBLIC_GRAPH_URL || ""
+        );
+        const query = getMarket(params.marketId);
+        const result: any = await client.request(query);
+
+        // Log the entire result to inspect its structure
+        console.log("GraphQL Response:", result);
+
+        // Check if data and applicant exist
+        if (result?.applicant) {
+          const applicantDataFromGraph = result.applicant;
+          setApplicantData(applicantDataFromGraph);
+          console.log("Address:", applicantDataFromGraph);
+        } else {
+          console.log("Markets data is missing or undefined.");
+        }
+      } catch (err: any) {
+        console.error("Error fetching data:", err.message);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   // Vote yes
   const voteYes = async (event: any) => {
     event.preventDefault();
@@ -37,14 +70,16 @@ function MarketPage({ params }: { params: { marketId: string } }) {
     // Write to contract
     const signer = await getSigner();
 
-    const contractAddress = process.env.NEXT_PUBLIC_DEPLOYED_ADDRESS || "";
+    console.log("MarketAddress:", applicantData.marketAddress);
+
+    const contractAddress = applicantData.marketAddress || "";
     const contract = new ethers.Contract(
       contractAddress,
-      JSON.parse(JSON.stringify(contractABI)),
+      JSON.parse(JSON.stringify(marketContractABI)),
       signer
     );
 
-    const tx = await contract.placeBid(0, {
+    const tx = await contract.placeBet(0, {
       value: parseEther(yesValue),
     });
     console.log(tx);
@@ -68,15 +103,15 @@ function MarketPage({ params }: { params: { marketId: string } }) {
     // Write to contract
     const signer = await getSigner();
 
-    const contractAddress = process.env.NEXT_PUBLIC_DEPLOYED_ADDRESS || "";
+    const contractAddress = applicantData.marketAddress || "";
     const contract = new ethers.Contract(
       contractAddress,
-      JSON.parse(JSON.stringify(contractABI)),
+      JSON.parse(JSON.stringify(marketContractABI)),
       signer
     );
 
-    const tx = await contract.placeBid(1, {
-      value: parseEther(yesValue),
+    const tx = await contract.placeBet(1, {
+      value: parseEther(noValue),
     });
     console.log(tx);
     // Wait for transaction to finish
