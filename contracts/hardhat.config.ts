@@ -35,7 +35,7 @@ const config: HardhatUserConfig = {
       url: 'https://rpc.sepolia.mantle.xyz', // Sepolia Testnet
       chainId: 5003,
       accounts: [PRIVATE_KEY_1],
-      gasPrice: 20000000, // specify the network's minimum basefee as the gas price
+      gasPrice: 60000000, // specify the network's minimum basefee as the gas price
     },
     flowTestnet: {
       url: "https://testnet.evm.nodes.onflow.org",
@@ -50,6 +50,16 @@ const config: HardhatUserConfig = {
     lineaSepolia: {
       url: "https://rpc.sepolia.linea.build",
       chainId: 59141,
+      accounts: [PRIVATE_KEY_1],
+    },
+    rootstockTestnet: {
+      url: "https://mycrypto.testnet.rsk.co",
+      chainId: 31,
+      accounts: [PRIVATE_KEY_1],
+    },
+    celoAlfajoresTestnet: {
+      url: "https://alfajores-forno.celo-testnet.org",
+      chainId: 44787,
       accounts: [PRIVATE_KEY_1],
     },
     sepolia: {

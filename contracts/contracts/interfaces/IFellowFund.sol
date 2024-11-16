@@ -37,7 +37,7 @@ interface IFellowFund {
         uint256 indexed applicationId
     );
 
-    function createFellowship(Fellowship calldata fellowship) external payable;
+    function createFellowship(string calldata _metadata, uint256 _funds, uint256 _applicationDeadline, uint256 _marketDeadline, uint256 _epochDeadline) external payable;
 
     function applyToFellowship(
         uint256 fellowshipId,

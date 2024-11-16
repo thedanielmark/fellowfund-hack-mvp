@@ -55,8 +55,9 @@ describe("FellowFund", function () {
 
   async function createDefaultFellowship() {
     const fellowship = await newDefaultFellowship();
-    await fellowFund.createFellowship(fellowship, {
-      value: fellowship.funds,
+    const { metadata, funds, applicationDeadline, marketDeadline, epochEndTime } = fellowship;
+    await fellowFund.createFellowship(metadata, funds, applicationDeadline, marketDeadline, epochEndTime, {
+      value: funds,
     });
     return (await fellowFund.fellowshipCount()) - 1n;
   }
@@ -74,13 +75,23 @@ describe("FellowFund", function () {
     epochEndTime = marketDeadline + oneDay;
   });
 
+  describe("Failing invocations", function () {
+    it("fail if no funds provided", async function () {
+      let fellowship = await newDefaultFellowship();
+      fellowship = { ...fellowship, funds: ethers.parseEther("0.3") };
+      const { metadata, funds, applicationDeadline, marketDeadline, epochEndTime } = fellowship;
+      await expect(fellowFund.createFellowship(metadata, funds, applicationDeadline, marketDeadline, epochEndTime)).to.be.revertedWith("Incorrect funds sent");
+    });
+  });
+
   describe("Fellowship Creation and Application", function () {
     it("should create a fellowship with correct parameters", async function () {
       const fellowship = await newDefaultFellowship();
       let expectedFellowship = fellowship;
       expectedFellowship.status = FellowshipStatus.AcceptingApplications;
 
-      const createTx = await fellowFund.createFellowship(fellowship, { value: fellowship.funds })
+      const { metadata, funds, applicationDeadline, marketDeadline, epochEndTime } = fellowship;
+      const createTx = await fellowFund.createFellowship(metadata, funds, applicationDeadline, marketDeadline, epochEndTime, { value: funds })
       expect(createTx).to.emit(fellowFund, "FellowshipCreated").withArgs(0, expectedFellowship);
 
       const createdFellowship = await fellowFund.fellowships(0);
@@ -148,10 +159,10 @@ describe("FellowFund", function () {
 
       await market
         .connect(bettor1)
-        .placeBet(0, { value: ethers.parseEther("0.1") }); // Yes bet
+        .placeBet(Side.Yes, { value: ethers.parseEther("0.1") });
       await market
         .connect(bettor2)
-        .placeBet(1, { value: ethers.parseEther("0.05") }); // No bet
+        .placeBet(Side.No, { value: ethers.parseEther("0.05") });
 
       await time.increaseTo(marketDeadline + 1);
 
@@ -321,5 +332,7 @@ describe("FellowFund", function () {
       expect(await ethers.provider.getBalance(bettor3.address)).to.equal(balanceBeforeResolveBettor3 + winningsBidder3);
     });
   });
+
+
 });
 

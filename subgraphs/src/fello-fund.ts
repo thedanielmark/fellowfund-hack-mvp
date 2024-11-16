@@ -14,7 +14,9 @@ import { Fellowship, Applicant } from "../generated/schema";
 
 export function handleApplicantAccepted(event: ApplicantAcceptedEvent): void {
   let entity = Applicant.load(
-    event.params.fellowshipId.toHex() + "x" + event.params.applicationId.toHex()
+    event.params.fellowshipId.toString() +
+      "x" +
+      event.params.applicationId.toString()
   );
   if (!entity) {
     return;
@@ -27,7 +29,9 @@ export function handleApplicationEvaluated(
   event: ApplicationEvaluatedEvent
 ): void {
   let entity = Applicant.load(
-    event.params.fellowshipId.toHex() + "x" + event.params.applicationId.toHex()
+    event.params.fellowshipId.toString() +
+      "x" +
+      event.params.applicationId.toString()
   );
   if (!entity) {
     return;
@@ -42,9 +46,11 @@ export function handleApplicationSubmitted(
   event: ApplicationSubmittedEvent
 ): void {
   let applicant = new Applicant(
-    event.params.fellowshipId.toHex() + "x" + event.params.applicationId.toHex()
+    event.params.fellowshipId.toString() +
+      "x" +
+      event.params.applicationId.toString()
   );
-  let fellowship = Fellowship.load(event.params.fellowshipId.toHex());
+  let fellowship = Fellowship.load(event.params.fellowshipId.toString());
 
   if (!fellowship) {
     // If fellowship doesn't exist, handle gracefully.
@@ -66,7 +72,7 @@ export function handleApplicationSubmitted(
 }
 
 export function handleEpochResolved(event: EpochResolvedEvent): void {
-  let entity = Fellowship.load(event.params.fellowshipId.toHex());
+  let entity = Fellowship.load(event.params.fellowshipId.toString());
   if (!entity) {
     return;
   }
@@ -77,7 +83,7 @@ export function handleEpochResolved(event: EpochResolvedEvent): void {
 }
 
 export function handleEpochStarted(event: EpochStartedEvent): void {
-  let entity = Fellowship.load(event.params.fellowshipId.toHex());
+  let entity = Fellowship.load(event.params.fellowshipId.toString());
   if (!entity) {
     return;
   }
@@ -88,7 +94,7 @@ export function handleEpochStarted(event: EpochStartedEvent): void {
 }
 
 export function handleFellowshipCreated(event: FellowshipCreatedEvent): void {
-  let fellowship = new Fellowship(event.params.fellowshipId.toHex());
+  let fellowship = new Fellowship(event.params.fellowshipId.toString());
   fellowship.fellowshipId = event.params.fellowshipId;
   fellowship.metadata = event.params.fellowship.metadata;
   fellowship.funds = event.params.fellowship.funds;
@@ -96,10 +102,11 @@ export function handleFellowshipCreated(event: FellowshipCreatedEvent): void {
   fellowship.marketDeadline = event.params.fellowship.marketDeadline;
   fellowship.epochEndTime = event.params.fellowship.epochEndTime;
   fellowship.status = event.params.fellowship.status;
-  fellowship.maxApplicants = event.params.fellowship.maxApplicants;
   fellowship.resolved = false;
   fellowship.epochStarted = false;
+  fellowship.grantPerAccepted = BigInt.fromI32(0);
   fellowship.acceptedApplicants = BigInt.fromI32(0);
+  fellowship.totalApplications = BigInt.fromI32(0);
   fellowship.blockNumber = event.block.number;
   fellowship.blockTimestamp = event.block.timestamp;
   fellowship.transactionHash = event.transaction.hash;
@@ -107,7 +114,7 @@ export function handleFellowshipCreated(event: FellowshipCreatedEvent): void {
 }
 
 export function handleFellowshipResolved(event: FellowshipResolvedEvent): void {
-  let entity = Fellowship.load(event.params.fellowshipId.toHex());
+  let entity = Fellowship.load(event.params.fellowshipId.toString());
   if (!entity) {
     return;
   }
@@ -118,7 +125,9 @@ export function handleFellowshipResolved(event: FellowshipResolvedEvent): void {
 
 export function handleMarketOpened(event: MarketOpenedEvent): void {
   let entity = Applicant.load(
-    event.params.fellowshipId.toHex() + "x" + event.params.applicationId.toHex()
+    event.params.fellowshipId.toString() +
+      "x" +
+      event.params.applicationId.toString()
   );
   if (!entity) {
     return;
@@ -130,5 +139,5 @@ export function handleMarketOpened(event: MarketOpenedEvent): void {
 export function handleOwnershipTransferred(
   event: OwnershipTransferredEvent
 ): void {
-  // let entity = Fellowship.load(event.params..toHex());
+  // let entity = Fellowship.load(event.params..toString());
 }

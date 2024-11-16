@@ -8,16 +8,24 @@ import {IFellowFund} from "../FellowFund.sol";
 contract MockFellowFund is IFellowFund {
     IGithubVerifier vLayerVerifierContract;
 
-    uint256 fellowshipsCount = 0;
+    uint256 fellowshipCount = 0;
     mapping(uint256 fellowshipId => Fellowship) fellowships;
     mapping(uint256 fellowshipId => Application[] applications) fellowshipApplications;
 
     constructor() {}
 
-    function createFellowship(Fellowship memory _fellowship) external payable {
-        uint256 fellowshipId = fellowshipsCount;
-        fellowships[fellowshipId] = _fellowship;
-        fellowshipsCount++;
+    function createFellowship(string calldata _metadata, uint256 _funds, uint256 _applicationDeadline, uint256 _marketDeadline, uint256 _epochDeadline) external payable {
+        uint256 fellowshipId = fellowshipCount;
+        fellowshipCount++;
+
+        Fellowship storage fellowship = fellowships[fellowshipId];
+        fellowship.metadata = _metadata;
+        fellowship.funds = _funds;
+        fellowship.applicationDeadline = _applicationDeadline;
+        fellowship.marketDeadline = _marketDeadline;
+        fellowship.epochEndTime = _epochDeadline;
+        fellowship.status = FellowshipStatus.Created;
+
         emit FellowshipCreated(fellowshipId, fellowships[fellowshipId]);
     }
 

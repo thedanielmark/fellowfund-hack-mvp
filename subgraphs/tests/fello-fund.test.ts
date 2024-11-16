@@ -8,9 +8,9 @@ import {
 } from "matchstick-as/assembly/index"
 import { BigInt, Address } from "@graphprotocol/graph-ts"
 import { ApplicantAccepted } from "../generated/schema"
-import { ApplicantAccepted as ApplicantAcceptedEvent } from "../generated/fellofund/fellofund"
-import { handleApplicantAccepted } from "../src/fellofund"
-import { createApplicantAcceptedEvent } from "./fellofund-utils"
+import { ApplicantAccepted as ApplicantAcceptedEvent } from "../generated/FelloFund/FelloFund"
+import { handleApplicantAccepted } from "../src/fello-fund"
+import { createApplicantAcceptedEvent } from "./fello-fund-utils"
 
 // Tests structure (matchstick-as >=0.5.0)
 // https://thegraph.com/docs/en/developer/matchstick/#tests-structure-0-5-0

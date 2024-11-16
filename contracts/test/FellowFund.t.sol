@@ -27,15 +27,7 @@ contract FellowFundTest is Test {
         uint256 marketDeadline = applicationDeadline + ONE_MINUTE;
         uint256 epochEndTime = marketDeadline + ONE_MINUTE;
         uint256 funds = 1e20;
-        Fellowship memory fellowship = Fellowship({
-            metadata: "TestFellowship",
-            funds: funds,
-            applicationDeadline: applicationDeadline,
-            marketDeadline: marketDeadline,
-            epochEndTime: epochEndTime,
-            status: FellowshipStatus.Created,
-            maxApplicants: 10
-        });
-        fellowFund.createFellowship{value: funds}(fellowship);
+        string memory metadata = "TestFellowship";
+        fellowFund.createFellowship{value: funds}(metadata, funds, applicationDeadline, marketDeadline, epochEndTime);
     }
 }

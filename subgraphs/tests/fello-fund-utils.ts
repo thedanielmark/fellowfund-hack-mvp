@@ -10,7 +10,7 @@ import {
   FellowshipResolved,
   MarketOpened,
   OwnershipTransferred
-} from "../generated/fellofund/fellofund"
+} from "../generated/FelloFund/FelloFund"
 
 export function createApplicantAcceptedEvent(
   fellowshipId: BigInt,
