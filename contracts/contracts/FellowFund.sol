@@ -1,94 +1,181 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.27;
 
-import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
-import {Application, Fellowship, Market, PoolKey, Target} from "./Types.sol";
-import {IGithubVerifier} from "./vlayer/GithubVerificationRegistry.sol";
+import {IFellowFund} from "./interfaces/IFellowFund.sol";
+import {Fellowship, Application, FellowshipStatus} from "./Types.sol";
+import {Market} from "./Market.sol";
+import "./Types.sol";
 
-interface IFellowFund {
-    event ApplicationSubmitted(uint256 indexed fellowshipId, string indexed githubUsername);
-    event FellowshipCreated(uint256 indexed fellowshipId, Fellowship fellowship);
+contract FellowFund is IFellowFund {
+    uint256 public fellowshipCount;
+    address public owner;
+    mapping(uint256 => Fellowship) public fellowships;
+    mapping(uint256 => Application[]) public applications;
+    mapping(uint256 => mapping(uint256 => Market)) public markets;
 
-    function createFellowship(
-        string calldata _name,
-        string calldata _description,
-        uint256 _funds,
-        Target[2] calldata kpiTargets
-    ) external payable;
+    address public verifier;
+    address public operator;
 
-    function applyToFellowship(uint256 _fellowshipId, string memory _githubUsername) external;
-
-    function openFellowshipMarket(uint256 _fellowshipId) external;
-
-    // function to interact with pools -> should happen directly via pools (Uniswap)
-    // Todo: Check if Uniswap supports pools for tokens in ERC1155 contract
-}
-
-interface IBidding {
-    function buy(uint256 _fellowshipId, uint256 _applicantId, bool yesToken) external payable;
-    function sell(uint256 _fellowshipId, uint256 _applicantId, uint256 _amount, bool yesToken) external;
-}
-
-contract FellowFund is IFellowFund, IBidding, Ownable {
-    IGithubVerifier vLayerVerifierContract;
-
-    uint256 fellowshipsCount = 0;
-    mapping(uint256 fellowshipId => Fellowship) fellowships;
-    mapping(uint256 fellowshipId => Application[] applications) fellowshipApplications;
-    mapping(uint256 fellowshipId => Market[] applications) fellowshipMarkets;
-
-    constructor() Ownable(msg.sender) {}
-
-    function createFellowship(
-        string calldata _name,
-        string calldata _description,
-        uint256 _funds,
-        Target[2] calldata kpiTargets
-    ) external payable onlyOwner {
-        require(msg.value == _funds, "Fund mismatch");
-
-        uint256 fellowshipId = fellowshipsCount;
-        Fellowship memory fellowship = Fellowship(_name, _description, _funds, kpiTargets);
-        fellowships[fellowshipId] = fellowship;
-        fellowshipsCount++;
-        emit FellowshipCreated(fellowshipId, fellowship);
+    constructor(address _verifier, address _operator) {
+        verifier = _verifier;
+        operator = _operator;
+        owner = msg.sender;
     }
 
-    function applyToFellowship(uint256 _fellowshipId, string memory _githubUsername) external {
-        // Todo: Add value to specify in which phase the fellowship currently is at.
-        // Make sure that the github username is verified with the msg.sender.
-        require(msg.sender == vLayerVerifierContract.resolve(_githubUsername), "Verification incorrect");
-        fellowshipApplications[_fellowshipId].push(Application(msg.sender, _githubUsername));
-        emit ApplicationSubmitted(_fellowshipId, _githubUsername);
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Only the owner can call this function");
+        _;
     }
 
-    /**
-     * @notice Opens the market for a fellowship. Creates Yes/No pools for each applicant.
-     * @param _fellowshipId The id of the fellowship for which the market should be opened
-     */
-    function openFellowshipMarket(uint256 _fellowshipId) external {
-        uint256 fundsForMarkets = fellowships[_fellowshipId].funds / 10;
-        Application[] memory applications = fellowshipApplications[_fellowshipId];
-        uint256 nrApps = applications.length;
-        uint256 fundsPerApplicantMarket = fundsForMarkets / nrApps;
-        for (uint256 i = 0; i < nrApps; i++) {
-            _createMarket(_fellowshipId, applications[i], fundsPerApplicantMarket);
+    modifier onlyVerifier() {
+        // require(msg.sender == verifier, "Only the verifier can call this function");
+        _;
+    }
+
+    modifier onlyOperator() {
+        require(msg.sender == operator, "Only the operator can call this function");
+        _;
+    }
+
+    function createFellowship(Fellowship calldata _fellowship) external payable {
+        require(msg.value == _fellowship.funds, "Incorrect funds sent");
+        require(_fellowship.applicationDeadline > block.timestamp, "Invalid application deadline");
+        require(_fellowship.marketDeadline > _fellowship.applicationDeadline, "Invalid market deadline");
+        require(_fellowship.epochEndTime > _fellowship.marketDeadline, "Invalid epoch end time");
+
+        require(_fellowship.maxApplicants > 0, "Invalid max applicants");
+
+        uint256 fellowshipId = fellowshipCount++;
+        fellowships[fellowshipId] = _fellowship;
+        fellowships[fellowshipId].status = FellowshipStatus.AcceptingApplications;
+
+        emit FellowshipCreated(fellowshipId, fellowships[fellowshipId]);
+    }
+
+    function applyToFellowship(uint256 fellowshipId, bytes calldata vlayerProof, string calldata metadata) external {
+        Fellowship storage fellowship = fellowships[fellowshipId];
+        require(fellowship.status == FellowshipStatus.AcceptingApplications, "Not accepting applications");
+        require(block.timestamp < fellowship.applicationDeadline, "Application period ended");
+        require(applications[fellowshipId].length < fellowship.maxApplicants, "Maximum applicants reached");
+
+        // Verify the proof using the verifier contract
+        (bool success,) = verifier.call(vlayerProof);
+        require(success, "Invalid proof");
+
+        uint256 applicationId = applications[fellowshipId].length;
+        applications[fellowshipId].push(
+            Application({
+                applicant: msg.sender,
+                metadata: metadata,
+                achieved: false,
+                verified: false,
+                yesStakes: 0,
+                noStakes: 0,
+                accepted: false,
+                grantAmount: 0
+            })
+        );
+
+        emit ApplicationSubmitted(fellowshipId, applicationId, msg.sender);
+    }
+
+    function openFellowshipMarkets(uint256 fellowshipId) external onlyOperator {
+        Fellowship storage fellowship = fellowships[fellowshipId];
+        require(block.timestamp >= fellowship.applicationDeadline, "Application period not ended");
+        require(fellowship.status == FellowshipStatus.AcceptingApplications, "Invalid status");
+
+        Application[] storage apps = applications[fellowshipId];
+        require(apps.length > 0, "No applications to create markets for");
+
+        // Create market for each applicant
+        for (uint256 i = 0; i < apps.length; i++) {
+            Market market = new Market(address(this), apps[i].applicant);
+            markets[fellowshipId][i] = market;
+
+            // Emit event for each market creation
+            emit MarketOpened(fellowshipId, address(market));
         }
+
+        fellowship.status = FellowshipStatus.MarketOpen;
     }
 
-    function _createMarket(uint256 _fellowshipId, Application memory application, uint256 fundsForMarket) internal {
-        uint256 yesCollateral = fundsForMarket / 2;
-        uint256 noCollateral = yesCollateral;
-        // Todo: Create 2 ERC20 tokens for YES/NO
-        // Todo: Create a pool for both tokens with 10% from the fellowship funds
+    function evaluateMarket(uint256 fellowshipId) external onlyOperator {
+        Fellowship storage fellowship = fellowships[fellowshipId];
+        require(block.timestamp >= fellowship.marketDeadline, "Market still open");
+        require(fellowship.status == FellowshipStatus.MarketOpen, "Invalid status");
+
+        Application[] storage apps = applications[fellowshipId];
+        uint256 acceptedCount = 0;
+
+        // Evaluate each application based on market stakes
+        for (uint256 i = 0; i < apps.length; i++) {
+            Application storage app = apps[i];
+            uint256 totalStakes = app.yesStakes + app.noStakes;
+
+            if (totalStakes > 0) {
+                if (app.yesStakes > app.noStakes) {
+                    app.accepted = true;
+                    acceptedCount++;
+                }
+            }
+        }
+
+        // Calculate grant amount for accepted applications
+        if (acceptedCount > 0) {
+            uint256 grantPerAccepted = fellowship.funds / acceptedCount;
+            for (uint256 i = 0; i < apps.length; i++) {
+                if (apps[i].accepted) {
+                    apps[i].grantAmount = grantPerAccepted;
+                    payable(apps[i].applicant).transfer(grantPerAccepted);
+                }
+            }
+        }
+
+        fellowship.status = FellowshipStatus.EpochStarted;
+        emit EpochStarted(fellowshipId);
     }
 
-    function buy(uint256 _fellowshipId, uint256 _applicantId, bool yesToken) external payable {
-        uint256 amount = msg.value;
-        // Todo: Send amount of eth to the pool and get the corresponding token
+    function setApplicantImpact(uint256 fellowshipId, uint256 applicationId, bool achieved, bytes calldata proof)
+        external
+        onlyVerifier
+    {
+        require(fellowships[fellowshipId].status == FellowshipStatus.EpochStarted, "Invalid status");
+
+        // Verify TEE proof
+        (bool success,) = verifier.call(proof);
+        require(success, "Invalid achievement proof");
+
+        Application storage application = applications[fellowshipId][applicationId];
+        application.achieved = achieved;
+        application.verified = true;
     }
 
-    function sell(uint256 _fellowshipId, uint256 _applicantId, uint256 _amount, bool yesToken) external {
-        // Todo: Send amount of eth to the pool and get the corresponding token
+    function resolveFellowship(uint256 fellowshipId) external onlyOperator {
+        Fellowship storage fellowship = fellowships[fellowshipId];
+        require(block.timestamp >= fellowship.epochEndTime, "Epoch not ended");
+        require(fellowship.status == FellowshipStatus.EpochStarted, "Invalid status");
+
+        Application[] storage apps = applications[fellowshipId];
+        for (uint256 i = 0; i < apps.length; i++) {
+            Application storage app = apps[i];
+            require(app.verified, "Not all applications verified");
+
+            if (app.achieved) {
+                markets[fellowshipId][i].resolve(Side.Yes);
+            } else {
+                markets[fellowshipId][i].resolve(Side.No);
+            }
+        }
+
+        fellowship.status = FellowshipStatus.Resolved;
+        emit FellowshipResolved(fellowshipId);
+    }
+
+    function setVerifier(address _verifier) external onlyOwner {
+        verifier = _verifier;
+    }
+
+    function setOperator(address _operator) external onlyOwner {
+        operator = _operator;
     }
 }
