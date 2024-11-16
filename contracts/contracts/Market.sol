@@ -8,6 +8,7 @@ contract Market {
 
     // State variables
     address public immutable applicant;
+    uint256 public immutable fellowshipId;
     Side public result;
     bool public isMarketResolved;
     mapping(Side => uint256) public bets;
@@ -26,14 +27,22 @@ contract Market {
     error TransferFailed();
     error NoBetsPlaced();
 
-    constructor(address _operator, address _applicant) {
+    constructor(address _operator, uint256 _fellowshipId, address _applicant) {
         operator = _operator;
+        fellowshipId = _fellowshipId;
         applicant = _applicant;
     }
 
     modifier onlyOperator() {
-        require(msg.sender == operator, "Only the operator can call this function");
+        require(
+            msg.sender == operator,
+            "Only the operator can call this function"
+        );
         _;
+    }
+
+    function getBet(Side _side) external view returns (uint256) {
+        return bets[_side];
     }
 
     function placeBet(Side _side) external payable {
@@ -67,11 +76,14 @@ contract Market {
                 uint256 winningBet = betsPerBettor[bettor][_winner];
 
                 if (winningBet > 0) {
-                    uint256 winnings = (winningBet * totalPot) / totalWinningBets;
+                    uint256 winnings = (winningBet * totalPot) /
+                        totalWinningBets;
                     betsPerBettor[bettor][Side.Yes] = 0;
                     betsPerBettor[bettor][Side.No] = 0;
 
-                    (bool success,) = payable(bettor).call{value: winnings}("");
+                    (bool success, ) = payable(bettor).call{value: winnings}(
+                        ""
+                    );
                     if (!success) revert TransferFailed();
 
                     emit WinningsDistributed(bettor, winnings);
