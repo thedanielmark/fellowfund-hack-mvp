@@ -5,7 +5,7 @@ import "../Types.sol";
 import {IGithubVerifier} from "../vlayer/GithubVerificationRegistry.sol";
 import {IFellowFund} from "../FellowFund.sol";
 
-contract FellowFund is IFellowFund {
+contract MockFellowFund is IFellowFund {
     IGithubVerifier vLayerVerifierContract;
 
     uint256 fellowshipsCount = 0;
