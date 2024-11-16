@@ -8,12 +8,22 @@ import {
   DialogTitle,
   Disclosure,
   DisclosureButton,
+  Listbox,
+  ListboxButton,
+  ListboxOption,
+  ListboxOptions,
   Menu,
   MenuButton,
   MenuItem,
   MenuItems,
 } from "@headlessui/react";
-import { Bars3Icon, WalletIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import {
+  Bars3Icon,
+  CheckIcon,
+  ChevronUpDownIcon,
+  WalletIcon,
+  XMarkIcon,
+} from "@heroicons/react/24/outline";
 import { ReactNode, useEffect, useState } from "react";
 import { useAuth } from "@/providers/AuthProvider";
 import Link from "next/link";
@@ -39,6 +49,27 @@ interface LayoutProps {
   children: ReactNode;
 }
 
+const networks = [
+  {
+    name: "Ethereum Mainnet",
+    chainId: 0x1,
+    logo: "https://cryptologos.cc/logos/ethereum-eth-logo.png",
+    graphURL: "",
+  },
+  {
+    name: "Mantle Sepolia Testnet",
+    chainId: 0x138b,
+    logo: "https://cryptologos.cc/logos/mantle-mnt-logo.png",
+    graphURL: "",
+  },
+  {
+    name: "Polygon Amoy",
+    chainId: 0x89,
+    logo: "https://cryptologos.cc/logos/polygon-matic-logo.png",
+    graphURL: "",
+  },
+];
+
 const DashboardLayout = ({ children }: LayoutProps) => {
   const pathname = usePathname();
   const { loggedIn, logout, user, address, getBalance, provider, getSigner } =
@@ -48,6 +79,7 @@ const DashboardLayout = ({ children }: LayoutProps) => {
   const [walletModalOpen, setWalletModalOpen] = useState<boolean>(false);
   const [balance, setBalance] = useState<number | any>(null);
   const [onlyCarsBalance, setOnlyCarsBalance] = useState<number | any>();
+  const [selectedNetwork, setSelectedNetwork] = useState(networks[1]);
 
   // Getting Web3Auth wallet balance
   useEffect(() => {
@@ -186,6 +218,51 @@ const DashboardLayout = ({ children }: LayoutProps) => {
                     <span className="sr-only">Wallet</span>
                     <WalletIcon aria-hidden="true" className="h-6 w-6" />
                   </button>
+
+                  <div className="shrink-0 rounded-md px-3 pb-1.5 pt-2.5 shadow-sm ring-1 ring-inset ring-zinc-800 focus-within:ring-2 focus-within:ring-primary-600">
+                    <Listbox
+                      value={selectedNetwork}
+                      onChange={setSelectedNetwork}
+                    >
+                      <div className="relative">
+                        <ListboxButton className="relative w-full cursor-default rounded-md text-white py-1.5 text-left shadow-sm focus:outline-none sm:text-sm sm:leading-6">
+                          <span className="block truncate">
+                            {selectedNetwork.name}
+                          </span>
+                          <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+                            <ChevronUpDownIcon
+                              aria-hidden="true"
+                              className="h-5 w-5 text-zinc-400"
+                            />
+                          </span>
+                        </ListboxButton>
+
+                        <ListboxOptions
+                          transition
+                          className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-black py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none data-[closed]:data-[leave]:opacity-0 data-[leave]:transition data-[leave]:duration-100 data-[leave]:ease-in sm:text-sm"
+                        >
+                          {networks.map((network, index) => (
+                            <ListboxOption
+                              key={index}
+                              value={network}
+                              className="group relative cursor-default select-none py-2 pl-3 pr-9 text-zinc-200 data-[focus]:bg-primary-600 data-[focus]:text-white"
+                            >
+                              <span className="block truncate font-normal group-data-[selected]:font-semibold">
+                                {network.name}
+                              </span>
+
+                              <span className="absolute inset-y-0 right-0 flex items-center pr-4 text-primary-600 group-data-[focus]:text-white [.group:not([data-selected])_&]:hidden">
+                                <CheckIcon
+                                  aria-hidden="true"
+                                  className="h-5 w-5"
+                                />
+                              </span>
+                            </ListboxOption>
+                          ))}
+                        </ListboxOptions>
+                      </div>
+                    </Listbox>
+                  </div>
 
                   {/* Profile dropdown */}
                   <Menu as="div" className="relative ml-3">

@@ -374,6 +374,8 @@ export default function TwoPointGraph({
                   type: "value",
                   boundaryGap: [0, "100%"],
                   alignTicks: true,
+                  inverse:
+                    data1.dataName === "proposalsCumulative" ? false : true, // Invert the axis
                   axisLine: {
                     show: false,
                   },
@@ -403,6 +405,7 @@ export default function TwoPointGraph({
                 data2 && {
                   type: "value",
                   alignTicks: true,
+                  inverse: data2.dataName === "votesCumulative" ? true : false, // Invert the second Y-axis as well
                   axisLine: {
                     show: false,
                   },

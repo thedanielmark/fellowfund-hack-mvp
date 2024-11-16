@@ -6,11 +6,16 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
+    "@pushprotocol/restapi": "^1.7.29",
     "cookie-parser": "~1.4.4",
     "cors": "^2.8.5",
     "debug": "~2.6.9",
+<<<<<<< HEAD
     "dotenv": "^16.4.5",
     "ethers": "^6.13.2",
+=======
+    "ethers": "^6.13.4",
+>>>>>>> 85f2ea0474e023fe93b4c08613dce7b082809725
     "express": "~4.16.1",
     "http-errors": "~1.6.3",
     "jade": "~1.11.0",
