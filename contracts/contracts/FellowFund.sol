@@ -5,13 +5,14 @@ import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 import {IFellowFund} from "./interfaces/IFellowFund.sol";
 import {Fellowship, Application, FellowshipStatus} from "./Types.sol";
 import {Market} from "./Market.sol";
+import {IMarket} from "./interfaces/IMarket.sol";
 import "./Types.sol";
 
 contract FellowFund is IFellowFund, Ownable {
     uint256 public fellowshipCount;
     mapping(uint256 => Fellowship) public fellowships;
     mapping(uint256 => Application[]) public applications;
-    mapping(uint256 => mapping(uint256 => Market)) public markets;
+    mapping(uint256 => mapping(uint256 => IMarket)) public markets;
 
     address public phalaVerifier;
     address public operator;
@@ -61,8 +62,6 @@ contract FellowFund is IFellowFund, Ownable {
                 metadata: metadata,
                 achieved: false,
                 verified: false,
-                yesStakes: 0,
-                noStakes: 0,
                 accepted: false,
                 grantAmount: 0
             })
@@ -81,8 +80,8 @@ contract FellowFund is IFellowFund, Ownable {
 
         // Create market for each applicant
         for (uint256 i = 0; i < apps.length; i++) {
-            Market market = new Market(address(this), apps[i].applicant);
-            markets[fellowshipId][i] = market;
+            Market market = new Market(address(this), fellowshipId, apps[i].applicant);
+            markets[fellowshipId][i] = IMarket(address(market));
 
             // Emit event for each market creation
             emit MarketOpened(fellowshipId, address(market));
@@ -99,13 +98,17 @@ contract FellowFund is IFellowFund, Ownable {
         Application[] storage apps = applications[fellowshipId];
         uint256 acceptedCount = 0;
 
+        uint256 nrApps = apps.length;
         // Evaluate each application based on market stakes
-        for (uint256 i = 0; i < apps.length; i++) {
+        for (uint256 i = 0; i < nrApps; i++) {
             Application storage app = apps[i];
-            uint256 totalStakes = app.yesStakes + app.noStakes;
+            IMarket market = markets[fellowshipId][i];
+            uint256 yesStakes = market.getBet(Side.Yes);
+            uint256 noStakes = market.getBet(Side.No);
+            uint256 totalStakes = noStakes + noStakes;
 
             if (totalStakes > 0) {
-                if (app.yesStakes > app.noStakes) {
+                if (yesStakes > noStakes) {
                     app.accepted = true;
                     acceptedCount++;
                 }

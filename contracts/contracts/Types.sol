@@ -29,8 +29,6 @@ struct Application {
     string metadata;
     bool achieved;
     bool verified;
-    uint256 yesStakes;
-    uint256 noStakes;
     bool accepted;
     uint256 grantAmount;
 }
