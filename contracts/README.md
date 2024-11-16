@@ -2,12 +2,6 @@
 
 This project is based on [hardhat](https://hardhat.org/) and using [Ignition](https://hardhat.org/ignition/docs/getting-started#overview).
 
-## Deployed Contracts and Networks
-
-> 🚨 A **complete list** of the deployed contracts, its versions and networks, can be found here:
-> 
-> [testnetDeployments.json](./ignition/deployments/testnetDeployments.json)
-
 ## Getting Started
 
 ```shell

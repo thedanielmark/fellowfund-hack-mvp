@@ -16,3 +16,12 @@ Additionally, the project includes the following repository:
 - [nextjs-viem-tee-sim-template](https://github.com/fellowfund/nextjs-viem-tee-sim-template): This repository implements APIs running in Phala Network's TEE, serving as a trusted Oracle for FellowFund.
 
 > 🚨 Each directory and repository within FellowFund includes a `README.md` file with instructions on how to set up and run the project.
+
+## Deployed Contracts and Networks
+
+> 🚨 A **complete list** of the deployed contracts, its versions and networks, can be found here: [testnetDeployments.json](./ignition/deployments/testnetDeployments.json)
+
+* Mantle Testnet
+  * [`0x`](https://explorer.mantle.xyz/address/0x1e36E0b2E733fE5a4b627fd4eF7f7e865916b58F)
+* Polygon
+ * [`0x`](https://explorer.mantle.xyz/address/0x1e36E0b2E733fE5a4b627fd4eF7f7e865916b58F)
