@@ -1,7 +1,7 @@
 import { ethers } from "hardhat";
 import { Wallet } from "ethers";
 import { vars } from "hardhat/config";
-import { FellowFund } from "../typechain-types/contracts/FellowFund.sol";
+import { FellowFund } from "../typechain-types/contracts/FellowFund";
 import { fundIfLocalNetwork } from "./utils/network";
 import { getPersonalWallet } from "./utils/wallet";
 
