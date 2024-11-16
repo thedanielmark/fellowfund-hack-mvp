@@ -94,7 +94,12 @@ contract FellowFund is IFellowFund, Ownable {
             })
         );
 
-        emit ApplicationSubmitted(fellowshipId, applicationId, msg.sender);
+        emit ApplicationSubmitted(
+            fellowshipId,
+            applicationId,
+            msg.sender,
+            metadata
+        ); // add metadata
     }
 
     function openFellowshipMarkets(uint256 fellowshipId) external onlyOperator {
@@ -121,7 +126,7 @@ contract FellowFund is IFellowFund, Ownable {
             markets[fellowshipId][i] = IMarket(address(market));
 
             // Emit event for each market creation
-            emit MarketOpened(fellowshipId, address(market));
+            emit MarketOpened(fellowshipId, address(market), i);
         }
 
         fellowship.status = FellowshipStatus.MarketOpen;
@@ -154,12 +159,14 @@ contract FellowFund is IFellowFund, Ownable {
                 if (yesStakes > noStakes) {
                     app.accepted = true;
                     acceptedCount++;
+                    emit ApplicantAccepted(fellowshipId, i);
                 }
             }
         }
         uint256 grantPerAccepted = fellowship.funds / acceptedCount;
 
         // Calculate grant amount for accepted applications
+
         if (acceptedCount > 0) {
             for (uint256 i = 0; i < apps.length; i++) {
                 if (apps[i].accepted) {

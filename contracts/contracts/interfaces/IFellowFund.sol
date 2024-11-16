@@ -11,11 +11,13 @@ interface IFellowFund {
     event ApplicationSubmitted(
         uint256 indexed fellowshipId,
         uint256 indexed applicationId,
-        address applicant
+        address applicant,
+        string metadata
     );
     event MarketOpened(
         uint256 indexed fellowshipId,
-        address indexed marketAddress
+        address indexed marketAddress,
+        uint256 indexed applicationId
     );
     event EpochStarted(
         uint256 indexed fellowshipId,
@@ -29,6 +31,10 @@ interface IFellowFund {
         uint256 indexed fellowshipId,
         uint256 indexed applicationId,
         bool achieved
+    );
+    event ApplicantAccepted(
+        uint256 indexed fellowshipId,
+        uint256 indexed applicationId
     );
 
     function createFellowship(Fellowship calldata fellowship) external payable;
