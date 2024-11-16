@@ -148,6 +148,8 @@ module.exports = {
     loadOperatorWallet,
     executeEveryXSeconds,
     listenForFellowshipApplications,
-    listenForFellowshipEvents
+    listenForFellowshipEvents,
+    callOpenFellowshipMarkets,
+    callEvaluateMarket,
 };
 
