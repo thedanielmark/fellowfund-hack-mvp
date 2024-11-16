@@ -30,6 +30,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { RotatingLines } from "react-loader-spinner";
 import { ethers, JsonRpcSigner, parseEther } from "ethers";
+import { networks } from "@/utils/chains";
 
 const navigation = [
   { name: "Navigate", href: "/dashboard" },
@@ -48,27 +49,6 @@ function classNames(...classes: string[]) {
 interface LayoutProps {
   children: ReactNode;
 }
-
-const networks = [
-  {
-    name: "Ethereum Mainnet",
-    chainId: 0x1,
-    logo: "https://cryptologos.cc/logos/ethereum-eth-logo.png",
-    graphURL: "",
-  },
-  {
-    name: "Mantle Sepolia Testnet",
-    chainId: 0x138b,
-    logo: "https://cryptologos.cc/logos/mantle-mnt-logo.png",
-    graphURL: "",
-  },
-  {
-    name: "Polygon Amoy",
-    chainId: 0x89,
-    logo: "https://cryptologos.cc/logos/polygon-matic-logo.png",
-    graphURL: "",
-  },
-];
 
 const DashboardLayout = ({ children }: LayoutProps) => {
   const pathname = usePathname();
@@ -219,7 +199,7 @@ const DashboardLayout = ({ children }: LayoutProps) => {
                     <WalletIcon aria-hidden="true" className="h-6 w-6" />
                   </button>
 
-                  <div className="shrink-0 rounded-md px-3 pb-1.5 pt-2.5 shadow-sm ring-1 ring-inset ring-zinc-800 focus-within:ring-2 focus-within:ring-primary-600">
+                  {/* <div className="shrink-0 rounded-md px-3 pb-1.5 pt-2.5 shadow-sm ring-1 ring-inset ring-zinc-800 focus-within:ring-2 focus-within:ring-primary-600">
                     <Listbox
                       value={selectedNetwork}
                       onChange={setSelectedNetwork}
@@ -262,6 +242,18 @@ const DashboardLayout = ({ children }: LayoutProps) => {
                         </ListboxOptions>
                       </div>
                     </Listbox>
+                  </div> */}
+                  <div className="mx-3">
+                    <select
+                      id="location"
+                      name="location"
+                      defaultValue="Canada"
+                      className="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 bg-transparent text-white ring-1 ring-inset ring-zinc-800 focus:ring-2 focus:ring-primary-600 sm:text-sm/6"
+                    >
+                      {networks.map((network, index) => (
+                        <option key={index}>{network.name}</option>
+                      ))}
+                    </select>
                   </div>
 
                   {/* Profile dropdown */}

@@ -12,14 +12,23 @@ import { Description, Field, Label, Switch } from "@headlessui/react";
 function CreateFellowshipPage() {
   const { address, getSigner } = useAuth();
   const [inputs, setInputs] = useState<any>({
-    deviceDefinitionId: "",
     name: "",
-    make: "",
-    model: "",
-    year: "",
+    amount: "",
+    githubCommits: false,
+    githubOrganizationHandle: "",
+    githubOrganizationWeight: 0,
+    eventsAttended: false,
+    eventsCount: "",
+    eventsWeight: 0,
+    applicationDeadline: "",
+    marketDeadline: "",
+    epochEndtime: "",
+    status: "Created",
+    maxApplicants: "",
   });
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [enabled, setEnabled] = useState(false);
+  const [gitHubCommitsEnabled, setGitHubCommitsEnabled] = useState(false);
+  const [eventsAttendedEnabled, setEventsAttendedEnabled] = useState(false);
   const [message, setMessage] = useState<string>("");
   const [showErrorMessage, setShowErrorMessage] = useState<boolean>(false);
 
@@ -34,6 +43,66 @@ function CreateFellowshipPage() {
     setIsLoading(true);
     setMessage("");
     setShowErrorMessage(false);
+
+    // Write to contract
+    const signer = await getSigner();
+
+    const contractAddress = "0x2323Cd8097708f4C8D4BA37aE72644Af712bAD76";
+    const contract = new ethers.Contract(
+      contractAddress,
+      JSON.parse(JSON.stringify(contractABI)),
+      signer
+    );
+
+    const tx = await contract.createFellowship([
+      JSON.stringify(inputs),
+      inputs.amount,
+      new Date(inputs.applicationDeadline).getTime() / 1000,
+      new Date(inputs.marketDeadline).getTime() / 1000,
+      inputs.epochEndtime,
+      inputs.status,
+      inputs.maxApplicants,
+    ]);
+    console.log(tx);
+    // Wait for transaction to finish
+    const receipt = await tx.wait();
+    if (receipt.status === 1) {
+      // POST request to API
+      const url = `${process.env.NEXT_PUBLIC_API_ROUTE}/broadcast/vehicle-created`;
+
+      const payload: { [key: string]: any } = {
+        address,
+      };
+
+      // Push inputs into payload using map
+      Object.keys(inputs).map((key: any) => {
+        payload[key] = inputs[key];
+      });
+
+      // Send a POST request
+      fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json", // Indicates you're sending JSON data
+        },
+        body: JSON.stringify(payload), // Convert the data object to JSON string
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          return response.json(); // Parse the JSON response
+        })
+        .then((data) => {
+          console.log("Success:", data);
+          setShowSuccess(true);
+          setTransactionHash(receipt.hash);
+          setIsLoading(false);
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    }
   };
 
   useEffect(() => {
@@ -114,6 +183,19 @@ function CreateFellowshipPage() {
     }));
   };
 
+  // Detect changes in eventsAttendedEnabled and gitHubCommitsEnabled and update inputs
+  useEffect(() => {
+    setInputs((prev: any) => ({
+      ...prev,
+      githubCommits: gitHubCommitsEnabled,
+      eventsAttended: eventsAttendedEnabled,
+    }));
+  }, [gitHubCommitsEnabled, eventsAttendedEnabled]);
+
+  useEffect(() => {
+    console.log(inputs);
+  }, [inputs]);
+
   return (
     <>
       <div className="my-10 space-y-6 sm:px-6 lg:col-span-9 lg:px-0">
@@ -158,7 +240,7 @@ function CreateFellowshipPage() {
                 <div className="col-span-3 sm:col-span-3">
                   <div className="rounded-md px-3 pb-1.5 pt-2.5 shadow-sm ring-1 ring-inset ring-zinc-800 focus-within:ring-2 focus-within:ring-primary-600">
                     <label
-                      htmlFor="make"
+                      htmlFor="amount"
                       className="block text-xs font-medium text-zinc-200"
                     >
                       Program Budget
@@ -169,9 +251,11 @@ function CreateFellowshipPage() {
                         <span className="text-gray-500 sm:text-sm">$</span>
                       </div>
                       <input
-                        id="price"
-                        name="price"
+                        id="amount"
+                        name="amount"
                         type="text"
+                        value={inputs.amount}
+                        onChange={handleInputChange}
                         placeholder="0.00"
                         aria-describedby="price-currency"
                         className="block w-full rounded-md border-0 py-1.5 pl-3 pr-12 bg-transparent text-white placeholder:text-zinc-400 focus:ring-0 sm:text-sm/6"
@@ -213,8 +297,8 @@ function CreateFellowshipPage() {
                       </Description>
                     </span>
                     <Switch
-                      checked={enabled}
-                      onChange={setEnabled}
+                      checked={gitHubCommitsEnabled}
+                      onChange={setGitHubCommitsEnabled}
                       className="group relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-zinc-200 transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-primary-600 focus:ring-offset-2 data-[checked]:bg-primary-600"
                     >
                       <span
@@ -230,7 +314,7 @@ function CreateFellowshipPage() {
                 <div className="col-span-3 sm:col-span-3">
                   <div className="rounded-md px-3 pb-1.5 pt-2.5 shadow-sm ring-1 ring-inset ring-zinc-800 focus-within:ring-2 focus-within:ring-primary-600">
                     <label
-                      htmlFor="make"
+                      htmlFor="gitHubOrganizationHandle"
                       className="block text-xs font-medium text-zinc-200"
                     >
                       GitHub Organization Handle
@@ -242,9 +326,11 @@ function CreateFellowshipPage() {
                           https://github.com/
                         </span>
                         <input
-                          id="company-website"
-                          name="company-website"
+                          id="gitHubOrganizationHandle"
+                          name="gitHubOrganizationHandle"
                           type="text"
+                          value={inputs.githubOrganization}
+                          onChange={handleInputChange}
                           placeholder="BoneyM"
                           className="block w-full rounded-md border-0 py-1.5 pl-3 pr-12 bg-transparent text-white placeholder:text-zinc-400 focus:ring-0 sm:text-sm/6"
                         />
@@ -253,6 +339,34 @@ function CreateFellowshipPage() {
                   </div>
                 </div>
                 {/* GitHub organization end */}
+
+                {/* GitHub organization weight start */}
+                <div className="col-span-6 sm:col-span-6">
+                  <label
+                    htmlFor="gitHubOrganizationWeight"
+                    className="block text-xs font-medium text-zinc-200"
+                  >
+                    Weight for this metric (0-1)
+                  </label>
+
+                  <div className="mt-3 relative flex items-center gap-x-2 rounded-md shadow-sm">
+                    <input
+                      type="range"
+                      value={inputs.githubOrganizationWeight}
+                      onChange={(e) =>
+                        setInputs({
+                          ...inputs,
+                          githubOrganizationWeight: e.target.value,
+                        })
+                      }
+                      className="appearance-none bg-zinc-800 slider rounded-full"
+                    />
+                    <div className="text-sm text-zinc-200 font-bold">
+                      {inputs.githubOrganizationWeight / 100}
+                    </div>
+                  </div>
+                </div>
+                {/* GitHub organization weight end */}
 
                 <div className="col-span-6 w-full pt-0.5 bg-zinc-800" />
 
@@ -273,8 +387,8 @@ function CreateFellowshipPage() {
                       </Description>
                     </span>
                     <Switch
-                      checked={enabled}
-                      onChange={setEnabled}
+                      checked={eventsAttendedEnabled}
+                      onChange={setEventsAttendedEnabled}
                       className="group relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-zinc-200 transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-primary-600 focus:ring-offset-2 data-[checked]:bg-primary-600"
                     >
                       <span
@@ -290,17 +404,17 @@ function CreateFellowshipPage() {
                 <div className="col-span-3">
                   <div className="rounded-md px-3 pb-1.5 pt-2.5 shadow-sm ring-1 ring-inset ring-zinc-800 focus-within:ring-2 focus-within:ring-primary-600">
                     <label
-                      htmlFor="make"
+                      htmlFor="eventsCount"
                       className="block text-xs font-medium text-zinc-200"
                     >
                       Number of Events
                     </label>
                     <input
-                      id="name"
-                      name="name"
+                      id="eventsCount"
+                      name="eventsCount"
                       type="text"
                       required={true}
-                      value={inputs.name}
+                      value={inputs.eventsCount}
                       onChange={handleInputChange}
                       placeholder="3"
                       className="block w-full border-0 py-1.5 px-0 bg-transparent text-white placeholder:text-zinc-400 focus:ring-0 sm:text-sm sm:leading-6"
@@ -308,7 +422,135 @@ function CreateFellowshipPage() {
                   </div>
                 </div>
                 {/* Events count end */}
+
+                {/* Events weight start */}
+                <div className="col-span-6 sm:col-span-6">
+                  <label
+                    htmlFor="make"
+                    className="block text-xs font-medium text-zinc-200"
+                  >
+                    Weight for this metric (0-1)
+                  </label>
+
+                  <div className="mt-3 relative flex items-center gap-x-2 rounded-md shadow-sm">
+                    <input
+                      type="range"
+                      value={inputs.eventsWeight}
+                      onChange={(e) =>
+                        setInputs({
+                          ...inputs,
+                          eventsWeight: e.target.value,
+                        })
+                      }
+                      className="appearance-none bg-zinc-800 slider rounded-full"
+                    />
+                    <div className="text-sm text-zinc-200 font-bold">
+                      {inputs.eventsWeight / 100}
+                    </div>
+                  </div>
+                </div>
+                {/* Events weight end */}
                 {/* Impact metrics end */}
+
+                <div className="col-span-6 w-full pt-0.5 bg-zinc-800" />
+
+                {/* Fellowship info start */}
+                <h1 className="col-span-6 sm:col-span-6 text-2xl">
+                  Fellowship Info
+                </h1>
+
+                {/* Applcation deadline start */}
+                <div className="col-span-3">
+                  <div className="rounded-md px-3 pb-1.5 pt-2.5 shadow-sm ring-1 ring-inset ring-zinc-800 focus-within:ring-2 focus-within:ring-primary-600">
+                    <label
+                      htmlFor="applicationDeadline"
+                      className="block text-xs font-medium text-zinc-200"
+                    >
+                      Application Deadline
+                    </label>
+                    <input
+                      id="applicationDeadline"
+                      name="applicationDeadline"
+                      type="date"
+                      required={true}
+                      value={inputs.applicationDeadline}
+                      onChange={handleInputChange}
+                      placeholder="2021-12-31"
+                      className="block w-full border-0 py-1.5 px-0 bg-transparent text-white placeholder:text-zinc-400 focus:ring-0 sm:text-sm sm:leading-6"
+                    />
+                  </div>
+                </div>
+                {/* Application deadline end */}
+
+                {/* Market deadline start */}
+                <div className="col-span-3">
+                  <div className="rounded-md px-3 pb-1.5 pt-2.5 shadow-sm ring-1 ring-inset ring-zinc-800 focus-within:ring-2 focus-within:ring-primary-600">
+                    <label
+                      htmlFor="marketDeadline"
+                      className="block text-xs font-medium text-zinc-200"
+                    >
+                      Market Deadline
+                    </label>
+                    <input
+                      id="marketDeadline"
+                      name="marketDeadline"
+                      type="date"
+                      required={true}
+                      value={inputs.marketDeadline}
+                      onChange={handleInputChange}
+                      placeholder="2021-12-31"
+                      className="block w-full border-0 py-1.5 px-0 bg-transparent text-white placeholder:text-zinc-400 focus:ring-0 sm:text-sm sm:leading-6"
+                    />
+                  </div>
+                </div>
+                {/* Market deadline end */}
+
+                {/* Epoch endtime start */}
+                <div className="col-span-3">
+                  <div className="rounded-md px-3 pb-1.5 pt-2.5 shadow-sm ring-1 ring-inset ring-zinc-800 focus-within:ring-2 focus-within:ring-primary-600">
+                    <label
+                      htmlFor="epochEndtime"
+                      className="block text-xs font-medium text-zinc-200"
+                    >
+                      Epoch End Time
+                    </label>
+                    <input
+                      id="epochEndtime"
+                      name="epochEndtime"
+                      type="date"
+                      required={true}
+                      value={inputs.epochEndtime}
+                      onChange={handleInputChange}
+                      placeholder="2021-12-31"
+                      className="block w-full border-0 py-1.5 px-0 bg-transparent text-white placeholder:text-zinc-400 focus:ring-0 sm:text-sm sm:leading-6"
+                    />
+                  </div>
+                </div>
+                {/* Epoch endtime end */}
+
+                {/* Max applicants start */}
+                <div className="col-span-3 sm:col-span-3">
+                  <div className="rounded-md px-3 pb-1.5 pt-2.5 shadow-sm ring-1 ring-inset ring-zinc-800 focus-within:ring-2 focus-within:ring-primary-600">
+                    <label
+                      htmlFor="maxApplicants"
+                      className="block text-xs font-medium text-zinc-200"
+                    >
+                      Maximum Number of Applicants
+                    </label>
+                    <input
+                      id="maxApplicants"
+                      name="maxApplicants"
+                      type="text"
+                      required={true}
+                      value={inputs.maxApplicants}
+                      onChange={handleInputChange}
+                      placeholder="10"
+                      className="block w-full border-0 py-1.5 px-0 bg-transparent text-white placeholder:text-zinc-400 focus:ring-0 sm:text-sm sm:leading-6"
+                    />
+                  </div>
+                </div>
+                {/* Max applicants end */}
+                {/* Fellowship info end */}
               </div>
             </div>
             <div className="flex justify-end bg-zinc-800/70 px-4 py-3 text-right sm:px-6 border border-zinc-800">

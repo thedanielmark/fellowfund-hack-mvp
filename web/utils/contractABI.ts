@@ -1,6 +1,17 @@
 export const contractABI = [
   {
-    inputs: [],
+    inputs: [
+      {
+        internalType: "address",
+        name: "_phalaVerifier",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "_operator",
+        type: "address",
+      },
+    ],
     stateMutability: "nonpayable",
     type: "constructor",
   },
@@ -8,103 +19,22 @@ export const contractABI = [
     inputs: [
       {
         internalType: "address",
-        name: "sender",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "tokenId",
-        type: "uint256",
-      },
-      {
-        internalType: "address",
         name: "owner",
         type: "address",
       },
     ],
-    name: "ERC721IncorrectOwner",
+    name: "OwnableInvalidOwner",
     type: "error",
   },
   {
     inputs: [
       {
         internalType: "address",
-        name: "operator",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "tokenId",
-        type: "uint256",
-      },
-    ],
-    name: "ERC721InsufficientApproval",
-    type: "error",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "approver",
+        name: "account",
         type: "address",
       },
     ],
-    name: "ERC721InvalidApprover",
-    type: "error",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "operator",
-        type: "address",
-      },
-    ],
-    name: "ERC721InvalidOperator",
-    type: "error",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "owner",
-        type: "address",
-      },
-    ],
-    name: "ERC721InvalidOwner",
-    type: "error",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "receiver",
-        type: "address",
-      },
-    ],
-    name: "ERC721InvalidReceiver",
-    type: "error",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "sender",
-        type: "address",
-      },
-    ],
-    name: "ERC721InvalidSender",
-    type: "error",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "tokenId",
-        type: "uint256",
-      },
-    ],
-    name: "ERC721NonexistentToken",
+    name: "OwnableUnauthorizedAccount",
     type: "error",
   },
   {
@@ -112,68 +42,24 @@ export const contractABI = [
     inputs: [
       {
         indexed: true,
-        internalType: "address",
-        name: "owner",
-        type: "address",
-      },
-      {
-        indexed: true,
-        internalType: "address",
-        name: "approved",
-        type: "address",
+        internalType: "uint256",
+        name: "fellowshipId",
+        type: "uint256",
       },
       {
         indexed: true,
         internalType: "uint256",
-        name: "tokenId",
+        name: "applicationId",
         type: "uint256",
-      },
-    ],
-    name: "Approval",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "address",
-        name: "owner",
-        type: "address",
-      },
-      {
-        indexed: true,
-        internalType: "address",
-        name: "operator",
-        type: "address",
       },
       {
         indexed: false,
         internalType: "bool",
-        name: "approved",
+        name: "achieved",
         type: "bool",
       },
     ],
-    name: "ApprovalForAll",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "address",
-        name: "user",
-        type: "address",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "amount",
-        type: "uint256",
-      },
-    ],
-    name: "BalanceTopUp",
+    name: "ApplicationEvaluated",
     type: "event",
   },
   {
@@ -182,35 +68,23 @@ export const contractABI = [
       {
         indexed: true,
         internalType: "uint256",
-        name: "stationId",
+        name: "fellowshipId",
         type: "uint256",
       },
       {
         indexed: true,
+        internalType: "uint256",
+        name: "applicationId",
+        type: "uint256",
+      },
+      {
+        indexed: false,
         internalType: "address",
-        name: "owner",
+        name: "applicant",
         type: "address",
       },
-      {
-        indexed: false,
-        internalType: "string",
-        name: "metadata",
-        type: "string",
-      },
-      {
-        indexed: false,
-        internalType: "bool",
-        name: "isActive",
-        type: "bool",
-      },
-      {
-        indexed: false,
-        internalType: "bytes",
-        name: "attestationUID",
-        type: "bytes",
-      },
     ],
-    name: "StationRegistered",
+    name: "ApplicationSubmitted",
     type: "event",
   },
   {
@@ -219,23 +93,11 @@ export const contractABI = [
       {
         indexed: true,
         internalType: "uint256",
-        name: "stationId",
+        name: "fellowshipId",
         type: "uint256",
       },
-      {
-        indexed: true,
-        internalType: "address",
-        name: "reporter",
-        type: "address",
-      },
-      {
-        indexed: false,
-        internalType: "string",
-        name: "issue",
-        type: "string",
-      },
     ],
-    name: "StationReported",
+    name: "EpochResolved",
     type: "event",
   },
   {
@@ -244,48 +106,29 @@ export const contractABI = [
       {
         indexed: true,
         internalType: "uint256",
-        name: "stationId",
-        type: "uint256",
-      },
-      {
-        indexed: true,
-        internalType: "uint256",
-        name: "vehicleId",
+        name: "fellowshipId",
         type: "uint256",
       },
       {
         indexed: false,
         internalType: "uint256",
-        name: "amount",
+        name: "grantPerAccepted",
         type: "uint256",
       },
-    ],
-    name: "StationUsed",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
       {
-        indexed: true,
-        internalType: "address",
-        name: "from",
-        type: "address",
-      },
-      {
-        indexed: true,
-        internalType: "address",
-        name: "to",
-        type: "address",
-      },
-      {
-        indexed: true,
+        indexed: false,
         internalType: "uint256",
-        name: "tokenId",
+        name: "acceptedCount",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "totalApplications",
         type: "uint256",
       },
     ],
-    name: "Transfer",
+    name: "EpochStarted",
     type: "event",
   },
   {
@@ -294,303 +137,125 @@ export const contractABI = [
       {
         indexed: true,
         internalType: "uint256",
-        name: "vehicleId",
+        name: "fellowshipId",
+        type: "uint256",
+      },
+      {
+        components: [
+          {
+            internalType: "string",
+            name: "metadata",
+            type: "string",
+          },
+          {
+            internalType: "uint256",
+            name: "funds",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "applicationDeadline",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "marketDeadline",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "epochEndTime",
+            type: "uint256",
+          },
+          {
+            internalType: "enum FellowshipStatus",
+            name: "status",
+            type: "uint8",
+          },
+          {
+            internalType: "uint256",
+            name: "maxApplicants",
+            type: "uint256",
+          },
+        ],
+        indexed: false,
+        internalType: "struct Fellowship",
+        name: "fellowship",
+        type: "tuple",
+      },
+    ],
+    name: "FellowshipCreated",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "uint256",
+        name: "fellowshipId",
+        type: "uint256",
+      },
+    ],
+    name: "FellowshipResolved",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "uint256",
+        name: "fellowshipId",
         type: "uint256",
       },
       {
         indexed: true,
         internalType: "address",
-        name: "owner",
+        name: "marketAddress",
+        type: "address",
+      },
+    ],
+    name: "MarketOpened",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "previousOwner",
         type: "address",
       },
       {
-        indexed: false,
-        internalType: "string",
-        name: "metadata",
-        type: "string",
-      },
-      {
-        indexed: false,
-        internalType: "bytes",
-        name: "attestationUID",
-        type: "bytes",
+        indexed: true,
+        internalType: "address",
+        name: "newOwner",
+        type: "address",
       },
     ],
-    name: "VehicleRegistered",
+    name: "OwnershipTransferred",
     type: "event",
   },
   {
     inputs: [
       {
-        internalType: "address",
-        name: "to",
-        type: "address",
-      },
-      {
         internalType: "uint256",
-        name: "tokenId",
+        name: "",
         type: "uint256",
       },
-    ],
-    name: "approve",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "owner",
-        type: "address",
-      },
-    ],
-    name: "balanceOf",
-    outputs: [
       {
         internalType: "uint256",
         name: "",
         type: "uint256",
       },
     ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    name: "balances",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "tokenId",
-        type: "uint256",
-      },
-    ],
-    name: "getApproved",
+    name: "applications",
     outputs: [
       {
         internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "owner",
-        type: "address",
-      },
-      {
-        internalType: "address",
-        name: "operator",
-        type: "address",
-      },
-    ],
-    name: "isApprovedForAll",
-    outputs: [
-      {
-        internalType: "bool",
-        name: "",
-        type: "bool",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "string",
-        name: "metadata",
-        type: "string",
-      },
-      {
-        internalType: "bytes",
-        name: "attestationUID",
-        type: "bytes",
-      },
-    ],
-    name: "mintVehicle",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "name",
-    outputs: [
-      {
-        internalType: "string",
-        name: "",
-        type: "string",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "tokenId",
-        type: "uint256",
-      },
-    ],
-    name: "ownerOf",
-    outputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "string",
-        name: "metadata",
-        type: "string",
-      },
-      {
-        internalType: "bytes",
-        name: "attestationUID",
-        type: "bytes",
-      },
-    ],
-    name: "registerStation",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "stationId",
-        type: "uint256",
-      },
-      {
-        internalType: "string",
-        name: "issue",
-        type: "string",
-      },
-    ],
-    name: "reportStation",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "from",
-        type: "address",
-      },
-      {
-        internalType: "address",
-        name: "to",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "tokenId",
-        type: "uint256",
-      },
-    ],
-    name: "safeTransferFrom",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "from",
-        type: "address",
-      },
-      {
-        internalType: "address",
-        name: "to",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "tokenId",
-        type: "uint256",
-      },
-      {
-        internalType: "bytes",
-        name: "data",
-        type: "bytes",
-      },
-    ],
-    name: "safeTransferFrom",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "operator",
-        type: "address",
-      },
-      {
-        internalType: "bool",
-        name: "approved",
-        type: "bool",
-      },
-    ],
-    name: "setApprovalForAll",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    name: "stations",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "id",
-        type: "uint256",
-      },
-      {
-        internalType: "address",
-        name: "owner",
+        name: "applicant",
         type: "address",
       },
       {
@@ -600,45 +265,33 @@ export const contractABI = [
       },
       {
         internalType: "bool",
-        name: "isActive",
+        name: "achieved",
         type: "bool",
       },
-      {
-        internalType: "bytes",
-        name: "attestationUID",
-        type: "bytes",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "bytes4",
-        name: "interfaceId",
-        type: "bytes4",
-      },
-    ],
-    name: "supportsInterface",
-    outputs: [
       {
         internalType: "bool",
-        name: "",
+        name: "verified",
         type: "bool",
       },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "symbol",
-    outputs: [
       {
-        internalType: "string",
-        name: "",
-        type: "string",
+        internalType: "uint256",
+        name: "yesStakes",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "noStakes",
+        type: "uint256",
+      },
+      {
+        internalType: "bool",
+        name: "accepted",
+        type: "bool",
+      },
+      {
+        internalType: "uint256",
+        name: "grantAmount",
+        type: "uint256",
       },
     ],
     stateMutability: "view",
@@ -648,24 +301,66 @@ export const contractABI = [
     inputs: [
       {
         internalType: "uint256",
-        name: "tokenId",
+        name: "fellowshipId",
         type: "uint256",
       },
-    ],
-    name: "tokenURI",
-    outputs: [
       {
         internalType: "string",
-        name: "",
+        name: "metadata",
         type: "string",
       },
     ],
-    stateMutability: "view",
+    name: "applyToFellowship",
+    outputs: [],
+    stateMutability: "nonpayable",
     type: "function",
   },
   {
-    inputs: [],
-    name: "topUp",
+    inputs: [
+      {
+        components: [
+          {
+            internalType: "string",
+            name: "metadata",
+            type: "string",
+          },
+          {
+            internalType: "uint256",
+            name: "funds",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "applicationDeadline",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "marketDeadline",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "epochEndTime",
+            type: "uint256",
+          },
+          {
+            internalType: "enum FellowshipStatus",
+            name: "status",
+            type: "uint8",
+          },
+          {
+            internalType: "uint256",
+            name: "maxApplicants",
+            type: "uint256",
+          },
+        ],
+        internalType: "struct Fellowship",
+        name: "_fellowship",
+        type: "tuple",
+      },
+    ],
+    name: "createFellowship",
     outputs: [],
     stateMutability: "payable",
     type: "function",
@@ -673,47 +368,27 @@ export const contractABI = [
   {
     inputs: [
       {
-        internalType: "address",
-        name: "from",
-        type: "address",
-      },
-      {
-        internalType: "address",
-        name: "to",
-        type: "address",
-      },
-      {
         internalType: "uint256",
-        name: "tokenId",
+        name: "fellowshipId",
         type: "uint256",
       },
     ],
-    name: "transferFrom",
+    name: "evaluateMarket",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
   },
   {
-    inputs: [
+    inputs: [],
+    name: "fellowshipCount",
+    outputs: [
       {
         internalType: "uint256",
-        name: "stationId",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "vehicleId",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "amount",
+        name: "",
         type: "uint256",
       },
     ],
-    name: "useStation",
-    outputs: [],
-    stateMutability: "nonpayable",
+    stateMutability: "view",
     type: "function",
   },
   {
@@ -724,30 +399,208 @@ export const contractABI = [
         type: "uint256",
       },
     ],
-    name: "vehicles",
+    name: "fellowships",
     outputs: [
-      {
-        internalType: "uint256",
-        name: "id",
-        type: "uint256",
-      },
-      {
-        internalType: "address",
-        name: "owner",
-        type: "address",
-      },
       {
         internalType: "string",
         name: "metadata",
         type: "string",
       },
       {
-        internalType: "bytes",
-        name: "attestationUID",
-        type: "bytes",
+        internalType: "uint256",
+        name: "funds",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "applicationDeadline",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "marketDeadline",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "epochEndTime",
+        type: "uint256",
+      },
+      {
+        internalType: "enum FellowshipStatus",
+        name: "status",
+        type: "uint8",
+      },
+      {
+        internalType: "uint256",
+        name: "maxApplicants",
+        type: "uint256",
       },
     ],
     stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    name: "markets",
+    outputs: [
+      {
+        internalType: "contract Market",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "fellowshipId",
+        type: "uint256",
+      },
+    ],
+    name: "openFellowshipMarkets",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "operator",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "owner",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "phalaVerifier",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "renounceOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "fellowshipId",
+        type: "uint256",
+      },
+    ],
+    name: "resolveFellowship",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "fellowshipId",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "applicationId",
+        type: "uint256",
+      },
+      {
+        internalType: "bool",
+        name: "achieved",
+        type: "bool",
+      },
+      {
+        internalType: "bytes",
+        name: "proof",
+        type: "bytes",
+      },
+    ],
+    name: "setApplicantImpact",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_operator",
+        type: "address",
+      },
+    ],
+    name: "setOperator",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_verifier",
+        type: "address",
+      },
+    ],
+    name: "setVerifier",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "newOwner",
+        type: "address",
+      },
+    ],
+    name: "transferOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
     type: "function",
   },
 ];
