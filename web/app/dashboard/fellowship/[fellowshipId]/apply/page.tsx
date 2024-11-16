@@ -241,16 +241,12 @@ function ApplyToFellowhipPage({
                   </div>
 
                   <div className="mt-3">
-                    <button
-                      type="submit"
-                      className={`flex items-center justify-center gap-x-3 rounded-md bg-primary-600 px-3 py-2 text-sm font-semibold text-black shadow-sm hover:bg-primary-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600 ${
-                        isLoading
-                          ? "cursor-not-allowed opacity-50"
-                          : "cursor-pointer opacity-100"
-                      }`}
+                    <a
+                      href="http://localhost:5174"
+                      className="flex items-center justify-center gap-x-3 rounded-md bg-primary-600 px-3 py-2 text-sm font-semibold text-black shadow-sm hover:bg-primary-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
                     >
                       Validate my GitHub
-                    </button>
+                    </a>
                   </div>
                 </div>
                 {/* GitHub username end */}
