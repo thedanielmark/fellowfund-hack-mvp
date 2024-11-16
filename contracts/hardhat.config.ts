@@ -57,6 +57,11 @@ const config: HardhatUserConfig = {
       chainId: 31,
       accounts: [PRIVATE_KEY_1],
     },
+    celoAlfajoresTestnet: {
+      url: "https://alfajores-forno.celo-testnet.org",
+      chainId: 44787,
+      accounts: [PRIVATE_KEY_1],
+    },
     sepolia: {
       url: `https://sepolia.infura.io/v3/${process.env.INFURA_API_KEY}`,
       accounts: [PRIVATE_KEY_1],
