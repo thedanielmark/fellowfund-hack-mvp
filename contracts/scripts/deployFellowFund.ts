@@ -1,8 +1,11 @@
 import { ethers } from "hardhat";
 import { Wallet } from "ethers";
-import { FellowFund } from "../typechain-types/contracts/FellowFund.sol";
+import { FellowFund } from "../typechain-types/contracts/FellowFund";
 import { fundIfLocalNetwork } from "./utils/network";
 import { getPersonalWallet } from "./utils/wallet";
+
+const phalaVerifier = "0xB20F6adf676D488b22962f0C84CD011BE6DD63cB";
+const operator = "";
 
 export async function deployFellowFundContract(deployer: Wallet): Promise<FellowFund> {
     console.log("\n#####################################################################");
@@ -10,7 +13,7 @@ export async function deployFellowFundContract(deployer: Wallet): Promise<Fellow
     console.log("#####################################################################");
 
     const FellowFundFactory = (await ethers.getContractFactory("FellowFund")).connect(deployer);
-    const deployContract = await FellowFundFactory.deploy();
+    const deployContract = await FellowFundFactory.deploy(phalaVerifier, operator);
     await deployContract.waitForDeployment();
     const fellowFund = await ethers.getContractAt("FellowFund", await deployContract.getAddress(), deployer);
 

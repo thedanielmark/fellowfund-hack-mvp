@@ -1,30 +1,24 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.27;
 
+import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 import {IFellowFund} from "./interfaces/IFellowFund.sol";
 import {Fellowship, Application, FellowshipStatus} from "./Types.sol";
 import {Market} from "./Market.sol";
 import "./Types.sol";
 
-contract FellowFund is IFellowFund {
+contract FellowFund is IFellowFund, Ownable {
     uint256 public fellowshipCount;
-    address public owner;
     mapping(uint256 => Fellowship) public fellowships;
     mapping(uint256 => Application[]) public applications;
     mapping(uint256 => mapping(uint256 => Market)) public markets;
 
-    address public verifier;
+    address public phalaVerifier;
     address public operator;
 
-    constructor(address _verifier, address _operator) {
-        verifier = _verifier;
+    constructor(address _phalaVerifier, address _operator) Ownable(msg.sender) {
+        phalaVerifier = _phalaVerifier;
         operator = _operator;
-        owner = msg.sender;
-    }
-
-    modifier onlyOwner() {
-        require(msg.sender == owner, "Only the owner can call this function");
-        _;
     }
 
     modifier onlyVerifier() {
@@ -52,15 +46,13 @@ contract FellowFund is IFellowFund {
         emit FellowshipCreated(fellowshipId, fellowships[fellowshipId]);
     }
 
-    function applyToFellowship(uint256 fellowshipId, bytes calldata vlayerProof, string calldata metadata) external {
+    function applyToFellowship(uint256 fellowshipId, string calldata metadata) external {
         Fellowship storage fellowship = fellowships[fellowshipId];
         require(fellowship.status == FellowshipStatus.AcceptingApplications, "Not accepting applications");
         require(block.timestamp < fellowship.applicationDeadline, "Application period ended");
         require(applications[fellowshipId].length < fellowship.maxApplicants, "Maximum applicants reached");
 
-        // Verify the proof using the verifier contract
-        (bool success,) = verifier.call(vlayerProof);
-        require(success, "Invalid proof");
+        // Todo: Add vlayer verification logic here - use vlayerProof as parameter
 
         uint256 applicationId = applications[fellowshipId].length;
         applications[fellowshipId].push(
@@ -142,7 +134,7 @@ contract FellowFund is IFellowFund {
         require(fellowships[fellowshipId].status == FellowshipStatus.EpochStarted, "Invalid status");
 
         // Verify TEE proof
-        (bool success,) = verifier.call(proof);
+        (bool success,) = phalaVerifier.call(proof);
         require(success, "Invalid achievement proof");
 
         Application storage application = applications[fellowshipId][applicationId];
@@ -172,7 +164,7 @@ contract FellowFund is IFellowFund {
     }
 
     function setVerifier(address _verifier) external onlyOwner {
-        verifier = _verifier;
+        phalaVerifier = _verifier;
     }
 
     function setOperator(address _operator) external onlyOwner {

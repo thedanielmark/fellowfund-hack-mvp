@@ -13,7 +13,7 @@ interface IFellowFund {
 
     function createFellowship(Fellowship calldata fellowship) external payable;
 
-    function applyToFellowship(uint256 fellowshipId, bytes calldata vlayerProof, string calldata metadata) external;
+    function applyToFellowship(uint256 fellowshipId, string calldata metadata) external;
 
     function openFellowshipMarkets(uint256 fellowshipId) external;
 
