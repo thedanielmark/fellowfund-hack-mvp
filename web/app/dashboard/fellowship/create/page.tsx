@@ -14,7 +14,7 @@ function CreateFellowshipPage() {
   const { address, getSigner } = useAuth();
   const [inputs, setInputs] = useState<any>({
     name: "",
-    amount: "",
+    amount: 0,
     githubCommits: false,
     githubOrganizationHandle: "",
     githubOrganizationWeight: 0,
@@ -55,55 +55,26 @@ function CreateFellowshipPage() {
       signer
     );
 
-    const tx = await contract.createFellowship([
-      JSON.stringify(inputs),
-      inputs.amount,
-      new Date(inputs.applicationDeadline).getTime() / 1000,
-      new Date(inputs.marketDeadline).getTime() / 1000,
-      new Date(inputs.epochEndtime).getTime() / 1000,
-      1,
-      inputs.maxApplicants,
-      parseEther(inputs.amount),
-    ]);
+    const tx = await contract.createFellowship(
+      [
+        JSON.stringify(inputs),
+        parseEther(inputs.amount),
+        new Date(inputs.applicationDeadline).getTime() / 1000,
+        new Date(inputs.marketDeadline).getTime() / 1000,
+        new Date(inputs.epochEndtime).getTime() / 1000,
+        1,
+        inputs.maxApplicants,
+      ],
+      { value: parseEther(inputs.amount) }
+    );
     console.log(tx);
     // Wait for transaction to finish
     const receipt = await tx.wait();
     if (receipt.status === 1) {
-      // POST request to API
-      const url = `${process.env.NEXT_PUBLIC_API_ROUTE}/broadcast/vehicle-created`;
-
-      const payload: { [key: string]: any } = {
-        address,
-      };
-
-      // Push inputs into payload using map
-      Object.keys(inputs).map((key: any) => {
-        payload[key] = inputs[key];
-      });
-
-      // Send a POST request
-      fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json", // Indicates you're sending JSON data
-        },
-        body: JSON.stringify(payload), // Convert the data object to JSON string
-      })
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error("Network response was not ok");
-          }
-          return response.json(); // Parse the JSON response
-        })
-        .then((data) => {
-          console.log("Success:", data);
-          setShowSuccess(true);
-          setTransactionHash(receipt.hash);
-          setIsLoading(false);
-        })
-        .catch((error) => {
-          console.error("Error:", error);
-        });
+      console.log("Success");
+      setShowSuccess(true);
+      setTransactionHash(receipt.hash);
+      setIsLoading(false);
     }
   };
 
