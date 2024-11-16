@@ -41,7 +41,7 @@ function ApplyToFellowhipPage({
     // Write to contract
     const signer = await getSigner();
 
-    const contractAddress = "0x25d598CBB74fa73290e74697616DE2740d280745";
+    const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || "";
     const contract = new ethers.Contract(
       contractAddress,
       JSON.parse(JSON.stringify(contractABI)),
@@ -333,7 +333,7 @@ function ApplyToFellowhipPage({
                     <span aria-hidden="true"> &rarr;</span>
                   </a>
                   <a
-                    href={`https://sepolia.etherscan.io/tx/${transactionHash}`}
+                    href={`https://zkevm.blockscout.com/tx/${transactionHash}`}
                     className="whitespace-nowrap font-medium text-primary-500 hover:text-primary-200"
                     target="_blank"
                   >
