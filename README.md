@@ -1,6 +1,6 @@
 # FellowFund
 
-**FellowFund** is an on-chain platform for fellowship funding that uses prediction markets to support individuals. By allowing bettors to stake on future outcomes, it reduces governance overhead and promotes informed, outcome-driven funding for ecosystem growth. This "skin in the game" approach aligns incentives and improves decision-making.
+**FellowFund** is an on-chain platform for fellowship funding that uses prediction markets to support individual contributors (a.k.a. BUIDLers 😅). By allowing bettors to stake on future outcomes of fellows' performance, it reduces governance overhead and promotes informed, outcome-driven funding for ecosystem growth. This "skin in the game" approach aligns incentives and improves decision-making.
 
 ## Project Organization
 
