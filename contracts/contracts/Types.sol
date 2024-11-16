@@ -21,7 +21,6 @@ struct Fellowship {
     uint256 marketDeadline;
     uint256 epochEndTime;
     FellowshipStatus status;
-    uint256 maxApplicants;
 }
 
 struct Application {
