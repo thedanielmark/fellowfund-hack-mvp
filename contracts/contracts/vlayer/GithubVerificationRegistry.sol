@@ -8,11 +8,13 @@ interface IProofVerifier {
     function verify(Proof calldata, string memory username, address account) external;
 }
 
-interface IProofVerificationRegistry is IProofVerifier {
+interface IGithubVerifier {
+    function resolve(string memory username) external view returns (address account);
+}
+
+interface IProofVerificationRegistry is IProofVerifier, IGithubVerifier {
     event ProofVerified(string username, address account);
     event Registered(string username, address account);
-
-    function resolve(string memory username) external view returns (address account);
 }
 
 contract GithubVerificationRegistry is IProofVerificationRegistry, Ownable {

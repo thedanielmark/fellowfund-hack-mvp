@@ -15,13 +15,12 @@ struct Fellowship {
      */
     uint256 funds;
     /**
-     * @notice The wheighted metrics that need to be achieved to pass the fellowship successfully.
-     * @dev The metrics should be github commits and poaps.
+     * @notice The kpi targets are wheighted metrics that need to be achieved to pass the fellowship successfully.
      */
-    WeightedMetric[2] requiredMetrics;
+    Target[2] kpiTargets;
 }
 
-struct WeightedMetric {
+struct Target {
     uint256 weight;
     uint256 count;
 }
@@ -35,4 +34,21 @@ struct Application {
      * @notice The github username of the applicant
      */
     string githubUsername;
+}
+
+struct Market {
+    PoolKey yesPool;
+    PoolKey noPool;
+}
+
+type Currency is address;
+
+type IHooks is address;
+
+struct PoolKey {
+    Currency currency0;
+    Currency currency1;
+    uint24 fee;
+    int24 tickSpacing;
+    IHooks hooks;
 }
