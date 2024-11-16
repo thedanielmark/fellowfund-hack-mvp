@@ -1,3 +1,5 @@
+const ethers = require('ethers');
+const fellowFundAbi = require('../contracts/ignition/deployments/chain-80002/artifacts/FellowFund#FellowFund.json');
 var dotenv = require('dotenv');
 dotenv.config();
 
@@ -8,6 +10,7 @@ let lastPollData = {
 
 let fellowshipEvents = [];
 let fellowshipApplications = new Map(); // Map fellowshipId -> array of applications
+let operatorWallet;
 
 const listenForFellowshipEvents = () => {
     console.log("Listening for fellowship events");
@@ -44,24 +47,71 @@ const listenForFellowshipEvents = () => {
 };
 
 const listenForFellowshipApplications = (fellowshipId) => {
-    console.log("Listening for fellowship applications for fellowshipId:", fellowshipId);
+    console.log(`Listening for fellowship applications of fellowshipId=${fellowshipId}`);
+
+    const sampleApplication = {
+        applicant: "0x9DaD0C0903dcD9a691504c674D8D87bF570e4fC4",
+        metadata: `{
+            "githubHandle": "gsmachado"
+        }`,
+        achieved: false,
+        verified: false,
+        yesStakes: 0n,
+        noStakes: 0n,
+        accepted: false,
+        grantAmount: 0n
+    };
 
     if (!fellowshipApplications.has(fellowshipId)) {
-        const sampleApplication = {
-            applicant: "0x1234567890123456789012345678901234567890",
-            metadata: `{ 
-                "githubHandle": "gsmachado"
-            }`,
-            achieved: false,
-            verified: false,
-            yesStakes: 0n,
-            noStakes: 0n,
-            accepted: false,
-            grantAmount: 0n
-        };
-        fellowshipApplications.set(fellowshipId, []);
+        console.log(`Adding sample application (NEW) to fellowshipId=${fellowshipId}`);
+        fellowshipApplications.set(fellowshipId, [sampleApplication]);
     }
+    // else {
+    //     let applications = fellowshipApplications.get(fellowshipId);
+    //     console.log(`Adding sample application (EXISTING) to fellowshipId=${fellowshipId}`);
+    //     applications.push(sampleApplication);
+    // }
 };
+
+const callOpenFellowshipMarkets = (fellowshipId) => {
+    console.log(`Calling openFellowshipMarkets() for fellowshipId=${fellowshipId}`);
+    const fellowFundAddress = process.env.FELLOWFUND_CONTRACT_ADDRESS;
+
+    const provider = operatorWallet.provider;
+    const fellowFundContract = new ethers.Contract(fellowFundAddress, fellowFundAbi, provider);
+
+    fellowFundContract.connect(operatorWallet).openFellowshipMarkets(fellowshipId)
+        .then((tx) => {
+            console.log(`Transaction sent: ${tx.hash}`);
+            return tx.wait();
+        })
+        .then((receipt) => {
+            console.log(`Transaction confirmed: ${receipt.transactionHash}`);
+        })
+        .catch((error) => {
+            console.error(`Failed to evaluate market: ${error}`);
+        });
+};
+
+const callEvaluateMarket = (fellowshipId) => {
+    console.log(`Calling evaluateMarket() for fellowshipId=${fellowshipId}`);
+    const fellowFundAddress = process.env.FELLOWFUND_CONTRACT_ADDRESS;
+
+    const provider = operatorWallet.provider;
+    const fellowFundContract = new ethers.Contract(fellowFundAddress, fellowFundAbi, provider);
+
+    fellowFundContract.connect(operatorWallet).evaluateMarket(fellowshipId)
+        .then((tx) => {
+            console.log(`Transaction sent: ${tx.hash}`);
+            return tx.wait();
+        })
+        .then((receipt) => {
+            console.log(`Transaction confirmed: ${receipt.transactionHash}`);
+        })
+        .catch((error) => {
+            console.error(`Failed to evaluate market: ${error}`);
+        });
+}
 
 const executeEveryXSeconds = (func, seconds, ...args) => {
   // Execute immediately
@@ -70,10 +120,6 @@ const executeEveryXSeconds = (func, seconds, ...args) => {
   // Schedule next execution
   setTimeout(() => executeEveryXSeconds(func, seconds, ...args), seconds * 1000);
 };
-
-const ethers = require('ethers');
-
-let operatorWallet;
 
 const loadOperatorWallet = async () => {
     try {
