@@ -16,13 +16,47 @@ describe("FellowFund", function () {
 
   // Test fellowship parameters
   const oneDay = 24 * 60 * 60;
-  let applicationDeadline: number;
-  let marketDeadline: number;
-  let epochEndTime: number;
+  const defaultMockStartingTimestamp = 1731754351;
+  let applicationDeadline: number = defaultMockStartingTimestamp + oneDay;
+  let marketDeadline: number = applicationDeadline + oneDay;
+  let epochEndTime: number = marketDeadline + oneDay;
+
+  enum FellowshipStatus {
+    Created,
+    AcceptingApplications,
+    MarketOpen,
+    EpochStarted,
+    Resolved
+  }
+
+  const defaultFellowship = {
+    metadata: "Test Fellowship",
+    funds: ethers.parseEther("1"),
+    applicationDeadline: applicationDeadline,
+    marketDeadline,
+    epochEndTime,
+    status: FellowshipStatus.Created,
+    maxApplicants: 5,
+  };
+
+  async function newDefaultFellowship() {
+    let fellowship = defaultFellowship;
+    fellowship.applicationDeadline = await time.latest() + oneDay;
+    fellowship.marketDeadline = fellowship.applicationDeadline + oneDay;
+    fellowship.epochEndTime = fellowship.marketDeadline + oneDay;
+    return fellowship;
+  }
+
+  async function createDefaultFellowship() {
+    const fellowship = await newDefaultFellowship();
+    await fellowFund.createFellowship(fellowship, {
+      value: fellowship.funds,
+    });
+    return (await fellowFund.fellowshipCount()) - 1n;
+  }
 
   beforeEach(async function () {
-    [owner, operator, verifier, applicant1, applicant2, bettor1, bettor2] =
-      await ethers.getSigners();
+    [owner, operator, verifier, applicant1, applicant2, bettor1, bettor2] = await ethers.getSigners();
 
     const FellowFund = await ethers.getContractFactory("FellowFund");
     fellowFund = await FellowFund.deploy(verifier.address, operator.address);
@@ -36,51 +70,31 @@ describe("FellowFund", function () {
 
   describe("Fellowship Creation and Application", function () {
     it("should create a fellowship with correct parameters", async function () {
-      const fellowship = {
-        metadata: "Test Fellowship",
-        funds: ethers.parseEther("1"),
-        applicationDeadline,
-        marketDeadline,
-        epochEndTime,
-        status: 0, // Created
-        maxApplicants: 5,
-      };
+      const fellowship = await newDefaultFellowship();
+      let expectedFellowship = fellowship;
+      expectedFellowship.status = FellowshipStatus.AcceptingApplications;
 
-      await expect(
-        fellowFund.createFellowship(fellowship, { value: fellowship.funds })
-      )
-        .to.emit(fellowFund, "FellowshipCreated")
-        .withArgs(0, fellowship);
+      const createTx = await fellowFund.createFellowship(fellowship, { value: fellowship.funds })
+      expect(createTx).to.emit(fellowFund, "FellowshipCreated").withArgs(0, expectedFellowship);
 
       const createdFellowship = await fellowFund.fellowships(0);
       expect(createdFellowship.metadata).to.equal(fellowship.metadata);
       expect(createdFellowship.funds).to.equal(fellowship.funds);
+      expect(await ethers.provider.getBalance(await fellowFund.getAddress())).to.equal(fellowship.funds);
     });
 
     it("should allow applications within deadline", async function () {
-      // Create fellowship first
-      const fellowship = {
-        metadata: "Test Fellowship",
-        funds: ethers.parseEther("1"),
-        applicationDeadline,
-        marketDeadline,
-        epochEndTime,
-        status: 0,
-        maxApplicants: 5,
-      };
+      const fellowshipId = await createDefaultFellowship();
 
-      await fellowFund.createFellowship(fellowship, {
-        value: fellowship.funds,
-      });
-
+      const applicationId = 0;
       // Apply to fellowship
       await expect(
-        fellowFund.connect(applicant1).applyToFellowship(0, "Application 1")
+        fellowFund.connect(applicant1).applyToFellowship(fellowshipId, "Application 1")
       )
         .to.emit(fellowFund, "ApplicationSubmitted")
-        .withArgs(0, 0, applicant1.address);
+        .withArgs(fellowshipId, applicationId, applicant1.address);
 
-      const application = await fellowFund.applications(0, 0);
+      const application = await fellowFund.applications(fellowshipId, applicationId);
       expect(application.applicant).to.equal(applicant1.address);
       expect(application.metadata).to.equal("Application 1");
     });
@@ -89,44 +103,37 @@ describe("FellowFund", function () {
   describe("Market Operations", function () {
     beforeEach(async function () {
       // Create fellowship and submit applications
-      const fellowship = {
-        metadata: "Test Fellowship",
-        funds: ethers.parseEther("1"),
-        applicationDeadline,
-        marketDeadline,
-        epochEndTime,
-        status: 0,
-        maxApplicants: 5,
-      };
+      const fellowshipId = await createDefaultFellowship();
 
-      await fellowFund.createFellowship(fellowship, {
-        value: fellowship.funds,
-      });
       await fellowFund
         .connect(applicant1)
-        .applyToFellowship(0, "Application 1");
+        .applyToFellowship(fellowshipId, "Application 1");
       await fellowFund
         .connect(applicant2)
-        .applyToFellowship(0, "Application 2");
+        .applyToFellowship(fellowshipId, "Application 2");
     });
 
     it("should open markets for applications", async function () {
       await time.increaseTo(applicationDeadline + 1);
 
+      const fellowshipId = 0;
+
       await expect(
-        fellowFund.connect(operator).openFellowshipMarkets(0)
+        fellowFund.connect(operator).openFellowshipMarkets(fellowshipId)
       ).to.emit(fellowFund, "MarketOpened");
 
-      const fellowship = await fellowFund.fellowships(0);
-      expect(fellowship.status).to.equal(2); // MarketOpen
+      const fellowship = await fellowFund.fellowships(fellowshipId);
+      expect(fellowship.status).to.equal(FellowshipStatus.MarketOpen);
     });
 
     it("should evaluate markets and distribute grants", async function () {
       await time.increaseTo(applicationDeadline + 1);
-      await fellowFund.connect(operator).openFellowshipMarkets(0);
+      const fellowshipId = 0;
+      const applicationId = 0;
+      await fellowFund.connect(operator).openFellowshipMarkets(fellowshipId);
 
       // Get market address and place bets
-      const marketAddress = await fellowFund.markets(0, 0);
+      const marketAddress = await fellowFund.markets(fellowshipId, applicationId);
       const market = (await ethers.getContractAt(
         "Market",
         marketAddress
@@ -144,9 +151,9 @@ describe("FellowFund", function () {
       const initialBalance = await ethers.provider.getBalance(
         applicant1.address
       );
-      await fellowFund.connect(operator).evaluateMarket(0);
+      await fellowFund.connect(operator).evaluateMarket(fellowshipId);
 
-      const application = await fellowFund.applications(0, 0);
+      const application = await fellowFund.applications(fellowshipId, applicationId);
       expect(application.accepted).to.be.true;
 
       // Check if grant was distributed
@@ -157,28 +164,17 @@ describe("FellowFund", function () {
 
   describe("Fellowship Resolution", function () {
     it("should resolve fellowship and distribute market winnings", async function () {
-      // Setup fellowship and complete full cycle
-      const fellowship = {
-        metadata: "Test Fellowship",
-        funds: ethers.parseEther("1"),
-        applicationDeadline,
-        marketDeadline,
-        epochEndTime,
-        status: 0,
-        maxApplicants: 5,
-      };
+      const fellowshipId = await createDefaultFellowship();
 
-      await fellowFund.createFellowship(fellowship, {
-        value: fellowship.funds,
-      });
+      const applicationId = 0;
       await fellowFund
         .connect(applicant1)
-        .applyToFellowship(0, "Application 1");
+        .applyToFellowship(applicationId, "Application 1");
 
       await time.increaseTo(applicationDeadline + 1);
-      await fellowFund.connect(operator).openFellowshipMarkets(0);
+      await fellowFund.connect(operator).openFellowshipMarkets(fellowshipId);
 
-      const marketAddress = await fellowFund.markets(0, 0);
+      const marketAddress = await fellowFund.markets(fellowshipId, applicationId);
       const market = (await ethers.getContractAt(
         "Market",
         marketAddress
@@ -193,21 +189,21 @@ describe("FellowFund", function () {
         .placeBet(1, { value: ethers.parseEther("0.05") }); // No bet
 
       await time.increaseTo(marketDeadline + 1);
-      await fellowFund.connect(operator).evaluateMarket(0);
+      await fellowFund.connect(operator).evaluateMarket(fellowshipId);
 
       // Verify achievement through verifier
       const mockProof = "0x00";
       await fellowFund
         .connect(verifier)
-        .setApplicantImpact(0, 0, true, mockProof);
+        .setApplicantImpact(fellowshipId, applicationId, true, mockProof);
 
       await time.increaseTo(epochEndTime + 1);
-      await expect(fellowFund.connect(operator).resolveFellowship(0))
+      await expect(fellowFund.connect(operator).resolveFellowship(fellowshipId))
         .to.emit(fellowFund, "FellowshipResolved")
-        .withArgs(0);
+        .withArgs(fellowshipId);
 
-      const resolvedFellowship = await fellowFund.fellowships(0);
-      expect(resolvedFellowship.status).to.equal(4); // Resolved
+      const resolvedFellowship = await fellowFund.fellowships(fellowshipId);
+      expect(resolvedFellowship.status).to.equal(FellowshipStatus.Resolved);
     });
   });
 });
