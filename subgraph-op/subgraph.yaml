@@ -5,12 +5,12 @@ schema:
   file: ./schema.graphql
 dataSources:
   - kind: ethereum
-    name: FelloFund
-    network: polygon-amoy
+    name: fello-fund-op
+    network: optimism-sepolia
     source:
       address: "0x54668Ac3E509020b2349b5e66851d9bf9Ee88B5A"
-      abi: FelloFund
-      startBlock: 14511134
+      abi: fello-fund-op
+      startBlock: 19996849
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -26,8 +26,8 @@ dataSources:
         - MarketOpened
         - OwnershipTransferred
       abis:
-        - name: FelloFund
-          file: ./abis/FelloFund.json
+        - name: fello-fund-op
+          file: ./abis/fello-fund-op.json
       eventHandlers:
         - event: ApplicantAccepted(indexed uint256,indexed uint256)
           handler: handleApplicantAccepted
@@ -47,4 +47,4 @@ dataSources:
           handler: handleMarketOpened
         - event: OwnershipTransferred(indexed address,indexed address)
           handler: handleOwnershipTransferred
-      file: ./src/fello-fund.ts
+      file: ./src/fello-fund-op.ts

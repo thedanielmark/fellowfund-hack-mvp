@@ -101,7 +101,6 @@ function FellowshipCard({ fellowshipId, signer }: { fellowshipId: number, signer
 
 
 function OperatorPage() {
-
   const [fellowships, setFellowships] = useState<Fellowship[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [message, setMessage] = useState<string>("");
@@ -152,11 +151,11 @@ function OperatorPage() {
         `;
 
         const response = await fetch(
-          'https://api.studio.thegraph.com/query/73364/fello-fund/version/latest',
+          "https://api.studio.thegraph.com/query/73364/fello-fund/version/latest",
           {
-            method: 'POST',
+            method: "POST",
             headers: {
-              'Content-Type': 'application/json',
+              "Content-Type": "application/json",
             },
             body: JSON.stringify({ query }),
           }
@@ -182,7 +181,9 @@ function OperatorPage() {
 
     try {
       const signer = await getSigner();
-      const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || "0x25d598CBB74fa73290e74697616DE2740d280745";
+      const contractAddress =
+        process.env.NEXT_PUBLIC_CONTRACT_ADDRESS ||
+        "0x25d598CBB74fa73290e74697616DE2740d280745";
       const contract = new ethers.Contract(
         contractAddress,
         JSON.parse(JSON.stringify(contractABI)),
@@ -300,14 +301,22 @@ function OperatorPage() {
                         <td className="whitespace-nowrap px-3 py-4 text-sm">
                           <div className="flex gap-2">
                             <button
-                              onClick={() => handleOpenMarkets(Number(fellowship.fellowshipId))}
+                              onClick={() =>
+                                handleOpenMarkets(
+                                  Number(fellowship.fellowshipId)
+                                )
+                              }
                               disabled={fellowship.status !== 1 || isLoading}
                               className="rounded bg-blue-600 px-2 py-1 text-xs font-semibold text-white shadow-sm hover:bg-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                               Open Markets
                             </button>
                             <button
-                              onClick={() => handleEvaluateMarket(Number(fellowship.fellowshipId))}
+                              onClick={() =>
+                                handleEvaluateMarket(
+                                  Number(fellowship.fellowshipId)
+                                )
+                              }
                               disabled={fellowship.status !== 2 || isLoading}
                               className="rounded bg-green-600 px-2 py-1 text-xs font-semibold text-white shadow-sm hover:bg-green-500 disabled:opacity-50 disabled:cursor-not-allowed"
                             >
@@ -344,11 +353,15 @@ function OperatorPage() {
 
       {/* Success/Error Message */}
       {message && (
-        <div className={`rounded-md p-4 ${showSuccess ? 'bg-green-50' : 'bg-red-50'}`}>
+        <div
+          className={`rounded-md p-4 ${showSuccess ? "bg-primary-900" : "bg-red-900"
+            }`}
+        >
           <div className="flex">
             <div className="flex-shrink-0">
               <InformationCircleIcon
-                className={`h-5 w-5 ${showSuccess ? 'text-green-400' : 'text-red-400'}`}
+                className={`h-5 w-5 ${showSuccess ? "text-primary-400" : "text-red-400"
+                  }`}
                 aria-hidden="true"
               />
             </div>
@@ -359,8 +372,8 @@ function OperatorPage() {
               {showSuccess && transactionHash && (
                 <p className="mt-3 text-sm md:ml-6 md:mt-0">
                   <a
-                    href={`https://sepolia.etherscan.io/tx/${transactionHash}`}
-                    className="whitespace-nowrap font-medium text-blue-600 hover:text-blue-500"
+                    href={`https://zkevm.blockscout.com/tx/${transactionHash}`}
+                    className="whitespace-nowrap font-medium text-primary-500 hover:text-primary-200"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
