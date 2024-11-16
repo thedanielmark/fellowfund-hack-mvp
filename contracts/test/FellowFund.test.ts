@@ -13,6 +13,7 @@ describe("FellowFund", function () {
   let applicant2: SignerWithAddress;
   let bettor1: SignerWithAddress;
   let bettor2: SignerWithAddress;
+  let bettor3: SignerWithAddress;
 
   // Test fellowship parameters
   const oneDay = 24 * 60 * 60;
@@ -27,6 +28,11 @@ describe("FellowFund", function () {
     MarketOpen,
     EpochStarted,
     Resolved
+  }
+
+  enum Side {
+    Yes,
+    No
   }
 
   const defaultFellowship = {
@@ -56,7 +62,7 @@ describe("FellowFund", function () {
   }
 
   beforeEach(async function () {
-    [owner, operator, verifier, applicant1, applicant2, bettor1, bettor2] = await ethers.getSigners();
+    [owner, operator, verifier, applicant1, applicant2, bettor1, bettor2, bettor3] = await ethers.getSigners();
 
     const FellowFund = await ethers.getContractFactory("FellowFund");
     fellowFund = await FellowFund.deploy(verifier.address, operator.address);
@@ -181,17 +187,39 @@ describe("FellowFund", function () {
       )) as Market;
 
       // Place bets
+      let yesBetAmount = 0n;
+      let noBetAmount = 0n;
+      const yesBetBidder1 = ethers.parseEther("0.1")
+      yesBetAmount += yesBetBidder1;
+      const noBetBidder2 = ethers.parseEther("0.05")
+      noBetAmount += noBetBidder2;
+      const noBetBidder3 = ethers.parseEther("0.32")
+      noBetAmount += noBetBidder3;
+      let totalBetAmount = yesBetAmount + noBetAmount;
+      expect(noBetAmount).to.be.greaterThan(yesBetAmount);
+
       await market
         .connect(bettor1)
-        .placeBet(0, { value: ethers.parseEther("0.1") }); // Yes bet
+        .placeBet(Side.Yes, { value: yesBetBidder1 });
       await market
         .connect(bettor2)
-        .placeBet(1, { value: ethers.parseEther("0.05") }); // No bet
+        .placeBet(Side.No, { value: noBetBidder2 });
+      await market
+        .connect(bettor3)
+        .placeBet(Side.No, { value: noBetBidder3 });
+
+      expect(await market.getBet(Side.Yes)).to.be.equal(yesBetAmount);
+      expect(await market.getBet(Side.No)).to.be.equal(noBetAmount);
+      expect(await ethers.provider.getBalance(await market.getAddress())).to.equal(totalBetAmount);
 
       await time.increaseTo(marketDeadline + 1);
       await fellowFund.connect(operator).evaluateMarket(fellowshipId);
 
-      // Verify achievement through verifier
+      const balanceBeforeResolveBettor1 = await ethers.provider.getBalance(bettor1.address);
+      const balanceBeforeResolveBettor2 = await ethers.provider.getBalance(bettor2.address);
+      const balanceBeforeResolveBettor3 = await ethers.provider.getBalance(bettor3.address);
+
+      // Verify achievement through verifier -> Achieved=true
       const mockProof = "0x00";
       await fellowFund
         .connect(verifier)
@@ -202,8 +230,95 @@ describe("FellowFund", function () {
         .to.emit(fellowFund, "FellowshipResolved")
         .withArgs(fellowshipId);
 
+
       const resolvedFellowship = await fellowFund.fellowships(fellowshipId);
       expect(resolvedFellowship.status).to.equal(FellowshipStatus.Resolved);
+
+      expect(await ethers.provider.getBalance(await market.getAddress())).to.equal(0n);
+      expect(await ethers.provider.getBalance(bettor1.address)).to.equal(balanceBeforeResolveBettor1 + totalBetAmount);
+      expect(await ethers.provider.getBalance(bettor2.address)).to.equal(balanceBeforeResolveBettor2);
+      expect(await ethers.provider.getBalance(bettor3.address)).to.equal(balanceBeforeResolveBettor3);
+    });
+
+    it("should resolve fellowship and distribute market winnings to multiple winners", async function () {
+      const fellowshipId = await createDefaultFellowship();
+
+      const applicationId = 0;
+      await fellowFund
+        .connect(applicant1)
+        .applyToFellowship(applicationId, "Application 1");
+
+      await time.increaseTo(applicationDeadline + 1);
+      await fellowFund.connect(operator).openFellowshipMarkets(fellowshipId);
+
+      const marketAddress = await fellowFund.markets(fellowshipId, applicationId);
+      const market = (await ethers.getContractAt(
+        "Market",
+        marketAddress
+      )) as Market;
+
+      // Place bets
+      let yesBetAmount = 0n;
+      let noBetAmount = 0n;
+      const yesBetBidder1 = ethers.parseEther("0.1")
+      yesBetAmount += yesBetBidder1;
+      const noBetBidder2 = ethers.parseEther("0.05")
+      noBetAmount += noBetBidder2;
+      const noBetBidder3 = ethers.parseEther("0.02")
+      noBetAmount += noBetBidder3;
+      let totalBetAmount = yesBetAmount + noBetAmount;
+      expect(noBetAmount).to.be.lessThan(yesBetAmount);
+
+      await market
+        .connect(bettor1)
+        .placeBet(Side.Yes, { value: yesBetBidder1 });
+      await market
+        .connect(bettor2)
+        .placeBet(Side.No, { value: noBetBidder2 });
+      await market
+        .connect(bettor3)
+        .placeBet(Side.No, { value: noBetBidder3 });
+
+      expect(await market.getBet(Side.Yes)).to.be.equal(yesBetAmount);
+      expect(await market.getBet(Side.No)).to.be.equal(noBetAmount);
+      expect(await ethers.provider.getBalance(await market.getAddress())).to.equal(totalBetAmount);
+
+      await time.increaseTo(marketDeadline + 1);
+      await fellowFund.connect(operator).evaluateMarket(fellowshipId);
+
+      const balanceBeforeResolveMarket = await ethers.provider.getBalance(await market.getAddress());
+      expect(balanceBeforeResolveMarket).to.be.equal(totalBetAmount);
+      const balanceBeforeResolveBettor1 = await ethers.provider.getBalance(bettor1.address);
+      const balanceBeforeResolveBettor2 = await ethers.provider.getBalance(bettor2.address);
+      const balanceBeforeResolveBettor3 = await ethers.provider.getBalance(bettor3.address);
+
+      // Verify achievement through verifier -> Achieved=true
+      const mockProof = "0x00";
+      await fellowFund
+        .connect(verifier)
+        .setApplicantImpact(fellowshipId, applicationId, false, mockProof);
+
+      await time.increaseTo(epochEndTime + 1);
+      await expect(fellowFund.connect(operator).resolveFellowship(fellowshipId))
+        .to.emit(fellowFund, "FellowshipResolved")
+        .withArgs(fellowshipId);
+
+      const resolvedFellowship = await fellowFund.fellowships(fellowshipId);
+      expect(resolvedFellowship.status).to.equal(FellowshipStatus.Resolved);
+
+      const factor = ethers.parseEther("1");
+
+      const winningPercentageBidder2 = noBetBidder2 * factor / noBetAmount;
+      const winningsBidder2 = winningPercentageBidder2 * totalBetAmount / factor;
+      const winningPercentageBidder3 = noBetBidder3 * factor / noBetAmount;
+      const winningsBidder3 = winningPercentageBidder3 * totalBetAmount / factor;
+
+      expect(await ethers.provider.getBalance(await market.getAddress())).to.equal(totalBetAmount - winningsBidder2 - winningsBidder3);
+      expect(await ethers.provider.getBalance(bettor1.address)).to.equal(balanceBeforeResolveBettor1);
+
+      expect(await ethers.provider.getBalance(bettor2.address)).to.equal(balanceBeforeResolveBettor2 + winningsBidder2);
+      expect(await ethers.provider.getBalance(bettor3.address)).to.equal(balanceBeforeResolveBettor3 + winningsBidder3);
     });
   });
 });
+
