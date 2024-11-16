@@ -14,7 +14,13 @@ contract MockFellowFund is IFellowFund {
 
     constructor() {}
 
-    function createFellowship(string calldata _metadata, uint256 _funds, uint256 _applicationDeadline, uint256 _marketDeadline, uint256 _epochDeadline) external payable {
+    function createFellowship(
+        string calldata _metadata,
+        uint256 _funds,
+        uint256 _applicationDeadline,
+        uint256 _marketDeadline,
+        uint256 _epochDeadline
+    ) external payable {
         uint256 fellowshipId = fellowshipCount;
         fellowshipCount++;
 
