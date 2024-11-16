@@ -1,3 +1,4 @@
+import { BigInt } from "@graphprotocol/graph-ts";
 import {
   ApplicantAccepted as ApplicantAcceptedEvent,
   ApplicationEvaluated as ApplicationEvaluatedEvent,
@@ -7,159 +8,127 @@ import {
   FellowshipCreated as FellowshipCreatedEvent,
   FellowshipResolved as FellowshipResolvedEvent,
   MarketOpened as MarketOpenedEvent,
-  OwnershipTransferred as OwnershipTransferredEvent
-} from "../generated/fellofund/fellofund"
-import {
-  ApplicantAccepted,
-  ApplicationEvaluated,
-  ApplicationSubmitted,
-  EpochResolved,
-  EpochStarted,
-  FellowshipCreated,
-  FellowshipResolved,
-  MarketOpened,
-  OwnershipTransferred
-} from "../generated/schema"
+  OwnershipTransferred as OwnershipTransferredEvent,
+} from "../generated/fellofund/fellofund";
+import { Fellowship, Applicant } from "../generated/schema";
 
 export function handleApplicantAccepted(event: ApplicantAcceptedEvent): void {
-  let entity = new ApplicantAccepted(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
-  entity.fellowshipId = event.params.fellowshipId
-  entity.applicationId = event.params.applicationId
-
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
-
-  entity.save()
+  let entity = Applicant.load(
+    event.params.fellowshipId.toHex() + "x" + event.params.applicationId.toHex()
+  );
+  if (!entity) {
+    return;
+  }
+  entity.accepted = true;
+  entity.save();
 }
 
 export function handleApplicationEvaluated(
   event: ApplicationEvaluatedEvent
 ): void {
-  let entity = new ApplicationEvaluated(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
-  entity.fellowshipId = event.params.fellowshipId
-  entity.applicationId = event.params.applicationId
-  entity.achieved = event.params.achieved
+  let entity = Applicant.load(
+    event.params.fellowshipId.toHex() + "x" + event.params.applicationId.toHex()
+  );
+  if (!entity) {
+    return;
+  }
 
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
+  entity.achieved = true;
 
-  entity.save()
+  entity.save();
 }
 
 export function handleApplicationSubmitted(
   event: ApplicationSubmittedEvent
 ): void {
-  let entity = new ApplicationSubmitted(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
-  entity.fellowshipId = event.params.fellowshipId
-  entity.applicationId = event.params.applicationId
-  entity.applicant = event.params.applicant
-  entity.metadata = event.params.metadata
+  let applicant = new Applicant(
+    event.params.fellowshipId.toHex() + "x" + event.params.applicationId.toHex()
+  );
+  let fellowship = Fellowship.load(event.params.fellowshipId.toHex());
 
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
+  if (!fellowship) {
+    // If fellowship doesn't exist, handle gracefully.
+    return;
+  }
 
-  entity.save()
+  applicant.fellowship = fellowship.id;
+  applicant.applicationId = event.params.applicationId;
+  applicant.applicantAddress = event.params.applicant;
+  applicant.metadata = event.params.metadata; // Placeholder; add actual metadata if available.
+  applicant.achieved = false;
+  applicant.verified = false;
+  applicant.accepted = false;
+  applicant.grantAmount = BigInt.fromI32(0);
+  applicant.blockNumber = event.block.number;
+  applicant.blockTimestamp = event.block.timestamp;
+  applicant.transactionHash = event.transaction.hash;
+  applicant.save();
 }
 
 export function handleEpochResolved(event: EpochResolvedEvent): void {
-  let entity = new EpochResolved(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
-  entity.fellowshipId = event.params.fellowshipId
+  let entity = Fellowship.load(event.params.fellowshipId.toHex());
+  if (!entity) {
+    return;
+  }
 
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
+  entity.resolved = true;
 
-  entity.save()
+  entity.save();
 }
 
 export function handleEpochStarted(event: EpochStartedEvent): void {
-  let entity = new EpochStarted(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
-  entity.fellowshipId = event.params.fellowshipId
-  entity.grantPerAccepted = event.params.grantPerAccepted
-  entity.acceptedCount = event.params.acceptedCount
-  entity.totalApplications = event.params.totalApplications
-
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
-
-  entity.save()
+  let entity = Fellowship.load(event.params.fellowshipId.toHex());
+  if (!entity) {
+    return;
+  }
+  entity.epochStarted = true;
+  entity.grantPerAccepted = event.params.grantPerAccepted;
+  entity.totalApplications = event.params.totalApplications;
+  entity.save();
 }
 
 export function handleFellowshipCreated(event: FellowshipCreatedEvent): void {
-  let entity = new FellowshipCreated(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
-  entity.fellowshipId = event.params.fellowshipId
-  entity.fellowship_metadata = event.params.fellowship.metadata
-  entity.fellowship_funds = event.params.fellowship.funds
-  entity.fellowship_applicationDeadline =
-    event.params.fellowship.applicationDeadline
-  entity.fellowship_marketDeadline = event.params.fellowship.marketDeadline
-  entity.fellowship_epochEndTime = event.params.fellowship.epochEndTime
-  entity.fellowship_status = event.params.fellowship.status
-  entity.fellowship_maxApplicants = event.params.fellowship.maxApplicants
-
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
-
-  entity.save()
+  let fellowship = new Fellowship(event.params.fellowshipId.toHex());
+  fellowship.fellowshipId = event.params.fellowshipId;
+  fellowship.metadata = event.params.fellowship.metadata;
+  fellowship.funds = event.params.fellowship.funds;
+  fellowship.applicationDeadline = event.params.fellowship.applicationDeadline;
+  fellowship.marketDeadline = event.params.fellowship.marketDeadline;
+  fellowship.epochEndTime = event.params.fellowship.epochEndTime;
+  fellowship.status = event.params.fellowship.status;
+  fellowship.maxApplicants = event.params.fellowship.maxApplicants;
+  fellowship.resolved = false;
+  fellowship.epochStarted = false;
+  fellowship.acceptedApplicants = BigInt.fromI32(0);
+  fellowship.blockNumber = event.block.number;
+  fellowship.blockTimestamp = event.block.timestamp;
+  fellowship.transactionHash = event.transaction.hash;
+  fellowship.save();
 }
 
 export function handleFellowshipResolved(event: FellowshipResolvedEvent): void {
-  let entity = new FellowshipResolved(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
-  entity.fellowshipId = event.params.fellowshipId
+  let entity = Fellowship.load(event.params.fellowshipId.toHex());
+  if (!entity) {
+    return;
+  }
+  entity.resolved = true;
 
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
-
-  entity.save()
+  entity.save();
 }
 
 export function handleMarketOpened(event: MarketOpenedEvent): void {
-  let entity = new MarketOpened(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
-  entity.fellowshipId = event.params.fellowshipId
-  entity.marketAddress = event.params.marketAddress
-  entity.applicationId = event.params.applicationId
-
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
-
-  entity.save()
+  let entity = Applicant.load(
+    event.params.fellowshipId.toHex() + "x" + event.params.applicationId.toHex()
+  );
+  if (!entity) {
+    return;
+  }
+  entity.marketAddress = event.params.marketAddress;
+  entity.save();
 }
 
 export function handleOwnershipTransferred(
   event: OwnershipTransferredEvent
 ): void {
-  let entity = new OwnershipTransferred(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
-  entity.previousOwner = event.params.previousOwner
-  entity.newOwner = event.params.newOwner
-
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
-
-  entity.save()
+  // let entity = Fellowship.load(event.params..toHex());
 }
