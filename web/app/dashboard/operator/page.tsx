@@ -34,6 +34,72 @@ declare global {
   }
 }
 
+
+function FellowshipCard({ fellowshipId, signer }: { fellowshipId: number, signer: ethers.JsonRpcSigner }) {
+  const [loading, setLoading] = useState<boolean>(false);
+  const [data, setData] = useState<any>(null);
+  const [applications, setApplications] = useState<any>(null);
+
+  const getApplicationsFromContract = async (fellowshipId: number) => {
+    try {
+      const contract = new ethers.Contract(
+        process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || "",
+        JSON.parse(JSON.stringify(contractABI)),
+        signer
+      );
+      const applications = await contract.applications(fellowshipId);
+      console.log("applications: ", applications);
+      setApplications(applications);
+    } catch (error) {
+      console.error("Error fetching applications:", error);
+    }
+  }
+
+  const getFellowshipFromContract = async (fellowshipId: number) => {
+    setLoading(true);
+    try {
+      const contract = new ethers.Contract(
+        process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || "",
+        JSON.parse(JSON.stringify(contractABI)),
+        signer
+      );
+      const fellowship = await contract.fellowships(fellowshipId);
+      setData(fellowship);
+      const applications = await contract.applications(fellowshipId);
+      setApplications(applications);
+      console.log("data: ", fellowship, applications);
+    } catch (error) {
+      console.error("Error fetching fellowship:", error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+
+  useEffect(() => {
+    getFellowshipFromContract(fellowshipId);
+  }, [fellowshipId, signer]);
+
+  if (loading) {
+    return <div className="flex justify-center">
+      <RotatingLines visible={true} width="24" strokeColor="#000000" strokeWidth="5" animationDuration="0.75" ariaLabel="loading" />
+    </div>;
+  }
+
+  if (!data) return null;
+
+  return (
+    <div className="text-xs space-y-1">
+      <div><span className="font-semibold">Funds:</span> {ethers.formatEther(data.funds || '0')} ETH</div>
+      <div><span className="font-semibold">Grant per accepted:</span> {ethers.formatEther(data.grantPerAccepted || '0')} ETH</div>
+      <div><span className="font-semibold">Accepted:</span> {Number(data.acceptedApplicants)}</div>
+      <div><span className="font-semibold">Epoch started:</span> {data.epochStarted ? 'Yes' : 'No'}</div>
+      {/* <div><span className="font-semibold">Applications:</span> {applications.length}</div> */}
+    </div>
+  );
+}
+
+
 function OperatorPage() {
 
   const [fellowships, setFellowships] = useState<Fellowship[]>([]);
@@ -43,12 +109,17 @@ function OperatorPage() {
   const [transactionHash, setTransactionHash] = useState<string>("");
   const [userAddress, setUserAddress] = useState<string>("");
 
+  const [signer, setSigner] = useState<ethers.JsonRpcSigner | null>(null);
+
   // Add this function to get signer
   const getSigner = async () => {
     if (!window.ethereum) throw new Error("Please install MetaMask");
     const provider = new ethers.BrowserProvider(window.ethereum);
-    return await provider.getSigner();
+    const signer = await provider.getSigner();
+    setSigner(signer);
+    return signer;
   };
+
 
   // Modify the useEffect to use window.ethereum
   useEffect(() => {
@@ -160,6 +231,10 @@ function OperatorPage() {
     }
   };
 
+  useEffect(() => {
+    getSigner();
+  }, []);
+
   return (
     <div className="my-10 space-y-6 sm:px-6 lg:col-span-9 lg:px-0">
       <div className="shadow sm:overflow-hidden sm:rounded-md">
@@ -177,39 +252,47 @@ function OperatorPage() {
           <div className="mt-8 flow-root">
             <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
               <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-                <table className="min-w-full divide-y divide-zinc-700">
-                  <thead>
+                <table className="min-w-full divide-y divide-zinc-200">
+                  <thead className="bg-zinc-50">
                     <tr>
-                      <th className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-black sm:pl-0">
+                      <th className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-zinc-900 sm:pl-0">
                         Name
                       </th>
-                      <th className="px-3 py-3.5 text-left text-sm font-semibold text-black">
+                      <th className="px-3 py-3.5 text-left text-sm font-semibold text-zinc-900">
                         Status
                       </th>
-                      <th className="px-3 py-3.5 text-left text-sm font-semibold text-black">
+                      <th className="px-3 py-3.5 text-left text-sm font-semibold text-zinc-900">
                         No. of Applicants
                       </th>
-                      <th className="px-3 py-3.5 text-left text-sm font-semibold text-black">
+                      <th className="px-3 py-3.5 text-left text-sm font-semibold text-zinc-900">
                         Actions
+                      </th>
+                      <th className="px-3 py-3.5 text-left text-sm font-semibold text-zinc-900">
+                        Fellowship Details
                       </th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-zinc-700">
+                  <tbody className="divide-y divide-zinc-200 bg-white">
                     {fellowships.map((fellowship) => (
                       <tr key={fellowship.id}>
                         <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-black sm:pl-0">
                           {JSON.parse(fellowship.metadata).name}
                         </td>
-                        <td className="whitespace-nowrap px-3 py-4 text-sm text-zinc-300">
-                          {
-                            [
+                        <td className="whitespace-nowrap px-3 py-4 text-sm">
+                          <span className={`inline-flex rounded-full px-2 text-xs font-semibold leading-5 ${fellowship.status === 0 ? 'bg-gray-100 text-gray-800' :
+                            fellowship.status === 1 ? 'bg-yellow-100 text-yellow-800' :
+                              fellowship.status === 2 ? 'bg-blue-100 text-blue-800' :
+                                fellowship.status === 3 ? 'bg-green-100 text-green-800' :
+                                  'bg-purple-100 text-purple-800'
+                            }`}>
+                            {[
                               "Created",
                               "AcceptingApplications",
                               "MarketOpen",
                               "EpochStarted",
                               "Resolved",
-                            ][fellowship.status]
-                          }
+                            ][fellowship.status]}
+                          </span>
                         </td>
                         <td className="whitespace-nowrap px-3 py-4 text-sm">
                           {fellowship?.totalApplications || 0}
@@ -219,18 +302,21 @@ function OperatorPage() {
                             <button
                               onClick={() => handleOpenMarkets(Number(fellowship.fellowshipId))}
                               disabled={fellowship.status !== 1 || isLoading}
-                              className="rounded bg-primary-600 px-2 py-1 text-xs font-semibold text-black shadow-sm hover:bg-primary-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                              className="rounded bg-blue-600 px-2 py-1 text-xs font-semibold text-white shadow-sm hover:bg-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                               Open Markets
                             </button>
                             <button
                               onClick={() => handleEvaluateMarket(Number(fellowship.fellowshipId))}
                               disabled={fellowship.status !== 2 || isLoading}
-                              className="rounded bg-primary-600 px-2 py-1 text-xs font-semibold text-black shadow-sm hover:bg-primary-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                              className="rounded bg-green-600 px-2 py-1 text-xs font-semibold text-white shadow-sm hover:bg-green-500 disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                               Evaluate Market
                             </button>
                           </div>
+                        </td>
+                        <td className="whitespace-nowrap px-3 py-4 text-sm">
+                          {signer && <FellowshipCard fellowshipId={Number(fellowship.fellowshipId)} signer={signer} />}
                         </td>
                       </tr>
                     ))}
@@ -258,25 +344,23 @@ function OperatorPage() {
 
       {/* Success/Error Message */}
       {message && (
-        <div
-          className={`rounded-md p-4 ${showSuccess ? "bg-primary-900" : "bg-red-900"
-            }`}
-        >
+        <div className={`rounded-md p-4 ${showSuccess ? 'bg-green-50' : 'bg-red-50'}`}>
           <div className="flex">
             <div className="flex-shrink-0">
               <InformationCircleIcon
-                className={`h-5 w-5 ${showSuccess ? "text-primary-400" : "text-red-400"
-                  }`}
+                className={`h-5 w-5 ${showSuccess ? 'text-green-400' : 'text-red-400'}`}
                 aria-hidden="true"
               />
             </div>
             <div className="ml-3 flex-1 md:flex md:justify-between">
-              <p className="text-sm text-black">{message}</p>
-              {showSuccess && (
+              <p className={`text-sm ${showSuccess ? 'text-green-700' : 'text-red-700'}`}>
+                {message}
+              </p>
+              {showSuccess && transactionHash && (
                 <p className="mt-3 text-sm md:ml-6 md:mt-0">
                   <a
                     href={`https://sepolia.etherscan.io/tx/${transactionHash}`}
-                    className="whitespace-nowrap font-medium text-primary-500 hover:text-primary-200"
+                    className="whitespace-nowrap font-medium text-blue-600 hover:text-blue-500"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
