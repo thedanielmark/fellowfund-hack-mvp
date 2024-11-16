@@ -1,10 +1,10 @@
 import { ethers } from "hardhat";
 import { Wallet } from "ethers";
-import { FellowFund } from "../typechain-types/contracts/FellowFund";
-import { fellowFundContractAddress } from "./utils/constants";
-import { fundIfLocalNetwork } from "./utils/network";
-import { FellowshipStruct } from "../typechain-types/contracts/FellowFund";
-import { getPersonalWallet } from "./utils/wallet";
+import { FellowFund } from "../../typechain-types/contracts/FellowFund";
+import { fellowFundContractAddress } from "../utils/constants";
+import { fundIfLocalNetwork } from "../utils/network";
+import { FellowshipStruct } from "../../typechain-types/contracts/FellowFund";
+import { getPersonalWallet } from "../utils/wallet";
 import fs, { stat } from "fs";
 import path from "path";
 
