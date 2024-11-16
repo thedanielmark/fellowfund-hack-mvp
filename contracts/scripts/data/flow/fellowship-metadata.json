@@ -1,0 +1,16 @@
+{
+    "name": "Flow Builders Program",
+    "description": "Fostering scalable and developer-friendly consumer crypto applications with Flow’s ACID-compliant blockchain architecture.",
+    "githubOrg": "flownetwork",
+    "logoURI": "https://cryptologos.cc/logos/thumbs/flow.png?v=034",
+    "kpiTargets": {
+        "totalCommits": {
+            "targetValue": 40,
+            "weight": 0.6
+        },
+        "poapEvents": {
+            "targetValue": 8,
+            "weight": 0.4
+        }
+    }
+}

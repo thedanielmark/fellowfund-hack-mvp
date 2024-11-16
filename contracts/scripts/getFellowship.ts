@@ -3,7 +3,7 @@ import { BigNumberish, Wallet } from "ethers";
 import { FellowFund } from "../typechain-types/contracts/FellowFund";
 import { fellowFundContractAddress } from "./utils/constants";
 import { fundIfLocalNetwork } from "./utils/network";
-import {FellowshipStruct} from "../typechain-types/contracts/FellowFund";
+import { FellowshipStruct } from "../typechain-types/contracts/FellowFund";
 import { getPersonalWallet } from "./utils/wallet";
 import fs, { stat } from "fs";
 import path from "path";
@@ -28,6 +28,7 @@ export async function getFellowship(id: BigNumberish) {
 }
 
 async function main() {
+    const fellowFund = await ethers.getContractAt("FellowFund", fellowFundContractAddress);
     await getFellowship(2);
 }
 

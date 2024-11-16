@@ -1,0 +1,20 @@
+{
+    "name": "Web3Auth Integration Campaign",
+    "description": "Simplifying Web3 onboarding with seamless social login integration for developers building across platforms.",
+    "githubOrg": "web3auth",
+    "logoURI": "https://web3auth.io/images/web3auth-logo.svg",
+    "kpiTargets": {
+        "integrationsWithHackathonSponsors": {
+            "targetValue": 10,
+            "weight": 0.5
+        },
+        "sdkDownloads": {
+            "targetValue": 5000,
+            "weight": 0.3
+        },
+        "developerFeedbackSessions": {
+            "targetValue": 3,
+            "weight": 0.2
+        }
+    }
+}

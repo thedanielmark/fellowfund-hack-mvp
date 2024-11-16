@@ -1,0 +1,16 @@
+{
+    "name": "Polygon Labs Special Edition",
+    "description": "Supporting builders of aggregated blockchains via the AggLayer to create a unified and scalable blockchain ecosystem.",
+    "githubOrg": "polygonlabs",
+    "logoURI": "https://cryptologos.cc/logos/thumbs/polygon.png?v=034",
+    "kpiTargets": {
+        "totalCommits": {
+            "targetValue": 25,
+            "weight": 0.7
+        },
+        "poapEvents": {
+            "targetValue": 6,
+            "weight": 0.3
+        }
+    }
+}
