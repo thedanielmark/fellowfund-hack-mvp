@@ -1,127 +1,89 @@
-# type ApplicantAccepted @entity(immutable: true) {
-#   id: Bytes!
-#   fellowshipId: BigInt! # uint256
-#   applicationId: BigInt! # uint256
-#   blockNumber: BigInt!
-#   blockTimestamp: BigInt!
-#   transactionHash: Bytes!
-# }
-
-# type ApplicationEvaluated @entity(immutable: true) {
-#   id: Bytes!
-#   fellowshipId: BigInt! # uint256
-#   applicationId: BigInt! # uint256
-#   achieved: Boolean! # bool
-#   blockNumber: BigInt!
-#   blockTimestamp: BigInt!
-#   transactionHash: Bytes!
-# }
-
-# type ApplicationSubmitted @entity(immutable: true) {
-#   id: Bytes!
-#   fellowshipId: BigInt! # uint256
-#   applicationId: BigInt! # uint256
-#   applicant: Bytes! # address
-#   metadata: String! # string
-#   blockNumber: BigInt!
-#   blockTimestamp: BigInt!
-#   transactionHash: Bytes!
-# }
-
-# type EpochResolved @entity(immutable: true) {
-#   id: Bytes!
-#   fellowshipId: BigInt! # uint256
-#   blockNumber: BigInt!
-#   blockTimestamp: BigInt!
-#   transactionHash: Bytes!
-# }
-
-# type EpochStarted @entity(immutable: true) {
-#   id: Bytes!
-#   fellowshipId: BigInt! # uint256
-#   grantPerAccepted: BigInt! # uint256
-#   acceptedCount: BigInt! # uint256
-#   totalApplications: BigInt! # uint256
-#   blockNumber: BigInt!
-#   blockTimestamp: BigInt!
-#   transactionHash: Bytes!
-# }
-
-# type FellowshipCreated @entity(immutable: true) {
-#   id: Bytes!
-#   fellowshipId: BigInt! # uint256
-#   fellowship_metadata: String! # string
-#   fellowship_funds: BigInt! # uint256
-#   fellowship_applicationDeadline: BigInt! # uint256
-#   fellowship_marketDeadline: BigInt! # uint256
-#   fellowship_epochEndTime: BigInt! # uint256
-#   fellowship_status: Int! # uint8
-#   fellowship_maxApplicants: BigInt! # uint256
-#   blockNumber: BigInt!
-#   blockTimestamp: BigInt!
-#   transactionHash: Bytes!
-# }
-
-# type FellowshipResolved @entity(immutable: true) {
-#   id: Bytes!
-#   fellowshipId: BigInt! # uint256
-#   blockNumber: BigInt!
-#   blockTimestamp: BigInt!
-#   transactionHash: Bytes!
-# }
-
-# type MarketOpened @entity(immutable: true) {
-#   id: Bytes!
-#   fellowshipId: BigInt! # uint256
-#   marketAddress: Bytes! # address
-#   applicationId: BigInt! # uint256
-#   blockNumber: BigInt!
-#   blockTimestamp: BigInt!
-#   transactionHash: Bytes!
-# }
-
-# type OwnershipTransferred @entity(immutable: true) {
-#   id: Bytes!
-#   previousOwner: Bytes! # address
-#   newOwner: Bytes! # address
-#   blockNumber: BigInt!
-#   blockTimestamp: BigInt!
-#   transactionHash: Bytes!
-# }
-
-type Fellowship @entity(immutable: true) {
-  id: ID!
+type ApplicantAccepted @entity(immutable: true) {
+  id: Bytes!
   fellowshipId: BigInt! # uint256
-  metadata: String! # Metadata for the fellowship
-  funds: BigInt! # Total funds for the fellowship
-  applicationDeadline: BigInt! # Deadline for applications
-  marketDeadline: BigInt! # Deadline for the market
-  epochEndTime: BigInt! # End time for the epoch
-  status: Int! # FellowshipStatus enum (e.g., AcceptingApplications, MarketOpen, etc.)
-  maxApplicants: BigInt! # Maximum number of applicants allowed
-  applicants: [Applicant!]! @derivedFrom(field: "fellowship") # Links to associated applicants
-  acceptedApplicants: BigInt!
-  grantPerAccepted: BigInt!
-  totalApplications: BigInt!
-  epochStarted: Boolean! # Whether the epoch has started
-  resolved: Boolean! # Whether the fellowship has been resolved
+  applicationId: BigInt! # uint256
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
 }
 
-type Applicant @entity(immutable: true) {
-  id: ID!
-  fellowship: Fellowship! @relation # Reference to the fellowship
-  applicationId: BigInt! # ID for the application
-  applicantAddress: Bytes! # Address of the applicant
-  metadata: String! # Metadata about the application
-  achieved: Boolean! # Whether the application achieved its goal
-  verified: Boolean! # Whether the application was verified
-  accepted: Boolean! # Whether the application was accepted
-  grantAmount: BigInt! # Grant amount awarded to the applicant
+type ApplicationEvaluated @entity(immutable: true) {
+  id: Bytes!
+  fellowshipId: BigInt! # uint256
+  applicationId: BigInt! # uint256
+  achieved: Boolean! # bool
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
-  marketAddress: Bytes # Address of the market contract
+}
+
+type ApplicationSubmitted @entity(immutable: true) {
+  id: Bytes!
+  fellowshipId: BigInt! # uint256
+  applicationId: BigInt! # uint256
+  applicant: Bytes! # address
+  metadata: String! # string
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type EpochResolved @entity(immutable: true) {
+  id: Bytes!
+  fellowshipId: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type EpochStarted @entity(immutable: true) {
+  id: Bytes!
+  fellowshipId: BigInt! # uint256
+  grantPerAccepted: BigInt! # uint256
+  acceptedCount: BigInt! # uint256
+  totalApplications: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type FellowshipCreated @entity(immutable: true) {
+  id: Bytes!
+  fellowshipId: BigInt! # uint256
+  fellowship_metadata: String! # string
+  fellowship_funds: BigInt! # uint256
+  fellowship_applicationDeadline: BigInt! # uint256
+  fellowship_marketDeadline: BigInt! # uint256
+  fellowship_epochEndTime: BigInt! # uint256
+  fellowship_status: Int! # uint8
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type FellowshipResolved @entity(immutable: true) {
+  id: Bytes!
+  fellowshipId: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type MarketOpened @entity(immutable: true) {
+  id: Bytes!
+  fellowshipId: BigInt! # uint256
+  marketAddress: Bytes! # address
+  applicationId: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type OwnershipTransferred @entity(immutable: true) {
+  id: Bytes!
+  previousOwner: Bytes! # address
+  newOwner: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
 }
