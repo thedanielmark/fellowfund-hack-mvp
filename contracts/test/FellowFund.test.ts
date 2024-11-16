@@ -93,16 +93,17 @@ describe("FellowFund", function () {
       const fellowshipId = await createDefaultFellowship();
 
       const applicationId = 0;
+      const applicationMetadata = "Application 1";
       // Apply to fellowship
       await expect(
-        fellowFund.connect(applicant1).applyToFellowship(fellowshipId, "Application 1")
+        fellowFund.connect(applicant1).applyToFellowship(fellowshipId, applicationMetadata)
       )
         .to.emit(fellowFund, "ApplicationSubmitted")
-        .withArgs(fellowshipId, applicationId, applicant1.address);
+        .withArgs(fellowshipId, applicationId, applicant1.address, applicationMetadata);
 
       const application = await fellowFund.applications(fellowshipId, applicationId);
       expect(application.applicant).to.equal(applicant1.address);
-      expect(application.metadata).to.equal("Application 1");
+      expect(application.metadata).to.equal(applicationMetadata);
     });
   });
 

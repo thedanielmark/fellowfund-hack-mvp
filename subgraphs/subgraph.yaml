@@ -5,17 +5,18 @@ schema:
   file: ./schema.graphql
 dataSources:
   - kind: ethereum
-    name: FelloFund
+    name: fellofund
     network: polygon-amoy
     source:
-      address: "0x2323Cd8097708f4C8D4BA37aE72644Af712bAD76"
-      abi: FelloFund
-      startBlock: 14493482
+      address: "0x3B0C03e82c60AF5D16f3419d969d80D3Ed4E0de2"
+      abi: fellofund
+      startBlock: 14500409
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
+        - ApplicantAccepted
         - ApplicationEvaluated
         - ApplicationSubmitted
         - EpochResolved
@@ -25,12 +26,14 @@ dataSources:
         - MarketOpened
         - OwnershipTransferred
       abis:
-        - name: FelloFund
-          file: ./abis/FelloFund.json
+        - name: fellofund
+          file: ./abis/fellofund.json
       eventHandlers:
+        - event: ApplicantAccepted(indexed uint256,indexed uint256)
+          handler: handleApplicantAccepted
         - event: ApplicationEvaluated(indexed uint256,indexed uint256,bool)
           handler: handleApplicationEvaluated
-        - event: ApplicationSubmitted(indexed uint256,indexed uint256,address)
+        - event: ApplicationSubmitted(indexed uint256,indexed uint256,address,string)
           handler: handleApplicationSubmitted
         - event: EpochResolved(indexed uint256)
           handler: handleEpochResolved
@@ -40,8 +43,8 @@ dataSources:
           handler: handleFellowshipCreated
         - event: FellowshipResolved(indexed uint256)
           handler: handleFellowshipResolved
-        - event: MarketOpened(indexed uint256,indexed address)
+        - event: MarketOpened(indexed uint256,indexed address,indexed uint256)
           handler: handleMarketOpened
         - event: OwnershipTransferred(indexed address,indexed address)
           handler: handleOwnershipTransferred
-      file: ./src/fello-fund.ts
+      file: ./src/fellofund.ts
