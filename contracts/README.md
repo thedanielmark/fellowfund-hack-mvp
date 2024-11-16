@@ -1,8 +1,13 @@
-# Sample Hardhat Project
+# FellowFund Smart Contracts
 
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, and a Hardhat Ignition module that deploys that contract.
+This project is based on [hardhat](https://hardhat.org/) and using [Ignition](https://hardhat.org/ignition/docs/getting-started#overview).
 
-Try running some of the following tasks:
+## Deployed Contracts and Networks
+
+> 🚨 A **complete list** of the deployed contracts, its versions and networks, can be found here:
+> [testnetDeployments.json](./ignition/deployments/testnetDeployments.json)
+
+## Getting Started
 
 ```shell
 npx hardhat help
