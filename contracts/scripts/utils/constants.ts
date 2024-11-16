@@ -1,1 +1,1 @@
-export const fellowFundContractAddress = "0x3B0C03e82c60AF5D16f3419d969d80D3Ed4E0de2";
+export const fellowFundContractAddress = "0x25d598CBB74fa73290e74697616DE2740d280745";

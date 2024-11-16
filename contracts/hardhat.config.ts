@@ -37,6 +37,11 @@ const config: HardhatUserConfig = {
       accounts: [PRIVATE_KEY_1],
       gasPrice: 60000000, // specify the network's minimum basefee as the gas price
     },
+    unichain: {
+      url: "https://sepolia.unichain.org",
+      chainId: 1301,
+      accounts: [PRIVATE_KEY_1],
+    },
     flowTestnet: {
       url: "https://testnet.evm.nodes.onflow.org",
       chainId: 545,
@@ -60,6 +65,11 @@ const config: HardhatUserConfig = {
     celoAlfajoresTestnet: {
       url: "https://alfajores-forno.celo-testnet.org",
       chainId: 44787,
+      accounts: [PRIVATE_KEY_1],
+    },
+    neoxTestnet: {
+      url: "https://testnet.rpc.banelabs.org",
+      chainId: 12227332,
       accounts: [PRIVATE_KEY_1],
     },
     sepolia: {

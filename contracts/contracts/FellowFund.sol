@@ -40,9 +40,16 @@ contract FellowFund is IFellowFund, Ownable {
         uint256 _epochDeadline
     ) external payable {
         require(msg.value == _funds, "Incorrect funds sent");
-        require(_applicationDeadline > block.timestamp, "Invalid application deadline");
-        require(_marketDeadline > _applicationDeadline, "Invalid market deadline");
-        require(_epochDeadline > _marketDeadline, "Invalid epoch end time");
+        // For the sake of the hackathon, these require statements is commented to simplify demonstrations.
+        // require(
+        //     _applicationDeadline > block.timestamp,
+        //     "Invalid application deadline"
+        // );
+        // require(
+        //     _marketDeadline > _applicationDeadline,
+        //     "Invalid market deadline"
+        // );
+        // require(_epochDeadline > _marketDeadline, "Invalid epoch end time");
 
         uint256 fellowshipId = fellowshipCount;
         fellowshipCount++;
@@ -64,7 +71,11 @@ contract FellowFund is IFellowFund, Ownable {
     function applyToFellowship(uint256 fellowshipId, string calldata metadata) external {
         Fellowship storage fellowship = fellowships[fellowshipId];
         require(fellowship.status == FellowshipStatus.AcceptingApplications, "Not accepting applications");
-        require(block.timestamp < fellowship.applicationDeadline, "Application period ended");
+        // For the sake of the hackathon, this require statement is commented to simplify demonstrations.
+        // require(
+        //     block.timestamp < fellowship.applicationDeadline,
+        //     "Application period ended"
+        // );
 
         // Todo: Add vlayer verification logic here - use vlayerProof as parameter
 
@@ -85,7 +96,8 @@ contract FellowFund is IFellowFund, Ownable {
 
     function openFellowshipMarkets(uint256 fellowshipId) external onlyOperator {
         Fellowship storage fellowship = fellowships[fellowshipId];
-        require(block.timestamp >= fellowship.applicationDeadline, "Application period not ended");
+        // TODO: For the sake of the hackathon, we will not check if the application period has ended
+        // require(block.timestamp >= fellowship.applicationDeadline, "Application period not ended");
         require(fellowship.status == FellowshipStatus.AcceptingApplications, "Invalid status");
 
         Application[] storage apps = applications[fellowshipId];
@@ -105,7 +117,8 @@ contract FellowFund is IFellowFund, Ownable {
 
     function evaluateMarket(uint256 fellowshipId) external onlyOperator {
         Fellowship storage fellowship = fellowships[fellowshipId];
-        require(block.timestamp >= fellowship.marketDeadline, "Market still open");
+        // TODO: For the sake of the hackathon, we will not check if the market is still open
+        // require(block.timestamp >= fellowship.marketDeadline, "Market still open");
         require(fellowship.status == FellowshipStatus.MarketOpen, "Invalid status");
 
         Application[] storage apps = applications[fellowshipId];
@@ -166,7 +179,8 @@ contract FellowFund is IFellowFund, Ownable {
 
     function resolveFellowship(uint256 fellowshipId) external onlyOperator {
         Fellowship storage fellowship = fellowships[fellowshipId];
-        require(block.timestamp >= fellowship.epochEndTime, "Epoch not ended");
+        // TODO: For the sake of the hackathon, we will not check if the epoch has ended
+        // require(block.timestamp >= fellowship.epochEndTime, "Epoch not ended");
         require(fellowship.status == FellowshipStatus.EpochStarted, "Invalid status");
 
         Application[] storage apps = applications[fellowshipId];

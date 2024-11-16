@@ -1,1 +1,16 @@
-{"name":"NounsDAO Fellow Special Edition","description":"This fellowship intends to fund active contributors, bringing results and stickness to the ecosystem.","githubOrg":"fellowfund","kpiTargets":{"totalCommits":{"targetValue":6,"weight":0.8},"poapEvents":{"targetValue":2,"weight":0.2}}}
+{
+    "name": "NounsDAO Fellow Special Edition",
+    "description": "This fellowship intends to fund active contributors, bringing results and stickness to the ecosystem.",
+    "githubOrg": "fellowfund",
+    "logoURI": "https://pbs.twimg.com/profile_images/1467601380567359498/oKcnQo_S_400x400.jpg",
+    "kpiTargets": {
+        "totalCommits": {
+            "targetValue": 20,
+            "weight": 0.5
+        },
+        "poapEvents": {
+            "targetValue": 7,
+            "weight": 0.5
+        }
+    }
+}

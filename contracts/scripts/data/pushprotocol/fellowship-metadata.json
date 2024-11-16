@@ -1,0 +1,16 @@
+{
+    "name": "Push Protocol Special Edition",
+    "description": "Enabling seamless communication in Web3 with decentralized notifications, chat, and video capabilities.",
+    "githubOrg": "pushprotocol",
+    "logoURI": "https://push.org/assets/website/docshub/PushLogoBlack@3x.png",
+    "kpiTargets": {
+        "totalCommits": {
+            "targetValue": 35,
+            "weight": 0.6
+        },
+        "poapEvents": {
+            "targetValue": 9,
+            "weight": 0.4
+        }
+    }
+}

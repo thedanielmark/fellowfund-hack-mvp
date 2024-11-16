@@ -9,75 +9,97 @@ import { InformationCircleIcon } from "@heroicons/react/24/outline";
 
 // Define types for our fellowship data
 type Fellowship = {
-  id: number;
+  acceptedApplicants: number;
+  applicationDeadline: string;
+  blockTimestamp: string;
+  blockNumber: string;
+  epochEndTime: string;
+  epochStarted: boolean;
+  fellowshipId: string;
+  funds: string;
+  grantPerAccepted: string;
+  id: string;
+  marketDeadline: string;
   metadata: string;
-  funds: bigint;
-  applicationDeadline: number;
-  marketDeadline: number;
-  epochEndTime: number;
+  resolved: boolean;
   status: number;
-  maxApplicants: number;
+  totalApplications: number;
+  transactionHash: string;
 };
 
+// At the top of the file, after the imports
+declare global {
+  interface Window {
+    ethereum?: any;
+  }
+}
+
 function OperatorPage() {
-  const { address, getSigner } = useAuth();
-  const [fellowships, setFellowships] = useState<Fellowship[]>([
-    // Mock fellowship entry
-    {
-      id: 1,
-      metadata: JSON.stringify({
-        name: "Demo Fellowship Program",
-        githubOrg: "fellowfund",
-        kpiTargets: {
-          totalCommits: {
-            targetValue: 3,
-            weight: 0.7,
-          },
-          poapEvents: {
-            targetValue: 1,
-            weight: 0.3,
-          },
-        },
-      }),
-      funds: BigInt("1000000000000000000"), // 1 ETH
-      applicationDeadline: Math.floor(Date.now() / 1000) + 3600, // 1 hour from now
-      marketDeadline: Math.floor(Date.now() / 1000) + 7200, // 2 hours from now
-      epochEndTime: Math.floor(Date.now() / 1000) + 10800, // 3 hours from now
-      status: 1, // AcceptingApplications
-      maxApplicants: 5,
-    },
-  ]);
+
+  const [fellowships, setFellowships] = useState<Fellowship[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [message, setMessage] = useState<string>("");
   const [showSuccess, setShowSuccess] = useState<boolean>(false);
   const [transactionHash, setTransactionHash] = useState<string>("");
+  const [userAddress, setUserAddress] = useState<string>("");
 
-  // Load fellowships from the contract
+  // Add this function to get signer
+  const getSigner = async () => {
+    if (!window.ethereum) throw new Error("Please install MetaMask");
+    const provider = new ethers.BrowserProvider(window.ethereum);
+    return await provider.getSigner();
+  };
+
+  // Modify the useEffect to use window.ethereum
   useEffect(() => {
     const loadFellowships = async () => {
-      const signer = await getSigner();
-      const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || "";
-      const contract = new ethers.Contract(
-        contractAddress,
-        JSON.parse(JSON.stringify(contractABI)),
-        signer
-      );
+      try {
+        const query = `
+          query MyQuery {
+            fellowships {
+              acceptedApplicants
+              applicationDeadline
+              blockTimestamp
+              blockNumber
+              epochEndTime
+              epochStarted
+              fellowshipId
+              funds
+              grantPerAccepted
+              id
+              marketDeadline
+              metadata
+              resolved
+              status
+              totalApplications
+              transactionHash
+            }
+          }
+        `;
 
-      const fellowshipCount = await contract.fellowshipCount();
-      const fellowshipsData: Fellowship[] = [];
+        const response = await fetch(
+          'https://api.studio.thegraph.com/query/73364/fello-fund/version/latest',
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ query }),
+          }
+        );
 
-      for (let i = 0; i < fellowshipCount; i++) {
-        const fellowship = await contract.fellowships(i);
-        fellowshipsData.push({ ...fellowship, id: i });
+        const data = await response.json();
+        if (data.data?.fellowships) {
+          console.log("data.data.fellowships: ", data.data.fellowships);
+          setFellowships(data.data.fellowships);
+        }
+      } catch (error) {
+        console.error("Error loading fellowships:", error);
       }
-
-      setFellowships(fellowshipsData);
     };
 
-    if (address) {
-      loadFellowships();
-    }
-  }, [address, getSigner]);
+    loadFellowships();
+  }, []);
 
   const handleOpenMarkets = async (fellowshipId: number) => {
     setIsLoading(true);
@@ -86,7 +108,7 @@ function OperatorPage() {
 
     try {
       const signer = await getSigner();
-      const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || "";
+      const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || "0x25d598CBB74fa73290e74697616DE2740d280745";
       const contract = new ethers.Contract(
         contractAddress,
         JSON.parse(JSON.stringify(contractABI)),
@@ -170,7 +192,7 @@ function OperatorPage() {
                     {fellowships.map((fellowship) => (
                       <tr key={fellowship.id}>
                         <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-black sm:pl-0">
-                          {fellowship.id}
+                          {fellowship.fellowshipId}
                         </td>
                         <td className="whitespace-nowrap px-3 py-4 text-sm text-zinc-300">
                           {
@@ -186,16 +208,14 @@ function OperatorPage() {
                         <td className="whitespace-nowrap px-3 py-4 text-sm">
                           <div className="flex gap-2">
                             <button
-                              onClick={() => handleOpenMarkets(fellowship.id)}
+                              onClick={() => handleOpenMarkets(Number(fellowship.fellowshipId))}
                               disabled={fellowship.status !== 1 || isLoading}
                               className="rounded bg-primary-600 px-2 py-1 text-xs font-semibold text-black shadow-sm hover:bg-primary-500 disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                               Open Markets
                             </button>
                             <button
-                              onClick={() =>
-                                handleEvaluateMarket(fellowship.id)
-                              }
+                              onClick={() => handleEvaluateMarket(Number(fellowship.fellowshipId))}
                               disabled={fellowship.status !== 2 || isLoading}
                               className="rounded bg-primary-600 px-2 py-1 text-xs font-semibold text-black shadow-sm hover:bg-primary-500 disabled:opacity-50 disabled:cursor-not-allowed"
                             >
@@ -230,16 +250,14 @@ function OperatorPage() {
       {/* Success/Error Message */}
       {message && (
         <div
-          className={`rounded-md p-4 ${
-            showSuccess ? "bg-primary-900" : "bg-red-900"
-          }`}
+          className={`rounded-md p-4 ${showSuccess ? "bg-primary-900" : "bg-red-900"
+            }`}
         >
           <div className="flex">
             <div className="flex-shrink-0">
               <InformationCircleIcon
-                className={`h-5 w-5 ${
-                  showSuccess ? "text-primary-400" : "text-red-400"
-                }`}
+                className={`h-5 w-5 ${showSuccess ? "text-primary-400" : "text-red-400"
+                  }`}
                 aria-hidden="true"
               />
             </div>
