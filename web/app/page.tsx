@@ -14,6 +14,8 @@ import { useAuth } from "@/providers/AuthProvider";
 
 import Footer from "@/components/Footer";
 import Link from "next/link";
+import WorldCoinConnect from "@/components/worldID/worldId";
+import { useState } from "react";
 
 const navigation = [
   { name: "Locate", href: "/" },
@@ -53,6 +55,7 @@ const solutions = [
 
 export default function Home() {
   const { login, loggedIn, user } = useAuth();
+  const [worldIdVerified, setWorldcoinVerified] = useState(false);
 
   return (
     <>
@@ -222,12 +225,17 @@ export default function Home() {
                     </p>
                     <div className="mx-auto mt-10 max-w-sm sm:flex sm:max-w-none sm:justify-center">
                       <div className="space-y-4 sm:mx-auto sm:inline-grid sm:grid-cols-2 sm:gap-5 sm:space-y-0">
-                        <button
-                          className="flex items-center justify-center rounded-md border border-transparent bg-white px-4 py-3 text-base font-medium text-primary-700 shadow-sm hover:bg-primary-50 sm:px-8"
-                          onClick={login}
-                        >
-                          Get started
-                        </button>
+                        {worldIdVerified ? (
+                          <button
+                            className="flex items-center justify-center rounded-md border border-transparent bg-white px-4 py-3 text-base font-medium text-primary-700 shadow-sm hover:bg-primary-50 sm:px-8"
+                            onClick={login}
+                          >
+                            Get started
+                          </button>
+                        ) : (
+                          <WorldCoinConnect onAction={setWorldcoinVerified} />
+                        )}
+
                         <a
                           href="https://github.com/fabianferno/builder-fund/"
                           className="flex items-center justify-center rounded-md border border-transparent bg-primary-500 bg-opacity-60 px-4 py-3 text-base font-medium text-white shadow-sm hover:bg-opacity-70 sm:px-8"
