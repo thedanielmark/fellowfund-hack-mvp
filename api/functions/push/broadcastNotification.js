@@ -18,12 +18,20 @@ async function broadcastNotification(type, body) {
     const sendNotifRes = await userAlice.channel.send(["*"], {
       notification: { title: "New Fellow Applied", body: body, category: 1 },
     });
-  } else {
+  } else if (type == 2) {
     const sendNotifRes = await userAlice.channel.send(["*"], {
       notification: {
         title: "New Betting has been placed",
         body: body,
         category: 2,
+      },
+    });
+  } else {
+    const sendNotifRes = await userAlice.channel.send(["*"], {
+      notification: {
+        title: "Markets Notification",
+        body: body,
+        category: 3,
       },
     });
   }
