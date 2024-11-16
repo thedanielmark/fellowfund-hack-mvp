@@ -4,7 +4,7 @@
 import { useEffect, useState } from "react";
 import { InformationCircleIcon } from "@heroicons/react/24/outline";
 import { useAuth } from "@/providers/AuthProvider";
-import { ethers, toUtf8Bytes } from "ethers";
+import { ethers, parseEther, toUtf8Bytes } from "ethers";
 import { contractABI } from "@/utils/contractABI";
 import { RotatingLines } from "react-loader-spinner";
 import { Description, Field, Label, Switch } from "@headlessui/react";
@@ -16,11 +16,10 @@ function ApplyToFellowhipPage({
 }) {
   const { address, getSigner } = useAuth();
   const [inputs, setInputs] = useState<any>({
-    deviceDefinitionId: "",
     name: "",
-    make: "",
-    model: "",
-    year: "",
+    amount: 0,
+    bio: "",
+    gitHubUsername: "",
   });
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [enabled, setEnabled] = useState(false);
@@ -38,6 +37,30 @@ function ApplyToFellowhipPage({
     setIsLoading(true);
     setMessage("");
     setShowErrorMessage(false);
+
+    // Write to contract
+    const signer = await getSigner();
+
+    const contractAddress = "0x2323Cd8097708f4C8D4BA37aE72644Af712bAD76";
+    const contract = new ethers.Contract(
+      contractAddress,
+      JSON.parse(JSON.stringify(contractABI)),
+      signer
+    );
+
+    const tx = await contract.applyToFellowship(
+      BigInt(0),
+      JSON.stringify(inputs)
+    );
+    console.log(tx);
+    // Wait for transaction to finish
+    const receipt = await tx.wait();
+    if (receipt.status === 1) {
+      console.log("Success");
+      setShowSuccess(true);
+      setTransactionHash(receipt.hash);
+      setIsLoading(false);
+    }
   };
 
   //   Get details of the fellowship program
@@ -69,71 +92,6 @@ function ApplyToFellowhipPage({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params.fellowshipId]);
-
-  useEffect(() => {
-    const writeData = async () => {
-      // Write to contract
-      const signer = await getSigner();
-
-      const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || "";
-      const contract = new ethers.Contract(
-        contractAddress,
-        JSON.parse(JSON.stringify(contractABI)),
-        signer
-      );
-
-      const tx = await contract.mintVehicle(
-        metadataIPFSHash,
-        toUtf8Bytes(attestationID)
-      );
-      console.log(tx);
-      // Wait for transaction to finish
-      const receipt = await tx.wait();
-      if (receipt.status === 1) {
-        // POST request to API
-        const url = `${process.env.NEXT_PUBLIC_API_ROUTE}/broadcast/vehicle-created`;
-
-        const payload: { [key: string]: any } = {
-          address,
-        };
-
-        // Push inputs into payload using map
-        Object.keys(inputs).map((key: any) => {
-          payload[key] = inputs[key];
-        });
-
-        // Send a POST request
-        fetch(url, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json", // Indicates you're sending JSON data
-          },
-          body: JSON.stringify(payload), // Convert the data object to JSON string
-        })
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error("Network response was not ok");
-            }
-            return response.json(); // Parse the JSON response
-          })
-          .then((data) => {
-            console.log("Success:", data);
-            setShowSuccess(true);
-            setTransactionHash(receipt.hash);
-            setIsLoading(false);
-          })
-          .catch((error) => {
-            console.error("Error:", error);
-          });
-      }
-    };
-
-    if (metadataIPFSHash && attestationID) {
-      writeData();
-      console.log("Called");
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [metadataIPFSHash, attestationID]);
 
   // Function to handle onChange of inputs
   const handleInputChange = (
@@ -192,7 +150,7 @@ function ApplyToFellowhipPage({
                 <div className="col-span-3 sm:col-span-3">
                   <div className="rounded-md px-3 pb-1.5 pt-2.5 shadow-sm ring-1 ring-inset ring-zinc-800 focus-within:ring-2 focus-within:ring-primary-600">
                     <label
-                      htmlFor="make"
+                      htmlFor="amount"
                       className="block text-xs font-medium text-zinc-200"
                     >
                       Desired Amount (USD)
@@ -203,10 +161,12 @@ function ApplyToFellowhipPage({
                         <span className="text-gray-500 sm:text-sm">$</span>
                       </div>
                       <input
-                        id="price"
-                        name="price"
+                        id="amount"
+                        name="amount"
                         type="text"
                         placeholder="10000"
+                        value={inputs.amount}
+                        onChange={handleInputChange}
                         aria-describedby="price-currency"
                         className="block w-full rounded-md border-0 py-1.5 pl-3 pr-12 bg-transparent text-white placeholder:text-zinc-400 focus:ring-0 sm:text-sm/6"
                       />
@@ -227,17 +187,17 @@ function ApplyToFellowhipPage({
                 <div className="col-span-6 sm:col-span-6">
                   <div className="rounded-md px-3 pb-1.5 pt-2.5 shadow-sm ring-1 ring-inset ring-zinc-800 focus-within:ring-2 focus-within:ring-primary-600">
                     <label
-                      htmlFor="name"
+                      htmlFor="bio"
                       className="block text-xs font-medium text-zinc-200"
                     >
                       Your short bio
                     </label>
                     <textarea
-                      id="name"
-                      name="name"
+                      id="bio"
+                      name="bio"
                       rows={3}
                       required={true}
-                      value={inputs.name}
+                      value={inputs.bio}
                       onChange={handleInputChange}
                       placeholder="My name is Rasputin and I'm a lover of the Russian queen..."
                       className="block w-full border-0 py-1.5 px-0 bg-transparent text-white placeholder:text-zinc-400 focus:ring-0 sm:text-sm sm:leading-6"
@@ -263,17 +223,17 @@ function ApplyToFellowhipPage({
                 <div className="col-span-6 sm:col-span-6">
                   <div className="rounded-md px-3 pb-1.5 pt-2.5 shadow-sm ring-1 ring-inset ring-zinc-800 focus-within:ring-2 focus-within:ring-primary-600">
                     <label
-                      htmlFor="name"
+                      htmlFor="gitHubUsername"
                       className="block text-xs font-medium text-zinc-200"
                     >
                       Your GitHub username
                     </label>
                     <input
-                      id="name"
-                      name="name"
+                      id="gitHubUsername"
+                      name="gitHubUsername"
                       type="text"
                       required={true}
-                      value={inputs.name}
+                      value={inputs.gitHubUsername}
                       onChange={handleInputChange}
                       placeholder="daddycool"
                       className="block w-full border-0 py-1.5 px-0 bg-transparent text-white placeholder:text-zinc-400 focus:ring-0 sm:text-sm sm:leading-6"
@@ -298,7 +258,7 @@ function ApplyToFellowhipPage({
                 <div className="col-span-6 w-full pt-0.5 bg-zinc-800" />
 
                 {/* Wallet address start */}
-                <div className="col-span-6 sm:col-span-6">
+                {/* <div className="col-span-6 sm:col-span-6">
                   <div className="rounded-md px-3 pb-1.5 pt-2.5 shadow-sm ring-1 ring-inset ring-zinc-800 focus-within:ring-2 focus-within:ring-primary-600">
                     <label
                       htmlFor="name"
@@ -317,7 +277,7 @@ function ApplyToFellowhipPage({
                       className="block w-full border-0 py-1.5 px-0 bg-transparent text-white placeholder:text-zinc-400 focus:ring-0 sm:text-sm sm:leading-6"
                     />
                   </div>
-                </div>
+                </div> */}
                 {/* Wallet address end */}
               </div>
             </div>
