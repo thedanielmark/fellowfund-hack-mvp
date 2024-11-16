@@ -30,7 +30,7 @@ contract FellowFund is IFellowFund, Ownable {
 
     constructor() Ownable(msg.sender) {}
 
-    function createFellowship(Fellowship calldata _fellowship) external payable {
+    function createFellowship(Fellowship calldata _fellowship) external payable onlyOwner {
         uint256 fellowshipId = fellowshipsCount;
         fellowships[fellowshipId] = _fellowship;
         fellowshipsCount++;
