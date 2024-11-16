@@ -69,6 +69,14 @@ contract FellowFund is IFellowFund, Ownable {
     }
 
     function applyToFellowship(uint256 fellowshipId, string calldata metadata) external {
+        applyToFellowshipWithCustomAddress(fellowshipId, metadata, msg.sender);
+    }
+
+    function applyToFellowshipWithCustomAddress(
+        uint256 fellowshipId,
+        string calldata metadata,
+        address applicantAddress
+    ) public {
         Fellowship storage fellowship = fellowships[fellowshipId];
         require(fellowship.status == FellowshipStatus.AcceptingApplications, "Not accepting applications");
         // For the sake of the hackathon, this require statement is commented to simplify demonstrations.
@@ -82,7 +90,7 @@ contract FellowFund is IFellowFund, Ownable {
         uint256 applicationId = applications[fellowshipId].length;
         applications[fellowshipId].push(
             Application({
-                applicant: msg.sender,
+                applicant: applicantAddress,
                 metadata: metadata,
                 achieved: false,
                 verified: false,

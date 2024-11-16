@@ -1,26 +1,28 @@
 import { ethers } from "hardhat";
 import { Wallet } from "ethers";
-import { FellowFund } from "../typechain-types/contracts/FellowFund";
-import { fellowFundContractAddress } from "./utils/constants";
-import { fundIfLocalNetwork } from "./utils/network";
-import { getPersonalWallet } from "./utils/wallet";
+import { FellowFund } from "../../typechain-types/contracts/FellowFund";
+import { fellowFundContractAddress } from "../utils/constants";
+import { fundIfLocalNetwork } from "../utils/network";
+import { getPersonalWallet } from "../utils/wallet";
 
-export async function applyToFellowship(deployer: Wallet): Promise<FellowFund> {
+const fellowshipId = 0;
+const applicationMetadata = ""
+
+export async function applyToFellowship(fellowFund: FellowFund, deployer: Wallet): Promise<bigint> {
     console.log("\n#####################################################################");
     console.log("################### Fellowship Application ###################");
     console.log("#####################################################################");
 
-    const fellowFund = await ethers.getContractAt("FellowFund", fellowFundContractAddress, deployer);
+    await fellowFund.applyToFellowship(applicationMetadata);
 
     console.log("\n# Deployment");
-    console.log("FellowFund Address: ", await fellowFund.getAddress());
     return fellowFund;
 }
 
 async function main() {
     const deployer = getPersonalWallet(ethers.provider);
-    await fundIfLocalNetwork([deployer.address]);
-    const application = await applyToFellowship(deployer);
+    const fellowFund = await ethers.getContractAt("FellowFund", fellowFundContractAddress, deployer);
+    const application = await applyToFellowship(fellowFund, deployer);
     console.log("\n# Fellowship Application Completed");
     console.log("Application: ", application);
 }

@@ -57,6 +57,10 @@ export function handleApplicationSubmitted(
     return;
   }
 
+  fellowship.totalApplications = fellowship.totalApplications.plus(
+    BigInt.fromI32(1)
+  );
+
   applicant.fellowship = fellowship.id;
   applicant.applicationId = event.params.applicationId;
   applicant.applicantAddress = event.params.applicant;
@@ -88,6 +92,7 @@ export function handleEpochStarted(event: EpochStartedEvent): void {
     return;
   }
   entity.epochStarted = true;
+  entity.status = 3;
   entity.grantPerAccepted = event.params.grantPerAccepted;
   entity.totalApplications = event.params.totalApplications;
   entity.save();
@@ -119,6 +124,11 @@ export function handleFellowshipResolved(event: FellowshipResolvedEvent): void {
     return;
   }
   entity.resolved = true;
+  let fellowship = Fellowship.load(event.params.fellowshipId.toString());
+  if (!fellowship) {
+    return;
+  }
+  fellowship.status = 4;
 
   entity.save();
 }
@@ -133,6 +143,11 @@ export function handleMarketOpened(event: MarketOpenedEvent): void {
     return;
   }
   entity.marketAddress = event.params.marketAddress;
+  let fellowship = Fellowship.load(event.params.fellowshipId.toString());
+  if (!fellowship) {
+    return;
+  }
+  fellowship.status = 2;
   entity.save();
 }
 
