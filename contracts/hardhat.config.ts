@@ -37,6 +37,21 @@ const config: HardhatUserConfig = {
       accounts: [PRIVATE_KEY_1],
       gasPrice: 20000000, // specify the network's minimum basefee as the gas price
     },
+    flowTestnet: {
+      url: "https://testnet.evm.nodes.onflow.org",
+      chainId: 545,
+      accounts: [PRIVATE_KEY_1],
+    },
+    bitkubTestnet: {
+      url: "wss://wss-testnet.bitkubchain.io",
+      chainId: 25925,
+      accounts: [PRIVATE_KEY_1],
+    },
+    lineaSepolia: {
+      url: "https://rpc.sepolia.linea.build",
+      chainId: 59141,
+      accounts: [PRIVATE_KEY_1],
+    },
     sepolia: {
       url: `https://sepolia.infura.io/v3/${process.env.INFURA_API_KEY}`,
       accounts: [PRIVATE_KEY_1],
