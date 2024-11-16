@@ -1,9 +1,14 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 import TwoPointGraph from "@/components/Graphs/TwoPointGraph";
+import { useAuth } from "@/providers/AuthProvider";
+import { contractABI } from "@/utils/contractABI";
+import { ethers, parseEther } from "ethers";
 import { useState } from "react";
 
 function MarketPage({ params }: { params: { marketId: string } }) {
+  const { address, getSigner } = useAuth();
+
   const tabs = [
     { name: "Yes", current: true },
     { name: "No", current: false },
@@ -21,6 +26,68 @@ function MarketPage({ params }: { params: { marketId: string } }) {
   function changeTab(tabName: string) {
     setCurrentTab(tabName);
   }
+
+  // Vote yes
+  const voteYes = async (event: any) => {
+    event.preventDefault();
+    // setIsLoading(true);
+    // setMessage("");
+    // setShowErrorMessage(false);
+
+    // Write to contract
+    const signer = await getSigner();
+
+    const contractAddress = process.env.NEXT_PUBLIC_DEPLOYED_ADDRESS || "";
+    const contract = new ethers.Contract(
+      contractAddress,
+      JSON.parse(JSON.stringify(contractABI)),
+      signer
+    );
+
+    const tx = await contract.placeBid(0, {
+      value: parseEther(yesValue),
+    });
+    console.log(tx);
+    // Wait for transaction to finish
+    const receipt = await tx.wait();
+    if (receipt.status === 1) {
+      console.log("Success");
+      // setShowSuccess(true);
+      // setTransactionHash(receipt.hash);
+      // setIsLoading(false);
+    }
+  };
+
+  // Vote yes
+  const voteNo = async (event: any) => {
+    event.preventDefault();
+    // setIsLoading(true);
+    // setMessage("");
+    // setShowErrorMessage(false);
+
+    // Write to contract
+    const signer = await getSigner();
+
+    const contractAddress = process.env.NEXT_PUBLIC_DEPLOYED_ADDRESS || "";
+    const contract = new ethers.Contract(
+      contractAddress,
+      JSON.parse(JSON.stringify(contractABI)),
+      signer
+    );
+
+    const tx = await contract.placeBid(1, {
+      value: parseEther(yesValue),
+    });
+    console.log(tx);
+    // Wait for transaction to finish
+    const receipt = await tx.wait();
+    if (receipt.status === 1) {
+      console.log("Success");
+      // setShowSuccess(true);
+      // setTransactionHash(receipt.hash);
+      // setIsLoading(false);
+    }
+  };
 
   return (
     <div className="py-6 sm:py-12 px-4 sm:px-0">
@@ -173,6 +240,7 @@ function MarketPage({ params }: { params: { marketId: string } }) {
 
                   <button
                     type="submit"
+                    onClick={voteYes}
                     className="mt-5 w-full rounded-md border border-transparent bg-primary-600 px-4 py-3 text-sm font-bold text-white shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus:ring-offset-zinc-50"
                   >
                     Vote Yes
@@ -203,6 +271,7 @@ function MarketPage({ params }: { params: { marketId: string } }) {
 
                   <button
                     type="submit"
+                    onClick={voteNo}
                     className="mt-5 w-full rounded-md border border-transparent bg-primary-600 px-4 py-3 text-sm font-bold text-white shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus:ring-offset-zinc-50"
                   >
                     Vote No

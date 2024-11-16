@@ -49,7 +49,7 @@ function ApplyToFellowhipPage({
     );
 
     const tx = await contract.applyToFellowship(
-      BigInt(0),
+      BigInt(params.fellowshipId),
       JSON.stringify(inputs)
     );
     console.log(tx);

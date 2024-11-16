@@ -104,7 +104,7 @@ function DashboardHomePage() {
     const fetchData = async () => {
       try {
         const client = new GraphQLClient(
-          "https://api.studio.thegraph.com/query/73364/fello-fund/version/latest"
+          process.env.NEXT_PUBLIC_GRAPH_URL || ""
         );
         const query = getMarkets();
         const result: any = await client.request(query);

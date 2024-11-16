@@ -12,13 +12,14 @@ const clientId = process.env.NEXT_PUBLIC_WEB3AUTH_CLIENT_ID || "";
 
 const chainConfig = {
   chainNamespace: CHAIN_NAMESPACES.EIP155,
-  chainId: "0x13882",
-  rpcTarget: "https://polygon-amoy.drpc.org",
-  displayName: "Polygon Amoy",
-  blockExplorerUrl: "explorer.amoy.polygonscan.com/",
-  ticker: "POL",
+  chainId: "0xaa37dc",
+  rpcTarget:
+    "https://opt-sepolia.g.alchemy.com/v2/P2lkgFvwByOpRNdXc_1T8FYTSayQci07",
+  displayName: "Optimism Sepolia",
+  blockExplorerUrl: "https://optimism-sepolia.blockscout.com/",
+  ticker: "ETH",
   tickerName: "Ethereum",
-  logo: "https://cryptologos.cc/logos/polygon-matic-logo.png",
+  logo: "https://cryptologos.cc/logos/optimism-optimism-logo.png",
 };
 
 const privateKeyProvider = new EthereumPrivateKeyProvider({
