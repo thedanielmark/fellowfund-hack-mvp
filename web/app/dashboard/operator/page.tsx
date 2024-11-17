@@ -39,6 +39,10 @@ function FellowshipCard({ fellowshipId, signer }: { fellowshipId: number, signer
   const [loading, setLoading] = useState<boolean>(false);
   const [data, setData] = useState<any>(null);
   const [applications, setApplications] = useState<any>(null);
+  const [impactValue, setImpactValue] = useState<string>("");
+  const [applicantAddress, setApplicantAddress] = useState<string>("");
+  const [applicationId, setApplicationId] = useState<string>("");
+  const [achieved, setAchieved] = useState<boolean>(false);
 
   const getApplicationsFromContract = async (fellowshipId: number) => {
     try {
@@ -75,6 +79,31 @@ function FellowshipCard({ fellowshipId, signer }: { fellowshipId: number, signer
     }
   }
 
+  const handleSetImpact = async () => {
+    try {
+      const contract = new ethers.Contract(
+        process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || "",
+        JSON.parse(JSON.stringify(contractABI)),
+        signer
+      );
+
+      const proof = ethers.toUtf8Bytes("");
+
+      const tx = await contract.setApplicantImpact(
+        fellowshipId,
+        applicationId,
+        achieved,
+        proof
+      );
+      await tx.wait();
+
+      await getFellowshipFromContract(fellowshipId);
+      setApplicationId("");
+      setAchieved(false);
+    } catch (error) {
+      console.error("Error setting impact:", error);
+    }
+  };
 
   useEffect(() => {
     getFellowshipFromContract(fellowshipId);
@@ -94,7 +123,36 @@ function FellowshipCard({ fellowshipId, signer }: { fellowshipId: number, signer
       <div><span className="font-semibold">Grant per accepted:</span> {ethers.formatEther(data.grantPerAccepted || '0')} ETH</div>
       <div><span className="font-semibold">Accepted:</span> {Number(data.acceptedApplicants)}</div>
       <div><span className="font-semibold">Epoch started:</span> {data.epochStarted ? 'Yes' : 'No'}</div>
+      <div><span className="font-semibold">Status:</span> {Number(data.status)}</div>
       {/* <div><span className="font-semibold">Applications:</span> {applications.length}</div> */}
+
+      <div className="mt-4 space-y-2">
+        <input
+          type="number"
+          placeholder="Application ID"
+          value={applicationId}
+          onChange={(e) => setApplicationId(e.target.value)}
+          className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+        />
+        <div className="flex items-center space-x-2">
+          <input
+            type="checkbox"
+            id="achieved"
+            checked={achieved}
+            onChange={(e) => setAchieved(e.target.checked)}
+            className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-600"
+          />
+          <label htmlFor="achieved" className="text-sm text-gray-900">
+            Impact Achieved
+          </label>
+        </div>
+        <button
+          onClick={handleSetImpact}
+          className="rounded bg-blue-600 px-2 py-1 text-xs font-semibold text-white shadow-sm hover:bg-blue-500"
+        >
+          Set Impact
+        </button>
+      </div>
     </div>
   );
 }
@@ -232,6 +290,35 @@ function OperatorPage() {
     }
   };
 
+  const handleResolveMarket = async (fellowshipId: number) => {
+    setIsLoading(true);
+    setMessage("");
+    setShowSuccess(false);
+
+    try {
+      const signer = await getSigner();
+      const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || "";
+      const contract = new ethers.Contract(
+        contractAddress,
+        JSON.parse(JSON.stringify(contractABI)),
+        signer
+      );
+
+      const tx = await contract.resolveMarket(fellowshipId);
+      const receipt = await tx.wait();
+
+      setShowSuccess(true);
+      setTransactionHash(receipt.hash);
+      setMessage(
+        `Successfully resolved market for fellowship ${fellowshipId}`
+      );
+    } catch (error: any) {
+      setMessage(`Error: ${error.message}`);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
     getSigner();
   }, []);
@@ -317,10 +404,17 @@ function OperatorPage() {
                                   Number(fellowship.fellowshipId)
                                 )
                               }
-                              disabled={fellowship.status !== 2 || isLoading}
+                              disabled={isLoading}
                               className="rounded bg-green-600 px-2 py-1 text-xs font-semibold text-white shadow-sm hover:bg-green-500 disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                               Evaluate Market
+                            </button>
+                            <button
+                              onClick={() => handleResolveMarket(Number(fellowship.fellowshipId))}
+                              disabled={isLoading}
+                              className="rounded bg-purple-600 px-2 py-1 text-xs font-semibold text-white shadow-sm hover:bg-purple-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                              Resolve Market
                             </button>
                           </div>
                         </td>
