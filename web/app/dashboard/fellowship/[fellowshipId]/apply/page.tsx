@@ -17,7 +17,7 @@ function ApplyToFellowhipPage({
   const { address, getSigner } = useAuth();
   const [inputs, setInputs] = useState<any>({
     name: "",
-    amount: 0,
+    avatarURL: "",
     bio: "",
     gitHubUsername: "",
   });
@@ -111,10 +111,10 @@ function ApplyToFellowhipPage({
       <div className="my-10 space-y-6 sm:px-6 lg:col-span-9 lg:px-0">
         <form onSubmit={handleSubmit}>
           <div className="shadow sm:overflow-hidden sm:rounded-md">
-            <div className="space-y-6 bg-zinc-100/70 border border-zinc-200 px-4 py-6 sm:p-6 overflow-hidden">
+            <div className="space-y-6 bg-white border-t border-x border-zinc-200 shadow-lg px-4 py-6 sm:p-6 overflow-hidden rounded-t-lg">
               <div>
                 <h1 className="text-2xl font-semibold leading-6 text-black">
-                  Apply to {}
+                  Create your application
                 </h1>
                 <p className="mt-1 text-sm text-zinc-600">
                   This information will be displayed publicly so be careful what
@@ -150,34 +150,21 @@ function ApplyToFellowhipPage({
                 <div className="col-span-3 sm:col-span-3">
                   <div className="rounded-md px-3 pb-1.5 pt-2.5 shadow-sm ring-1 ring-inset ring-zinc-200 focus-within:ring-2 focus-within:ring-primary-600">
                     <label
-                      htmlFor="amount"
+                      htmlFor="avatarURL"
                       className="block text-xs font-medium text-zinc-800"
                     >
-                      Desired Amount (USD)
+                      Avatar URL
                     </label>
-
-                    <div className="relative rounded-md shadow-sm">
-                      <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center">
-                        <span className="text-gray-500 sm:text-sm">$</span>
-                      </div>
+                    <div className="relative rounded-md">
                       <input
-                        id="amount"
-                        name="amount"
+                        id="avatarURL"
+                        name="avatarURL"
                         type="text"
-                        placeholder="10000"
-                        value={inputs.amount}
+                        placeholder="https://example.com/avatar.png"
+                        value={inputs.avatarURL}
                         onChange={handleInputChange}
-                        aria-describedby="price-currency"
-                        className="block w-full rounded-md border-0 py-1.5 pl-3 pr-12 bg-transparent text-black placeholder:text-zinc-600 focus:ring-0 sm:text-sm/6"
+                        className="block w-full border-0 py-1.5 px-0 bg-transparent text-black placeholder:text-zinc-600 focus:ring-0 sm:text-sm sm:leading-6"
                       />
-                      <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
-                        <span
-                          id="price-currency"
-                          className="text-gray-500 sm:text-sm"
-                        >
-                          USD
-                        </span>
-                      </div>
                     </div>
                   </div>
                 </div>
@@ -205,6 +192,8 @@ function ApplyToFellowhipPage({
                   </div>
                 </div>
                 {/* Bio end */}
+
+                <div className="col-span-6 w-full pt-0.5 bg-zinc-100" />
 
                 <div className="col-span-6">
                   <h1 className="text-2xl font-semibold leading-6 text-black">
@@ -243,44 +232,20 @@ function ApplyToFellowhipPage({
                   <div className="mt-3">
                     <a
                       href="http://localhost:5174"
-                      className="flex items-center justify-center gap-x-3 rounded-md bg-primary-600 px-3 py-2 text-sm font-semibold text-black shadow-sm hover:bg-primary-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
+                      target="_blank"
+                      className="rounded-md bg-primary-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
                     >
                       Validate my GitHub
                     </a>
                   </div>
                 </div>
                 {/* GitHub username end */}
-
-                <div className="col-span-6 w-full pt-0.5 bg-zinc-800" />
-
-                {/* Wallet address start */}
-                {/* <div className="col-span-6 sm:col-span-6">
-                  <div className="rounded-md px-3 pb-1.5 pt-2.5 shadow-sm ring-1 ring-inset ring-zinc-200 focus-within:ring-2 focus-within:ring-primary-600">
-                    <label
-                      htmlFor="name"
-                      className="block text-xs font-medium text-zinc-800"
-                    >
-                      Your wallet address
-                    </label>
-                    <input
-                      id="name"
-                      name="name"
-                      type="text"
-                      required={true}
-                      value={inputs.name}
-                      onChange={handleInputChange}
-                      placeholder="0x7351...36g2"
-                      className="block w-full border-0 py-1.5 px-0 bg-transparent text-black placeholder:text-zinc-600 focus:ring-0 sm:text-sm sm:leading-6"
-                    />
-                  </div>
-                </div> */}
-                {/* Wallet address end */}
               </div>
             </div>
-            <div className="flex justify-end bg-zinc-800/70 px-4 py-3 text-right sm:px-6 border border-zinc-200">
+            <div className="flex justify-end bg-zinc-200 px-4 py-3 text-right sm:px-6 border-b border-x border-white/10 rounded-b-lg">
               <button
                 type="submit"
-                className={`flex items-center justify-center gap-x-3 rounded-md bg-primary-600 px-3 py-2 text-sm font-semibold text-black shadow-sm hover:bg-primary-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600 ${
+                className={`flex items-center justify-center gap-x-3 rounded-md bg-primary-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600 ${
                   isLoading
                     ? "cursor-not-allowed opacity-50"
                     : "cursor-pointer opacity-100"
@@ -291,15 +256,15 @@ function ApplyToFellowhipPage({
                     <RotatingLines
                       visible={true}
                       width="20"
-                      strokeColor="#ffffff"
+                      strokeColor="#000000"
                       strokeWidth="5"
                       animationDuration="0.75"
                       ariaLabel="rotating-lines-loading"
                     />{" "}
-                    Creating Program
+                    Creating Application
                   </>
                 ) : (
-                  "Create Program"
+                  "Create Application"
                 )}
               </button>
             </div>
@@ -307,30 +272,22 @@ function ApplyToFellowhipPage({
         </form>
 
         {showSuccess && (
-          <div className="rounded-md bg-primary-900 p-4">
+          <div className="rounded-md bg-primary-100 p-4">
             <div className="flex">
               <div className="flex-shrink-0">
                 <InformationCircleIcon
                   aria-hidden="true"
-                  className="h-5 w-5 text-primary-400"
+                  className="h-5 w-5 text-primary-600"
                 />
               </div>
               <div className="ml-3 flex-1 md:flex md:justify-between">
                 <p className="text-sm text-black">
-                  Your program was successfully created.
+                  Your application was successfully submitted.
                 </p>
                 <p className="mt-3 flex items-center gap-x-3 text-sm md:ml-6 md:mt-0">
                   <a
-                    href={`https://optimism-sepolia.blockscout.com/tx/${attestationID}`}
-                    className="whitespace-nowrap font-medium text-primary-500 hover:text-primary-200"
-                    target="_blank"
-                  >
-                    View Attestation
-                    <span aria-hidden="true"> &rarr;</span>
-                  </a>
-                  <a
                     href={`https://optimism-sepolia.blockscout.com/tx/${transactionHash}`}
-                    className="whitespace-nowrap font-medium text-primary-500 hover:text-primary-200"
+                    className="whitespace-nowrap font-medium text-primary-500 hover:text-primary-900"
                     target="_blank"
                   >
                     View Transaction

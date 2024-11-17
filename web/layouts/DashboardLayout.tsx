@@ -8,31 +8,22 @@ import {
   DialogTitle,
   Disclosure,
   DisclosureButton,
-  Listbox,
-  ListboxButton,
-  ListboxOption,
-  ListboxOptions,
   Menu,
   MenuButton,
   MenuItem,
   MenuItems,
 } from "@headlessui/react";
-import {
-  Bars3Icon,
-  CheckIcon,
-  ChevronUpDownIcon,
-  WalletIcon,
-  XMarkIcon,
-} from "@heroicons/react/24/outline";
+import { Bars3Icon, WalletIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { ReactNode, useEffect, useState } from "react";
 import { useAuth } from "@/providers/AuthProvider";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { RotatingLines } from "react-loader-spinner";
-import { ethers, JsonRpcSigner, parseEther } from "ethers";
+import { ethers, JsonRpcSigner } from "ethers";
 import { networks } from "@/utils/chains";
+import { switchChain } from "@/components/SwitchChain";
 
-const navigation = [{ name: "Fellowships", href: "/dashboard/fellowships" }];
+const navigation = [{ name: "Fellowships", href: "/dashboard" }];
 
 const userNavigation = [
   { name: "Your Profile", href: "/profile" },
@@ -56,7 +47,6 @@ const DashboardLayout = ({ children }: LayoutProps) => {
   const [walletModalOpen, setWalletModalOpen] = useState<boolean>(false);
   const [balance, setBalance] = useState<number | any>(null);
   const [FellowFundBalance, setFellowFundBalance] = useState<number | any>();
-  const [selectedNetwork, setSelectedNetwork] = useState(networks[1]);
 
   // Getting Web3Auth wallet balance
   useEffect(() => {
@@ -138,7 +128,7 @@ const DashboardLayout = ({ children }: LayoutProps) => {
           <RotatingLines
             visible={true}
             width="20"
-            strokeColor="#ffffff"
+            strokeColor="#000000"
             strokeWidth="5"
             animationDuration="0.75"
             ariaLabel="rotating-lines-loading"
@@ -256,6 +246,7 @@ const DashboardLayout = ({ children }: LayoutProps) => {
                       name="location"
                       defaultValue="Canada"
                       className="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 bg-transparent text-black ring-1 ring-inset ring-zinc-200 focus:ring-2 focus:ring-primary-600 sm:text-sm/6"
+                      onChange={() => switchChain()}
                     >
                       {networks.map((network, index) => (
                         <option key={index}>{network.name}</option>

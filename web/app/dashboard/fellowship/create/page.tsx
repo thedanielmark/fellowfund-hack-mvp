@@ -107,7 +107,7 @@ function CreateFellowshipPage() {
       <div className="my-10 space-y-6 sm:px-6 lg:col-span-9 lg:px-0">
         <form onSubmit={handleSubmit}>
           <div className="shadow sm:overflow-hidden sm:rounded-md">
-            <div className="space-y-6 bg-zinc-100/70 border border-zinc-200 px-4 py-6 sm:p-6 overflow-hidden rounded-md">
+            <div className="space-y-6 bg-white border border-zinc-200 px-4 py-6 sm:p-6 overflow-hidden rounded-t-lg shadow-lg">
               <div>
                 <h1 className="text-2xl font-semibold leading-6 text-black">
                   Create a New Fellowship Program
@@ -224,7 +224,7 @@ function CreateFellowshipPage() {
                 </div>
                 {/* Logo URL end */}
 
-                <div className="col-span-6 w-full pt-0.5 bg-zinc-800" />
+                <div className="col-span-6 w-full pt-0.5 bg-zinc-100" />
 
                 {/* Impact metrics start */}
                 <h1 className="col-span-6 sm:col-span-6 text-2xl">
@@ -319,7 +319,7 @@ function CreateFellowshipPage() {
                 </div>
                 {/* GitHub organization weight end */}
 
-                <div className="col-span-6 w-full pt-0.5 bg-zinc-800" />
+                <div className="col-span-6 w-full pt-0.5 bg-zinc-200" />
 
                 {/* Events attended start */}
                 <div className="col-span-6 sm:col-span-6">
@@ -403,7 +403,7 @@ function CreateFellowshipPage() {
                 {/* Events weight end */}
                 {/* Impact metrics end */}
 
-                <div className="col-span-6 w-full pt-0.5 bg-zinc-800" />
+                <div className="col-span-6 w-full pt-0.5 bg-zinc-200" />
 
                 {/* Fellowship info start */}
                 <h1 className="col-span-6 sm:col-span-6 text-2xl">
@@ -504,10 +504,10 @@ function CreateFellowshipPage() {
                 {/* Fellowship info end */}
               </div>
             </div>
-            <div className="flex justify-end bg-zinc-800/70 px-4 py-3 text-right sm:px-6 border border-zinc-200">
+            <div className="flex justify-end bg-zinc-100/80 px-4 py-3 text-right sm:px-6 border border-zinc-20 rounded-b-lg">
               <button
                 type="submit"
-                className={`flex items-center justify-center gap-x-3 rounded-md bg-primary-600 px-3 py-2 text-sm font-semibold text-black shadow-sm hover:bg-primary-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600 ${
+                className={`flex items-center justify-center gap-x-3 rounded-md bg-primary-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600 ${
                   isLoading
                     ? "cursor-not-allowed opacity-50"
                     : "cursor-pointer opacity-100"
@@ -518,7 +518,7 @@ function CreateFellowshipPage() {
                     <RotatingLines
                       visible={true}
                       width="20"
-                      strokeColor="#ffffff"
+                      strokeColor="#000000"
                       strokeWidth="5"
                       animationDuration="0.75"
                       ariaLabel="rotating-lines-loading"

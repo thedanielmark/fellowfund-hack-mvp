@@ -48,12 +48,12 @@ function DashboardHomePage() {
         {fellowships.map((fellowship: any, index: number) => (
           <div
             key={index}
-            className="flex flex-col justify-between p-5 overflow-hidden rounded-lg shadow-lg bg-zinc-100"
+            className="flex flex-col justify-between p-5 overflow-hidden rounded-lg bg-white border border-zinc-200 shadow-lg"
           >
             <div>
               <div className="flex items-center">
                 <div className="shrink-0">
-                  <a href={"/fellowship"}>
+                  <Link href={`/dashboard/fellowship/${fellowship.id}`}>
                     <span className="sr-only">
                       {JSON.parse(fellowship.metadata).name}
                     </span>
@@ -62,7 +62,7 @@ function DashboardHomePage() {
                       src={JSON.parse(fellowship.metadata).logoURL}
                       className="size-10 rounded-full"
                     />
-                  </a>
+                  </Link>
                 </div>
                 <div className="ml-3">
                   <h1 className="text-xl font-medium text-zinc-900">
@@ -109,7 +109,7 @@ function DashboardHomePage() {
 
               <div className="mt-8">
                 <Link
-                  href={`/dashboard/fellowship/${fellowship.id}`}
+                  href={`/dashboard/fellowship/${fellowship.id}/apply`}
                   className="block w-full text-center rounded-md bg-primary-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-primary-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
                 >
                   Apply to Fellowship

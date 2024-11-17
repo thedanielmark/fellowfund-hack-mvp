@@ -32,6 +32,7 @@ const fellowshipsToCreate = [
     // "scroll",
     // "vlayer",
     // "web3auth"
+    // "rootstock",
 ]
 
 export async function createAllFellowships(deployer: Wallet) {
