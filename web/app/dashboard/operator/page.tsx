@@ -380,7 +380,7 @@ function OperatorPage() {
           <RotatingLines
             visible={true}
             width="40"
-            strokeColor="#ffffff"
+            strokeColor="#000000"
             strokeWidth="5"
             animationDuration="0.75"
             ariaLabel="rotating-lines-loading"

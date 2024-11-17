@@ -255,28 +255,96 @@ export default function Home() {
                 <p className="text-center text-base font-semibold text-zinc-500">
                   FellowFund is built on some of the best web3 technologies
                 </p>
-                <div className="mt-6 grid grid-cols-2 gap-8 md:grid-cols-6 lg:grid-cols-5">
-                  <div className="col-span-1 flex items-center justify-center md:col-span-2 lg:col-span-1">
-                    <img alt="Tesla" src="/logos/tesla.png" className="h-12" />
-                  </div>
-                  <div className="col-span-1 flex items-center justify-center md:col-span-2 lg:col-span-1">
-                    <img alt="BYD" src="/logos/byd.png" className="h-20" />
-                  </div>
-                  <div className="col-span-1 flex items-center justify-center md:col-span-2 lg:col-span-1">
-                    <img alt="Audi" src="/logos/audi.png" className="h-20" />
-                  </div>
-                  <div className="col-span-1 flex items-center justify-center md:col-span-2 md:col-start-2 lg:col-span-1">
+                <div className="mt-6 grid grid-cols-2 gap-8 md:grid-cols-5 lg:grid-cols-5">
+                  <div className="flex items-center justify-center">
                     <img
-                      alt="Volkswagen"
-                      src="/logos/volkswagen.png"
-                      className="h-12"
+                      alt="Tesla"
+                      src="/logos/blockscout.png"
+                      className="size-12 rounded-full"
                     />
                   </div>
-                  <div className="col-span-2 flex items-center justify-center md:col-span-2 md:col-start-4 lg:col-span-1">
+                  <div className="flex items-center justify-center">
+                    <img
+                      alt="BYD"
+                      src="/logos/celo.png"
+                      className="size-12 rounded-full"
+                    />
+                  </div>
+                  <div className="flex items-center justify-center">
+                    <img
+                      alt="Audi"
+                      src="/logos/graph.png"
+                      className="size-12 rounded-full"
+                    />
+                  </div>
+                  <div className="flex items-center justify-center">
+                    <img
+                      alt="Volkswagen"
+                      src="/logos/ledger.png"
+                      className="size-12 rounded-full"
+                    />
+                  </div>
+                  <div className="flex items-center justify-center">
                     <img
                       alt="Toyota"
-                      src="/logos/toyota.png"
-                      className="h-14"
+                      src="/logos/nounsdao.png"
+                      className="size-12"
+                    />
+                  </div>
+                  <div className="flex items-center justify-center">
+                    <img
+                      alt="Toyota"
+                      src="/logos/rootstock.png"
+                      className="size-12"
+                    />
+                  </div>
+                  <div className="flex items-center justify-center">
+                    <img
+                      alt="Toyota"
+                      src="/logos/vlayer.png"
+                      className="size-12"
+                    />
+                  </div>
+                  <div className="flex items-center justify-center">
+                    <img
+                      alt="Toyota"
+                      src="/logos/web3auth.png"
+                      className="size-12"
+                    />
+                  </div>
+                  <div className="flex items-center justify-center">
+                    <img
+                      alt="Toyota"
+                      src="/logos/worldcoin.png"
+                      className="size-12"
+                    />
+                  </div>
+                  <div className="flex items-center justify-center">
+                    <img
+                      alt="Toyota"
+                      src="/logos/phala.png"
+                      className="size-12"
+                    />
+                  </div>
+                  <div className="flex items-center justify-center">
+                    <img
+                      alt="Toyota"
+                      src="/logos/polygon.png"
+                      className="size-12"
+                    />
+                  </div>
+                  <div className="flex items-center justify-center">
+                    <img
+                      alt="Toyota"
+                      src="/logos/protocollabs.png"
+                      className="size-12"
+                    />
+                  </div>
+                  <div className="flex items-center justify-center">
+                    <img
+                      alt="Toyota"
+                      src="/logos/flow.png"
+                      className="size-12"
                     />
                   </div>
                 </div>

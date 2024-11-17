@@ -90,11 +90,11 @@ function FellowshipMarketsPage({
                     <span className="sr-only">
                       {JSON.parse(applicant.metadata).name}
                     </span>
-                    {/* <img
+                    <img
                       alt=""
-                      src={JSON.parse(applicant.metadata).logoURL}
+                      src={JSON.parse(applicant.metadata).avatarURL}
                       className="size-10 rounded-full"
-                    /> */}
+                    />
                   </a>
                 </div>
                 <div className="ml-3">

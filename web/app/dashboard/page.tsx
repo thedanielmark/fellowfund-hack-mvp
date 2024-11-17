@@ -48,7 +48,7 @@ function DashboardHomePage() {
         {fellowships.map((fellowship: any, index: number) => (
           <div
             key={index}
-            className="flex flex-col justify-between p-5 overflow-hidden rounded-lg shadow-lg bg-zinc-100"
+            className="flex flex-col justify-between p-5 overflow-hidden rounded-lg bg-white border border-zinc-200 shadow-lg"
           >
             <div>
               <div className="flex items-center">
