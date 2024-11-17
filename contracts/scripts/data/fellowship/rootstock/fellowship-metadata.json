@@ -1,0 +1,16 @@
+{
+    "name": "Rootstock Builders Program",
+    "description": "Rootstock (RSK) brings Ethereum-compatible smart contracts to Bitcoin, combining Bitcoin's security with Ethereum's flexibility for DeFi and decentralized applications.",
+    "githubOrg": "rootstock",
+    "logoURI": "https://www.rsk.co/img/logo.svg",
+    "kpiTargets": {
+        "totalCommits": {
+            "targetValue": 28,
+            "weight": 0.75
+        },
+        "poapEvents": {
+            "targetValue": 6,
+            "weight": 0.25
+        }
+    }
+}
