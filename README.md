@@ -21,7 +21,19 @@ Additionally, the project includes the following repository:
 
 > 🚨 A **complete list** of the deployed contracts, its versions and networks, can be found here: [testnetDeployments.json](./ignition/deployments/testnetDeployments.json)
 
-* Mantle Testnet
-  * [`0x`](https://explorer.mantle.xyz/address/0x1e36E0b2E733fE5a4b627fd4eF7f7e865916b58F)
-* Polygon
- * [`0x`](https://explorer.mantle.xyz/address/0x1e36E0b2E733fE5a4b627fd4eF7f7e865916b58F)
+* Polygon Amoy
+  * [`0x54668Ac3E509020b2349b5e66851d9bf9Ee88B5A`](https://www.oklink.com/amoy/address/0x54668ac3e509020b2349b5e66851d9bf9ee88b5a)
+* Optimism Sepolia
+  * [`0x54668Ac3E509020b2349b5e66851d9bf9Ee88B5A`](https://optimism-sepolia.blockscout.com/address/0x54668Ac3E509020b2349b5e66851d9bf9Ee88B5A)
+* Flow Testnet
+  * [`0xc6197dF92872B6665B7A3ba6857e3D8580D1A6d5`](https://testnet.flowdiver.io/c6197dF92872B6665B7A3ba6857e3D8580D1A6d5)
+* Mantle Sepolia
+  * [`0x2323Cd8097708f4C8D4BA37aE72644Af712bAD76`](https://sepolia.mantlescan.xyz/address/0x2323Cd8097708f4C8D4BA37aE72644Af712bAD76)
+* Celo Alfajores Testnet
+  * [`0x0810B2d3C23d7207C6B15fb6B3303e99561cb80f`](https://alfajores.celoscan.io/address/0x0810B2d3C23d7207C6B15fb6B3303e99561cb80f)
+* Unichain Sepolia
+  * [`0x0810B2d3C23d7207C6B15fb6B3303e99561cb80f`](https://unichain-sepolia.blockscout.com/address/0x0810B2d3C23d7207C6B15fb6B3303e99561cb80f)
+* Rootstock Testnet
+  * [`0x2323Cd8097708f4C8D4BA37aE72644Af712bAD76`](https://explorer.testnet.rootstock.io/address/0x2323cd8097708f4c8d4ba37ae72644af712bad76)
+* Base Sepolia
+  * [`0x54668Ac3E509020b2349b5e66851d9bf9Ee88B5A`](https://sepolia.basescan.org/address/0x54668Ac3E509020b2349b5e66851d9bf9Ee88B5A)
