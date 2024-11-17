@@ -1,0 +1,8 @@
+{
+  "base-sepolia": {
+    "FelloFund-base": {
+      "address": "0x54668Ac3E509020b2349b5e66851d9bf9Ee88B5A",
+      "startBlock": 18019504
+    }
+  }
+}

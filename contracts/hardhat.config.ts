@@ -37,9 +37,14 @@ const config: HardhatUserConfig = {
       accounts: [PRIVATE_KEY_1],
       gasPrice: 60000000, // specify the network's minimum basefee as the gas price
     },
-    unichain: {
+    unichainSepolia: {
       url: "https://sepolia.unichain.org",
       chainId: 1301,
+      accounts: [PRIVATE_KEY_1],
+    },
+    baseSepolia: {
+      url: "https://base-sepolia-rpc.publicnode.com",
+      chainId: 84532,
       accounts: [PRIVATE_KEY_1],
     },
     flowTestnet: {

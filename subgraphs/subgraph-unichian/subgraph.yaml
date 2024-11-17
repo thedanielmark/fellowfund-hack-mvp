@@ -1,0 +1,50 @@
+specVersion: 1.0.0
+indexerHints:
+  prune: auto
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: fello-fund-unichain
+    network: unichain-testnet
+    source:
+      address: "0x0810B2d3C23d7207C6B15fb6B3303e99561cb80f"
+      abi: fello-fund-unichain
+      startBlock: 4954622
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - ApplicantAccepted
+        - ApplicationEvaluated
+        - ApplicationSubmitted
+        - EpochResolved
+        - EpochStarted
+        - FellowshipCreated
+        - FellowshipResolved
+        - MarketOpened
+        - OwnershipTransferred
+      abis:
+        - name: fello-fund-unichain
+          file: ./abis/fello-fund-unichain.json
+      eventHandlers:
+        - event: ApplicantAccepted(indexed uint256,indexed uint256)
+          handler: handleApplicantAccepted
+        - event: ApplicationEvaluated(indexed uint256,indexed uint256,bool)
+          handler: handleApplicationEvaluated
+        - event: ApplicationSubmitted(indexed uint256,indexed uint256,address,string)
+          handler: handleApplicationSubmitted
+        - event: EpochResolved(indexed uint256)
+          handler: handleEpochResolved
+        - event: EpochStarted(indexed uint256,uint256,uint256,uint256)
+          handler: handleEpochStarted
+        - event: FellowshipCreated(indexed uint256,(string,uint256,uint256,uint256,uint256,uint8))
+          handler: handleFellowshipCreated
+        - event: FellowshipResolved(indexed uint256)
+          handler: handleFellowshipResolved
+        - event: MarketOpened(indexed uint256,indexed address,indexed uint256)
+          handler: handleMarketOpened
+        - event: OwnershipTransferred(indexed address,indexed address)
+          handler: handleOwnershipTransferred
+      file: ./src/fello-fund-unichain.ts
