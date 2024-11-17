@@ -1,0 +1,8 @@
+{
+  "unichain-testnet": {
+    "fello-fund-unichain": {
+      "address": "0x0810B2d3C23d7207C6B15fb6B3303e99561cb80f",
+      "startBlock": 4954622
+    }
+  }
+}
