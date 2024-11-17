@@ -9,7 +9,7 @@ import {
   FellowshipResolved as FellowshipResolvedEvent,
   MarketOpened as MarketOpenedEvent,
   OwnershipTransferred as OwnershipTransferredEvent,
-} from "../generated/fellofund/fellofund";
+} from "../generated/fello-fund-op/fello_fund_op";
 import { Fellowship, Applicant } from "../generated/schema";
 
 export function handleApplicantAccepted(event: ApplicantAcceptedEvent): void {

@@ -77,7 +77,8 @@ const config: HardhatUserConfig = {
       accounts: [PRIVATE_KEY_1],
     },
     optimism_sepolia: {
-      url: `https://opt-sepolia.g.alchemy.com/v2/${process.env.ALCHEMY_API_KEY}`,
+      url: "https://sepolia.optimism.io",
+      chainId: 11155420,
       accounts: [PRIVATE_KEY_1],
     },
   },
