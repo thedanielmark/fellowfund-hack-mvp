@@ -98,20 +98,23 @@ function FellowshipMarketsPage({
                   </a>
                 </div>
                 <div className="ml-3">
-                  <h1 className="text-xl font-medium text-zinc-900">
-                    <Link
-                      href={`/dashboard/fellowship/${applicant.id}`}
-                      className="hover:underline"
-                    >
+                  <Link
+                    href={`/dashboard/fellowship/${applicant.id}`}
+                    className="hover:underline"
+                  >
+                    <h1 className="text-xl font-medium text-zinc-900">
                       {JSON.parse(applicant.metadata).name}
-                    </Link>
-                  </h1>
+                    </h1>
+                  </Link>
+                  <div className="text-sm text-gray-500 font-bold">
+                    {JSON.parse(applicant.metadata).gitHubUsername}
+                  </div>
                 </div>
               </div>
 
               <div className="mt-3">
                 <p className="text-black font-medium text-sm">
-                  {JSON.parse(applicant.metadata).description}
+                  {JSON.parse(applicant.metadata).bio}
                 </p>
               </div>
             </div>

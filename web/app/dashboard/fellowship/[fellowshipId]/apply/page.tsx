@@ -261,10 +261,10 @@ function ApplyToFellowhipPage({
                       animationDuration="0.75"
                       ariaLabel="rotating-lines-loading"
                     />{" "}
-                    Creating Program
+                    Creating Application
                   </>
                 ) : (
-                  "Create Program"
+                  "Create Application"
                 )}
               </button>
             </div>

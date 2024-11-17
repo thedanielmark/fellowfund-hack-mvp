@@ -142,27 +142,6 @@ function MarketPage({ params }: { params: { marketId: any } }) {
             </h1>
           </div>
 
-          {/* Graph start */}
-          <div className="mt-5">
-            <TwoPointGraph
-              title=""
-              id="prop-voters-over-time"
-              data1={{
-                type: "line",
-                name: "Yes votes",
-                endpoint: `/market/yes`,
-                dataName: "proposalsCumulative",
-              }}
-              data2={{
-                type: "line",
-                name: "No votes",
-                endpoint: `/market/no`,
-                dataName: "votesCumulative",
-              }}
-            />
-          </div>
-          {/* Graph end */}
-
           <div className="mt-8 sm:mt-12">
             <h1 className="text-2xl sm:text-3xl font-medium text-black">
               Applicant Details
