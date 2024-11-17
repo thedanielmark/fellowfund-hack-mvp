@@ -18,4 +18,11 @@ export const networks = [
     graphURL: "https://api.studio.thegraph.com/query/73364/fello-fund/v0.0.2",
     deployedAddress: "0x2323Cd8097708f4C8D4BA37aE72644Af712bAD76",
   },
+  {
+    name: "Celo Alfrajoes",
+    chainId: 0x89,
+    logo: "https://cryptologos.cc/logos/polygon-matic-logo.png",
+    graphURL: "https://api.studio.thegraph.com/query/73364/fello-fund/v0.0.2",
+    deployedAddress: "0x2323Cd8097708f4C8D4BA37aE72644Af712bAD76",
+  },
 ];
